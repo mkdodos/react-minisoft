@@ -7,8 +7,8 @@ require_once 'db.php';
 $datas = array();
 // sql語法存在變數中
 
-$sql = "SELECT `id`,`spend_date`,`note`,`income`,`expense`,`account` 
-FROM `spending` limit 10";
+$sql = "SELECT `id`,spend_date,`note`,`income`,`expense`,`cate`,`account` 
+FROM `spending` where substring(spend_date,1,4)=2023";
 
 
 // 用mysqli_query方法執行(sql語法)將結果存在變數中
