@@ -7,9 +7,8 @@ require_once 'db.php';
 $datas = array();
 // sql語法存在變數中
 
-// content 欄位內容包含 html tag 在前端取得資料時會出現問題
-// $sql = "SELECT `id`,`note_date`,`title`,`content`,`user_sn` FROM `notebook`";
-$sql = "SELECT `id`,`note_date`,`title`,`user_sn` FROM `notebook`";
+$sql = "SELECT `id`,`spend_date`,`note`,`income`,`expense`,`account` 
+FROM `spending` limit 10";
 
 
 // 用mysqli_query方法執行(sql語法)將結果存在變數中
@@ -17,10 +16,8 @@ $result = mysqli_query($link,$sql);
 
 // 如果有資料
 if ($result) {
-  // mysqli_num_rows方法可以回傳我們結果總共有幾筆資料
-  if (mysqli_num_rows($result)>0) {
-      // 取得大於0代表有資料
-      // while迴圈會根據資料數量，決定跑的次數
+  // mysqli_num_rows方法回傳結果共有幾筆資料
+  if (mysqli_num_rows($result)>0) {     
       // mysqli_fetch_assoc方法可取得一筆值
       while ($row = mysqli_fetch_assoc($result)) {
           // 每跑一次迴圈就抓一筆值，最後放進data陣列中
@@ -35,9 +32,6 @@ else {
 }
 // 處理完後印出資料
 if(!empty($result)){
-  // 如果結果不為空，就利用print_r方法印出資料
-  // print_r($datas);
-
 
   $json = json_encode($datas);
   $json = urldecode($json);
