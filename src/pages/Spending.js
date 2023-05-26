@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, Container, Input, Button } from 'semantic-ui-react';
 import { db } from '../utils/firebase';
+import { Table, Container, Input, Button } from 'semantic-ui-react';
+
+import YearSelect from '../components/YearSelect';
+import MonthSelect from '../components/MonthSelect';
+
 
 export default function Notebook() {
   const [search, setSearch] = useState('');
@@ -9,7 +13,7 @@ export default function Notebook() {
   const [rowsCopy, setRowsCopy] = useState([]);
   const url = 'http://localhost:8888/react-minisoft/mysql/spending.php';
   // 年月條件
-  const [year,setYear]=useState('2022');
+  const [year,setYear]=useState(2022);
   const [month,setMonth]=useState('02');
 
   useEffect(() => {
@@ -28,9 +32,9 @@ export default function Notebook() {
         // 使用前端查詢,需要複製一份資料做為查詢用
         setRowsCopy(data);
       });
-  }, []);
+  }, [year,month]);
 
-  // 轉資料(目前2023,2022已轉)
+  // 轉資料(目前2023,2022,2021已轉)
   const transData = (e) => {
     // 將 mysql 資料新增到 firebase, 每次一年份
     axios.get(url).then((res) => {
@@ -49,8 +53,21 @@ export default function Notebook() {
     setRows(filterData);
   };
 
+  const handleYearChange=(e,obj)=>{
+    setYear(obj.value)
+    // console.log(month)
+  }
+
+  const handleMonthChange=(e,obj)=>{
+    setMonth(obj.value)
+    // console.log(month)
+  }
+
   return (
     <Container>
+      <YearSelect year={year}  onChange={handleYearChange}/>
+
+      <MonthSelect month={month}  onChange={handleMonthChange}/>
       <Button onClick={transData}>轉資料</Button>
       <Input value={search} onChange={handleSearch} />
       <Table celled unstackable>
