@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, Container, Input } from 'semantic-ui-react';
+import { Table, Container, Input, Button } from 'semantic-ui-react';
 import { db } from '../utils/firebase';
 
 export default function Notebook() {
@@ -8,21 +8,16 @@ export default function Notebook() {
   const [rows, setRows] = useState([]);
   const [rowsCopy, setRowsCopy] = useState([]);
   const url = 'http://localhost:8888/react-minisoft/mysql/spending.php';
+  // 年月條件
+  const [year,setYear]=useState('2022');
+  const [month,setMonth]=useState('02');
 
   useEffect(() => {
-    // 將 mysql 資料新增到 firebase, 每次一年份,目前已做了2023
-    // axios.get(url).then((res) => {
-    // console.log(res.data)
-    // setRows(res.data)
-    // const data = res.data;
-    // data.map(row=>{
-    //   db.collection('spending').add(row)
-    // })
-    // });
-
     db.collection('spending')
       .orderBy('spend_date', 'desc')
-      .limit(100)
+      .where('spend_date','>=',`${year}-${month}-01`)
+      .where('spend_date','<=',`${year}-${month}-31`)
+      // .limit(100)
       .get()
       .then((snapshot) => {
         const data = snapshot.docs.map((doc) => {
@@ -35,6 +30,17 @@ export default function Notebook() {
       });
   }, []);
 
+  // 轉資料(目前2023,2022已轉)
+  const transData = (e) => {
+    // 將 mysql 資料新增到 firebase, 每次一年份
+    axios.get(url).then((res) => {
+      console.log(res.data.length);
+      res.data.map((row) => {
+        db.collection('spending').add(row);
+      });
+    });
+  };
+
   const handleSearch = (e) => {
     setSearch(e.target.value);
     const filterData = rowsCopy.filter((row) =>
@@ -45,13 +51,14 @@ export default function Notebook() {
 
   return (
     <Container>
+      <Button onClick={transData}>轉資料</Button>
       <Input value={search} onChange={handleSearch} />
-      <Table celled>
+      <Table celled unstackable>
         <Table.Header>
           <Table.Row>
             {/* <Table.HeaderCell>id</Table.HeaderCell> */}
-            <Table.HeaderCell>spend_date</Table.HeaderCell>
-            <Table.HeaderCell>note</Table.HeaderCell>
+            <Table.HeaderCell width={3}>spend_date</Table.HeaderCell>
+            <Table.HeaderCell width={5}>note</Table.HeaderCell>
             <Table.HeaderCell>收入</Table.HeaderCell>
             <Table.HeaderCell>支出</Table.HeaderCell>
           </Table.Row>
