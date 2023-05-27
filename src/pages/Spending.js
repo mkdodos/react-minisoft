@@ -5,34 +5,36 @@ import { Table, Container, Input, Button } from 'semantic-ui-react';
 
 import YearSelect from '../components/YearSelect';
 import MonthSelect from '../components/MonthSelect';
-
+import CateSelect from '../components/CateSelect';
 
 export default function Notebook() {
   const [search, setSearch] = useState('');
   const [rows, setRows] = useState([]);
   const [rowsCopy, setRowsCopy] = useState([]);
   const url = 'http://localhost:8888/react-minisoft/mysql/spending.php';
-  // 年月條件
-  const [year,setYear]=useState(2022);
-  const [month,setMonth]=useState('02');
+  // 條件
+  const [year, setYear] = useState(2022);
+  const [month, setMonth] = useState('02');
+  const [cate, setCate] = useState('');
 
   useEffect(() => {
     db.collection('spending')
-      .orderBy('spend_date', 'desc')
-      .where('spend_date','>=',`${year}-${month}-01`)
-      .where('spend_date','<=',`${year}-${month}-31`)
-      // .limit(100)
+      // .orderBy('spend_date', 'desc')
+      // .where('spend_date','>=',`${year}-${month}-01`)
+      // .where('spend_date','<=',`${year}-${month}-31`)
+      .where('cate', '==', cate)
+      .limit(10)
       .get()
       .then((snapshot) => {
         const data = snapshot.docs.map((doc) => {
           return doc.data();
         });
-        console.log(snapshot.size);
+        // console.log(snapshot.size);
         setRows(data);
         // 使用前端查詢,需要複製一份資料做為查詢用
         setRowsCopy(data);
       });
-  }, [year,month]);
+  }, [year, month, cate]);
 
   // 轉資料(目前2023,2022,2021已轉)
   const transData = (e) => {
@@ -53,21 +55,27 @@ export default function Notebook() {
     setRows(filterData);
   };
 
-  const handleYearChange=(e,obj)=>{
-    setYear(obj.value)
+  const handleYearChange = (e, obj) => {
+    setYear(obj.value);
     // console.log(month)
-  }
+  };
 
-  const handleMonthChange=(e,obj)=>{
-    setMonth(obj.value)
+  const handleMonthChange = (e, obj) => {
+    setMonth(obj.value);
     // console.log(month)
-  }
+  };
+
+  const handleCateChange = (e, obj) => {
+    console.log(obj.value)
+    setCate(obj.value);
+  };
 
   return (
     <Container>
-      <YearSelect year={year}  onChange={handleYearChange}/>
+      <CateSelect cate={cate} onChange={handleCateChange} />
+      <YearSelect year={year} onChange={handleYearChange} />
 
-      <MonthSelect month={month}  onChange={handleMonthChange}/>
+      <MonthSelect month={month} onChange={handleMonthChange} />
       <Button onClick={transData}>轉資料</Button>
       <Input value={search} onChange={handleSearch} />
       <Table celled unstackable>
