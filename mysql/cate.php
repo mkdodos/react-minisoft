@@ -8,7 +8,7 @@ $datas = array();
 // sql語法存在變數中
 
 $sql = "SELECT cate_id,cate_name,`enable`,cate_sort,user_sn
-FROM `spend_cate` WHERE user_sn=4 ORDER BY cate_sort";
+FROM `spend_cate` ORDER BY cate_sort";
 
 $result = mysqli_query($link,$sql);
 

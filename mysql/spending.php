@@ -8,7 +8,7 @@ $datas = array();
 // sql語法存在變數中
 
 $sql = "SELECT `id`,spend_date,`note`,`income`,`expense`,`cate`,`account` 
-FROM `spending` where substring(spend_date,1,4)=2021";
+FROM `spending` where substring(spend_date,1,4)=2018";
 
 
 // 用mysqli_query方法執行(sql語法)將結果存在變數中

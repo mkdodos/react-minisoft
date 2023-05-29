@@ -1,21 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Dropdown } from 'semantic-ui-react';
+import { db } from '../utils/firebase';
 
 export default function CateSelect({ cate, onChange }) {
-  const url = 'http://localhost:8888/react-minisoft/mysql/cate.php';
+  // const url = 'http://localhost:8888/react-minisoft/mysql/cate.php';
   const [options, setOptions] = useState([]);
   useEffect(() => {
-    axios.get(url).then((res) => {
-      console.log(res.data);
-      res.data.map((row) => {
-        options.push({
-          key: row.cate_id,
-          text: row.cate_name,
-          value: row.cate_id,
+    db.collection('spend_cate')
+    .where('user_sn','==','7')
+    .orderBy('cate_sort')
+      .get()
+      .then((snapshot) => {
+       
+        // snapshot.docs.map((doc) => {
+        
+        //   const row=doc.data()
+        //   options.push({
+        //     key: row.cate_id,
+        //     text: row.cate_name,
+        //     value: row.cate_id,
+        //   });
+        // });
+        const data = snapshot.docs.map((doc) => {
+          const row = doc.data()
+          return { key: row.cate_id, text: row.cate_name, value: row.cate_id };
         });
+        setOptions(data)
       });
-    });
+    // axios.get(url).then((res) => {
+    //   console.log(res.data);
+    //   res.data.map((row) => {
+    //     options.push({
+    //       key: row.cate_id,
+    //       text: row.cate_name,
+    //       value: row.cate_id,
+    //     });
+    //   });
+    // });
   }, []);
 
   return (
@@ -23,7 +45,7 @@ export default function CateSelect({ cate, onChange }) {
       <Dropdown
         selection
         onChange={onChange}
-        placeholder="順位"
+        placeholder="類別"
         options={options}
         value={cate}
       ></Dropdown>
