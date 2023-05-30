@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { db } from '../utils/firebase';
-import { Table, Container, Input, 
-  Button, Divider, Form, Grid, Segment
-
+import {
+  Table,
+  Container,
+  Input,
+  Button,
+  Divider,
+  Form,
+  Grid,
+  Segment,
 } from 'semantic-ui-react';
 
 import YearSelect from '../components/YearSelect';
@@ -14,6 +20,8 @@ export default function Notebook() {
   const [search, setSearch] = useState('');
   const [rows, setRows] = useState([]);
   const [rowsCopy, setRowsCopy] = useState([]);
+  // 筆數
+  const [rowsCount, setRowsCount] = useState();
   const url = 'http://localhost:8888/react-minisoft/mysql/spending.php';
   const urlCate = 'http://localhost:8888/react-minisoft/mysql/cate.php';
   // 條件
@@ -28,7 +36,7 @@ export default function Notebook() {
       .where('spend_date', '<=', `${year}-${month}-31`)
       // .where('account', '<=', `${year}-${month}-31`)
 
-      .limit(100)
+      .limit(10)
       .get()
       .then((snapshot) => {
         const data = snapshot.docs.map((doc) => {
@@ -52,22 +60,23 @@ export default function Notebook() {
         const data = snapshot.docs.map((doc) => {
           return doc.data();
         });
+        setRowsCount(snapshot.size);
         // console.log(snapshot.size);
         setRows(data);
         // 使用前端查詢,需要複製一份資料做為查詢用
         setRowsCopy(data);
+        setSearch('')
       });
   }, [cate]);
 
   // 轉資料(目前2023,2022,2021,2020,2019,2018已轉)
   const transData = (e) => {
     // 將 mysql 資料新增到 firebase, 每次一年份
-    axios.get(url).then((res) => {      
-      res.data.map((row) => {       
+    axios.get(url).then((res) => {
+      res.data.map((row) => {
         db.collection('spending').add(row);
       });
     });
-    
   };
 
   const handleSearch = (e) => {
@@ -95,32 +104,28 @@ export default function Notebook() {
 
   return (
     <Container>
+      {/* <Segment placeholder>
+        <Grid columns={2} relaxed="very" stackable>
+          <Grid.Column>
+            <Form>
+              <YearSelect year={year} onChange={handleYearChange} />
+              <MonthSelect month={month} onChange={handleMonthChange} />
+            </Form>
+          </Grid.Column>         
+        </Grid>
+        <Divider vertical>{rowsCount}</Divider>
+      </Segment> */}
 
+      <Form unstackable>
+        <Form.Group>
+          <CateSelect width={8} cate={cate} onChange={handleCateChange} />
 
-<Segment placeholder>
-    <Grid columns={2} relaxed='very' stackable>
-      <Grid.Column>
-        <Form>
-        <YearSelect year={year} onChange={handleYearChange} />
+          <Form.Input fluid width={8} value={search} onChange={handleSearch} />
+        </Form.Group>
+      </Form>
 
-<MonthSelect month={month} onChange={handleMonthChange} />
-        </Form>
-      </Grid.Column>
+      {/* <Button onClick={transData}>轉資料</Button> */}
 
-      <Grid.Column verticalAlign='middle'>
-      <CateSelect cate={cate} onChange={handleCateChange} />
-      </Grid.Column>
-    </Grid>
-
-    <Divider vertical>Or</Divider>
-  </Segment>
-
-
-
-    
-     
-      <Button onClick={transData}>轉資料</Button>
-      <Input value={search} onChange={handleSearch} />
       <Table celled unstackable>
         <Table.Header>
           <Table.Row>
