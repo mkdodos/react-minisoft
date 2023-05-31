@@ -8,16 +8,16 @@ export default function Notebook() {
   const url = 'http://localhost:8888/react-minisoft/mysql/select.php';
   
   useEffect(()=>{
-    axios.get(url).then((res) => {
-      console.log(res.data)
-      setRows(res.data)   
+    // axios.get(url).then((res) => {
+    //   console.log(res.data)
+    //   setRows(res.data)   
      
-    });
-    db.collection("notebook").orderBy('note_date').get().then(snapshot=>{
+    // });
+    db.collection("notebook").orderBy('note_date').limit(1).get().then(snapshot=>{
       const data = snapshot.docs.map(doc=>{
         return doc.data();
       })
-      // setRows(data)
+      setRows(data)
     })
   },[])
   
