@@ -7,6 +7,7 @@ export default function Header() {
 
   const { currentUser, logout } = useAuth();
 
+  const user = localStorage.getItem('login')
 
   const navigate = useNavigate()
   async function handleLogout() { 
@@ -21,7 +22,8 @@ export default function Header() {
   }
   return (
     <div>
-      <Button onClick={handleLogout}>登出</Button>
+      {user &&  <Button onClick={handleLogout}>登出</Button> }
+     
     </div>
   )
 }
