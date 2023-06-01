@@ -1,20 +1,21 @@
-import { Button } from 'semantic-ui-react'
-import React from 'react'
+import { Button, Menu ,Icon} from 'semantic-ui-react';
+import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Header() {
-
   const { currentUser, logout } = useAuth();
 
-  const user = localStorage.getItem('login')
+  // 取得 user 值
+  const user = localStorage.getItem('user');
 
-  const navigate = useNavigate()
-  async function handleLogout() { 
-
+  const navigate = useNavigate();
+  // 登出
+  async function handleLogout() {
     try {
       // await logout();
-      localStorage.setItem('login','')
+      // 清空 user 值
+      localStorage.setItem('user', '');
       navigate('/login');
     } catch {
       // setError("Failed to log out")
@@ -22,8 +23,20 @@ export default function Header() {
   }
   return (
     <div>
-      {user &&  <Button onClick={handleLogout}>登出</Button> }
-     
+      {/* 有登入才顯示登出鈕 */}
+      {/* {user && <Button onClick={handleLogout}>登出</Button>} */}
+
+      <Menu pointing secondary>
+        <Menu.Item as={Link} to="/spending">
+          記帳
+        </Menu.Item>
+        <Menu.Item as={Link} to="/notebook">
+          記事本
+        </Menu.Item>
+        {user && <Menu.Item onClick={handleLogout}>
+        <Icon name="sign-out" />
+          登出</Menu.Item>}
+      </Menu>
     </div>
-  )
+  );
 }

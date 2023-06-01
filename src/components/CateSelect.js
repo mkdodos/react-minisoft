@@ -6,7 +6,8 @@ import { db } from '../utils/firebase';
 export default function CateSelect({ width, cate, onChange }) {
   // const url = 'http://localhost:8888/react-minisoft/mysql/cate.php';
   const [options, setOptions] = useState([]);
-  const user_sn = '4' ;
+  const user_sn =
+    localStorage.getItem('user') == 'mkdodos@gmail.com' ? '7' : '4';
   useEffect(() => {
     db.collection('spend_cate')
       .where('user_sn', '==', user_sn)

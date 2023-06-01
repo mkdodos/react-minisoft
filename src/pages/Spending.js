@@ -54,7 +54,7 @@ export default function Notebook() {
       .orderBy('spend_date', 'desc')
 
       .where('cate', '==', cate)
-      .limit(100)
+      .limit(200)
       .get()
       .then((snapshot) => {
         const data = snapshot.docs.map((doc) => {

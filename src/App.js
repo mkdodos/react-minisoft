@@ -22,11 +22,13 @@ export default function App() {
         <Router>
           <Header/>
           <Routes>
-            <Route element={<PrivateRoutes />}>
+            {/* <Route element={<PrivateRoutes />}>
               <Route element={<Spending />} path="/spending" />
-            </Route>
+            </Route> */}
 
             {/* <Route element={<Notebook />} path="/notebook" /> */}
+            <Route element={<Protected Component={Spending} />} path="/spending" />
+
             <Route element={<Protected Component={Notebook} />} path="/notebook" />
             <Route element={<Login />} path="/login" />
           </Routes>

@@ -30,7 +30,8 @@ export default function Login() {
       .signInWithEmailAndPassword(email.current.value, password.current.value)
       .then((userCredential) => {
         // console.log(userCredential)
-        localStorage.setItem('login', userCredential.user.email);
+        // 寫入 user 值 email
+        localStorage.setItem('user', userCredential.user.email);
         navigate('/notebook');
       });
   };
@@ -38,8 +39,8 @@ export default function Login() {
     // if(currentUser){
     //   navigate('/notebook')
     // }
-    let login = localStorage.getItem('login');
-    if (login) {
+    let user = localStorage.getItem('user');
+    if (user) {
       navigate('/notebook');
     }
   }, []);
