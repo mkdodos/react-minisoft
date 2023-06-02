@@ -1,4 +1,4 @@
-import { Button, Menu ,Icon} from 'semantic-ui-react';
+import { Button, Menu, Icon } from 'semantic-ui-react';
 import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -22,21 +22,19 @@ export default function Header() {
     }
   }
   return (
-    <div>
-      {/* 有登入才顯示登出鈕 */}
-      {/* {user && <Button onClick={handleLogout}>登出</Button>} */}
-
-      <Menu pointing secondary>
-        <Menu.Item as={Link} to="/spending">
-          記帳
+    <Menu pointing secondary>
+      <Menu.Item as={Link} to="/spending">
+        記帳
+      </Menu.Item>
+      <Menu.Item as={Link} to="/notebook">
+        記事本
+      </Menu.Item>
+      {user && (
+        <Menu.Item onClick={handleLogout}>
+          <Icon name="sign-out" />
+          登出
         </Menu.Item>
-        <Menu.Item as={Link} to="/notebook">
-          記事本
-        </Menu.Item>
-        {user && <Menu.Item onClick={handleLogout}>
-        <Icon name="sign-out" />
-          登出</Menu.Item>}
-      </Menu>
-    </div>
+      )}
+    </Menu>
   );
 }

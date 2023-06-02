@@ -14,24 +14,33 @@ import Protected from './routes/Protected';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
+import { Container } from 'semantic-ui-react';
 
 export default function App() {
   return (
     <div>
       <AuthProvider>
         <Router>
-          <Header/>
-          <Routes>
-            {/* <Route element={<PrivateRoutes />}>
+          <Header />
+          <Container>
+            <Routes>
+              {/* <Route element={<PrivateRoutes />}>
               <Route element={<Spending />} path="/spending" />
             </Route> */}
 
-            {/* <Route element={<Notebook />} path="/notebook" /> */}
-            <Route element={<Protected Component={Spending} />} path="/spending" />
+              {/* <Route element={<Notebook />} path="/notebook" /> */}
+              <Route
+                element={<Protected Component={Spending} />}
+                path="/spending"
+              />
 
-            <Route element={<Protected Component={Notebook} />} path="/notebook" />
-            <Route element={<Login />} path="/login" />
-          </Routes>
+              <Route
+                element={<Protected Component={Notebook} />}
+                path="/notebook"
+              />
+              <Route element={<Login />} path="/login" />
+            </Routes>
+          </Container>
         </Router>
       </AuthProvider>
     </div>
