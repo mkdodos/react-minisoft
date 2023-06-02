@@ -23,8 +23,11 @@ export default function Header() {
   }
   return (
     <Menu pointing secondary>
-      <Menu.Item as={Link} to="/spending">
+      <Menu.Item as={Link} to="/balance">
         記帳
+      </Menu.Item>
+      <Menu.Item as={Link} to="/spending">
+        記帳(舊資料)
       </Menu.Item>
       <Menu.Item as={Link} to="/notebook">
         記事本

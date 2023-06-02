@@ -2,7 +2,8 @@ import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import Notebook from './pages/NoteBook';
 import Spending from './pages/Spending';
-import PrivateRoutes from './routes/PrivateRoutes';
+import Balance from './pages/Balance';
+
 import Login from './pages/Login';
 
 import { AuthProvider } from './contexts/AuthContext';
@@ -39,6 +40,7 @@ export default function App() {
                 path="/notebook"
               />
               <Route element={<Login />} path="/login" />
+              <Route element={<Balance />} path="/balance" />
             </Routes>
           </Container>
         </Router>
