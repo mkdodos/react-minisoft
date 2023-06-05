@@ -15,8 +15,9 @@ import {
 import YearSelect from '../components/YearSelect';
 import MonthSelect from '../components/MonthSelect';
 import CateSelect from '../components/CateSelect';
+import AccSelect from '../components/AccSelect';
 
-export default function Notebook() {
+export default function Spending() {
   const [search, setSearch] = useState('');
   const [rows, setRows] = useState([]);
   const [rowsCopy, setRowsCopy] = useState([]);

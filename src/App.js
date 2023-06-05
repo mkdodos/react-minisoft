@@ -30,6 +30,12 @@ export default function App() {
             </Route> */}
 
               {/* <Route element={<Notebook />} path="/notebook" /> */}
+              
+              <Route
+                element={<Protected Component={Balance} />}
+                path="/balance"
+              />
+              
               <Route
                 element={<Protected Component={Spending} />}
                 path="/spending"
