@@ -2,10 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { db_money2022 as db } from '../utils/firebase';
 import { Button, Table } from 'semantic-ui-react';
 import AccSelect from '../components/AccSelect';
+import EditForm from './EditForm';
 
 export default function Balance() {
   const [rows, setRows] = useState([]);
   const [acc, setAcc] = useState('');
+  const [open, setOpen] = useState(false);
+  const [isIncome, setIsIncome] = useState(false);
+
+  const [item, setItem] = useState({ title: '', amt: '',date:'' });
+
   const user = localStorage.getItem('user');
   useEffect(() => {
     db.collection('balances')
@@ -50,7 +56,7 @@ export default function Balance() {
   };
 
   // 更新帳戶餘額
-  const handleUpdateBalance = () => {
+  const handleSaveItem = () => {
     // console.log(acc)
     // 取得目前帳戶餘額
     db.collection('accounts')
@@ -59,9 +65,9 @@ export default function Balance() {
       .then((doc) => {
         const currentAmt = doc.data().balance;
         // 收入或支出
-        const isExpense = false;
-        let newAmt = 15;
-        newAmt = isExpense ? newAmt * -1 : newAmt;
+        // const isExpense = false;
+        let newAmt = item.amt;
+        newAmt = isIncome ? newAmt : newAmt * -1;
 
         // 更新後餘額
         const updatedAmt = currentAmt + newAmt;
@@ -69,15 +75,36 @@ export default function Balance() {
 
         const row = { balance: updatedAmt };
         db.collection('accounts').doc(acc).update(row);
-        // console.log(doc.data().balance)
+        setOpen(false);
       });
 
-    
+    console.log(item);
+
+    // 新增一筆收支
+    // db.collection('balances').add(item).then(doc=>{
+    //   console.log(doc.id);
+    // })
+  };
+
+  // 新增
+  const handleNewItem = () => {
+    setOpen(true);
+    console.log(isIncome);
   };
 
   return (
     <div>
-      <Button onClick={handleUpdateBalance}>新增</Button>
+      <EditForm
+        open={open}
+        setItem={setItem}
+        saveItem={handleSaveItem}
+        setOpen={setOpen}
+        isIncome={isIncome}
+        setIsIncome={setIsIncome}
+        item={item}
+      />
+      <Button onClick={handleNewItem}>新增</Button>
+      {/* <Button onClick={handleSaveItem}>儲存</Button> */}
       <AccSelect onChange={handleAccChange} />
       <Table celled unstackable>
         <Table.Header>
