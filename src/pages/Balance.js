@@ -19,11 +19,16 @@ export default function Balance() {
 
   const user = localStorage.getItem('user');
   useEffect(() => {
+    get10();
+  }, []);
+
+  // 最近10筆資料
+  const get10 = () => {
     db.collection('balances')
-      // .where('type', '==', '轉帳')
       .limit(10)
       .where('user', '==', user)
       .orderBy('date', 'desc')
+      .orderBy('createdAt', 'desc')
       .get()
       .then((snapshot) => {
         let data = snapshot.docs.map((doc) => {
@@ -37,10 +42,16 @@ export default function Balance() {
           if (row.expense) total += row.expense * 1;
           if (row.income) total2 += row.income * 1;
         });
-        // console.log(total, total2);
+
+        // var numbers = [4, 2, 5, 1, 3];
+        // data.sort(function (a, b) {
+        //   return a.createdAt - b.createdAt;
+        // });
+        // console.log(data);
+
         setRows(data);
       });
-  }, []);
+  };
 
   // 帳戶下拉選取
   const handleAccChange = (e, obj) => {
@@ -64,11 +75,6 @@ export default function Balance() {
 
   // 儲存
   const handleSaveItem = () => {
-    // setOpen(false);
-
-    // return;
-    // console.log(item.account.id)
-    // return ;
     // 取得目前帳戶餘額
     const acc = item.account.id;
     db.collection('accounts')
@@ -76,26 +82,43 @@ export default function Balance() {
       .get()
       .then((doc) => {
         // 目前帳戶餘額
-        const currentAmt = doc.data().balance;
+        const currentAmt = doc.data().balance * 1;
         // 收入或支出
         let newAmt = item.amt;
-        newAmt = isIncome ? newAmt : newAmt * -1;
+        newAmt = isIncome ? newAmt * 1 : newAmt * -1;
 
         // 計算更新後餘額
         const updatedAmt = currentAmt + newAmt;
-        // console.log(updatedAmt);
+        console.log(updatedAmt);
 
         // 更新帳戶餘額
         const row = { balance: updatedAmt };
         db.collection('accounts').doc(acc).update(row);
 
-        // console.log();
-
-        const newItem = {
-          ...item,
+        let newItem = {
+          createdAt: Date.now(),
+          date: item.date,
           user: user,
+          title: item.title,
           account: { ...item.account, balance: updatedAmt },
         };
+
+        // 判斷收入或支出給不同欄位名稱
+        if (isIncome) {
+          newItem = {
+            ...newItem,
+            income: item.amt,
+          };
+        } else {
+          newItem = {
+            ...newItem,
+            expense: item.amt,
+          };
+        }
+
+        // console.log(newItem);
+        // return;
+
         // 新增一筆收支
         db.collection('balances')
           .add(newItem)
@@ -103,6 +126,7 @@ export default function Balance() {
             console.log(doc.id);
             setItem(defaultItem);
             setOpen(false);
+            get10();
           });
       });
   };
@@ -110,7 +134,16 @@ export default function Balance() {
   // 新增
   const handleNewItem = () => {
     setOpen(true);
-    console.log(isIncome);
+
+    var numbers = [4, 2, 5, 1, 3];
+    numbers.sort(function (a, b) {
+      return a - b;
+    });
+    console.log(numbers);
+
+    // console.log(isIncome);
+    // const now = Date.now();
+    // console.log(now);
   };
 
   return (
@@ -143,10 +176,10 @@ export default function Balance() {
         <Table.Header>
           <Table.Row>
             {/* <Table.HeaderCell>id</Table.HeaderCell> */}
-            <Table.HeaderCell>date</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell>title</Table.HeaderCell>
+            <Table.HeaderCell>日期</Table.HeaderCell>
+            <Table.HeaderCell>帳戶</Table.HeaderCell>
+            {/* <Table.HeaderCell></Table.HeaderCell> */}
+            <Table.HeaderCell>項目</Table.HeaderCell>
             <Table.HeaderCell>收入</Table.HeaderCell>
             <Table.HeaderCell>支出</Table.HeaderCell>
             <Table.HeaderCell>餘額</Table.HeaderCell>
@@ -157,10 +190,10 @@ export default function Balance() {
           {rows.map((row) => {
             return (
               <Table.Row key={row.id}>
-                {/* <Table.Cell>{row.id}</Table.Cell> */}
+              
                 <Table.Cell>{row.date}</Table.Cell>
                 <Table.Cell>{row.account?.name}</Table.Cell>
-                <Table.Cell>{row.type}</Table.Cell>
+                {/* <Table.Cell>{row.createdAt}</Table.Cell> */}
                 <Table.Cell>{row.title}</Table.Cell>
                 <Table.Cell>{row.income}</Table.Cell>
                 <Table.Cell>{row.expense}</Table.Cell>
