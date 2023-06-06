@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db_money2022 as db } from '../utils/firebase';
-import { Button, Table } from 'semantic-ui-react';
+import { Button, Grid, Table } from 'semantic-ui-react';
 import AccSelect from '../components/AccSelect';
 import EditForm from './EditForm';
 
@@ -10,7 +10,12 @@ export default function Balance() {
   const [open, setOpen] = useState(false);
   const [isIncome, setIsIncome] = useState(false);
 
-  const [item, setItem] = useState({ title: '', amt: '',date:'' });
+  const defaultItem = {
+    title: '',
+    amt: '',
+    date: new Date().toISOString().slice(0, 10),
+  };
+  const [item, setItem] = useState(defaultItem);
 
   const user = localStorage.getItem('user');
   useEffect(() => {
@@ -25,6 +30,7 @@ export default function Balance() {
           return { ...doc.data(), id: doc.id };
         });
 
+        console.log(snapshot.size);
         let total = 0;
         let total2 = 0;
         data.forEach((row) => {
@@ -36,6 +42,7 @@ export default function Balance() {
       });
   }, []);
 
+  // 帳戶下拉選取
   const handleAccChange = (e, obj) => {
     db.collection('balances')
       .where('user', '==', user)
@@ -55,35 +62,49 @@ export default function Balance() {
     // setAcc(obj.value);
   };
 
-  // 更新帳戶餘額
+  // 儲存
   const handleSaveItem = () => {
-    // console.log(acc)
+    // setOpen(false);
+
+    // return;
+    // console.log(item.account.id)
+    // return ;
     // 取得目前帳戶餘額
+    const acc = item.account.id;
     db.collection('accounts')
       .doc(acc)
       .get()
       .then((doc) => {
+        // 目前帳戶餘額
         const currentAmt = doc.data().balance;
         // 收入或支出
-        // const isExpense = false;
         let newAmt = item.amt;
         newAmt = isIncome ? newAmt : newAmt * -1;
 
-        // 更新後餘額
+        // 計算更新後餘額
         const updatedAmt = currentAmt + newAmt;
-        console.log(updatedAmt);
+        // console.log(updatedAmt);
 
+        // 更新帳戶餘額
         const row = { balance: updatedAmt };
         db.collection('accounts').doc(acc).update(row);
-        setOpen(false);
+
+        // console.log();
+
+        const newItem = {
+          ...item,
+          user: user,
+          account: { ...item.account, balance: updatedAmt },
+        };
+        // 新增一筆收支
+        db.collection('balances')
+          .add(newItem)
+          .then((doc) => {
+            console.log(doc.id);
+            setItem(defaultItem);
+            setOpen(false);
+          });
       });
-
-    console.log(item);
-
-    // 新增一筆收支
-    // db.collection('balances').add(item).then(doc=>{
-    //   console.log(doc.id);
-    // })
   };
 
   // 新增
@@ -103,9 +124,21 @@ export default function Balance() {
         setIsIncome={setIsIncome}
         item={item}
       />
-      <Button onClick={handleNewItem}>新增</Button>
+      <Grid columns={2}>
+        <Grid.Row>
+          <Grid.Column>
+            {' '}
+            <AccSelect onChange={handleAccChange} />
+          </Grid.Column>
+          <Grid.Column>
+            {' '}
+            <Button onClick={handleNewItem}>新增</Button>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+
       {/* <Button onClick={handleSaveItem}>儲存</Button> */}
-      <AccSelect onChange={handleAccChange} />
+
       <Table celled unstackable>
         <Table.Header>
           <Table.Row>
@@ -126,12 +159,12 @@ export default function Balance() {
               <Table.Row key={row.id}>
                 {/* <Table.Cell>{row.id}</Table.Cell> */}
                 <Table.Cell>{row.date}</Table.Cell>
-                <Table.Cell>{row.account.name}</Table.Cell>
+                <Table.Cell>{row.account?.name}</Table.Cell>
                 <Table.Cell>{row.type}</Table.Cell>
                 <Table.Cell>{row.title}</Table.Cell>
                 <Table.Cell>{row.income}</Table.Cell>
                 <Table.Cell>{row.expense}</Table.Cell>
-                <Table.Cell>{row.account.balance}</Table.Cell>
+                <Table.Cell>{row.account?.balance}</Table.Cell>
               </Table.Row>
             );
           })}

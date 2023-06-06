@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Button, Modal, Menu } from 'semantic-ui-react';
+import AccSelect from '../components/AccSelect';
 
 export default function EditForm({
   open,
@@ -24,6 +25,14 @@ export default function EditForm({
   // 表單輸入時,設定 item 的值
   const handleChange = (e) => {
     setItem({ ...item, [e.target.name]: e.target.value });
+    // console.log(item)
+  };
+
+  const handleAccChange = (e,obj) => {
+    // console.log(obj.options)
+    const name = obj.options.filter(row=>row.value==obj.value)
+    // console.log(name[0].text)
+    setItem({ ...item, account: {id:obj.value,name:name[0].text} });
     // console.log(item)
   };
 
@@ -56,19 +65,21 @@ export default function EditForm({
           </Menu.Item>
         </Menu>
 
-
-        <Form.Field>
-              <label>日期</label>
-              <input
-                name="date"
-                type="date"
-                placeholder=""
-                value={item.date}
-                onChange={handleChange}
-              />
-            </Form.Field>
-
         <Form>
+          <Form.Field>
+            <AccSelect onChange={handleAccChange} />
+          </Form.Field>
+
+          <Form.Field>
+            <label>日期</label>
+            <input
+              name="date"
+              type="date"
+              placeholder=""
+              value={item.date}
+              onChange={handleChange}
+            />
+          </Form.Field>
           <Form.Field>
             <label>項目</label>
             <input
