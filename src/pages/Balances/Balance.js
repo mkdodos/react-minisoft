@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { db_money2022 as db } from '../utils/firebase';
+import { db_money2022 as db } from '../../utils/firebase';
 import { Button, Grid, Table } from 'semantic-ui-react';
-import AccSelect from '../components/AccSelect';
-import EditForm from './EditForm';
+import AccSelect from './components/AccSelect';
+import EditForm from './components/EditForm';
 
 export default function Balance() {
   const [rows, setRows] = useState([]);
@@ -101,6 +101,7 @@ export default function Balance() {
           user: user,
           title: item.title,
           account: { ...item.account, balance: updatedAmt },
+          cate: item.cate
         };
 
         // 判斷收入或支出給不同欄位名稱
@@ -133,17 +134,9 @@ export default function Balance() {
 
   // 新增
   const handleNewItem = () => {
-    setOpen(true);
+    setOpen(true);  
 
-    var numbers = [4, 2, 5, 1, 3];
-    numbers.sort(function (a, b) {
-      return a - b;
-    });
-    console.log(numbers);
-
-    // console.log(isIncome);
-    // const now = Date.now();
-    // console.log(now);
+   
   };
 
   return (
@@ -176,9 +169,9 @@ export default function Balance() {
         <Table.Header>
           <Table.Row>
             {/* <Table.HeaderCell>id</Table.HeaderCell> */}
-            <Table.HeaderCell>日期</Table.HeaderCell>
+            <Table.HeaderCell width={2}>日期</Table.HeaderCell>
             <Table.HeaderCell>帳戶</Table.HeaderCell>
-            {/* <Table.HeaderCell></Table.HeaderCell> */}
+            <Table.HeaderCell>類別</Table.HeaderCell>
             <Table.HeaderCell>項目</Table.HeaderCell>
             <Table.HeaderCell>收入</Table.HeaderCell>
             <Table.HeaderCell>支出</Table.HeaderCell>
@@ -193,11 +186,11 @@ export default function Balance() {
               
                 <Table.Cell>{row.date}</Table.Cell>
                 <Table.Cell>{row.account?.name}</Table.Cell>
-                {/* <Table.Cell>{row.createdAt}</Table.Cell> */}
+                <Table.Cell>{row.cate}</Table.Cell>
                 <Table.Cell>{row.title}</Table.Cell>
                 <Table.Cell>{row.income}</Table.Cell>
                 <Table.Cell>{row.expense}</Table.Cell>
-                <Table.Cell>{row.account?.balance}</Table.Cell>
+                <Table.Cell positive>{row.account?.balance}</Table.Cell>
               </Table.Row>
             );
           })}

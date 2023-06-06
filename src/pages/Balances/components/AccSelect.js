@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { db_money2022 as db } from '../utils/firebase';
+import { db_money2022 as db } from '../../../utils/firebase';
 import { Dropdown, Form } from 'semantic-ui-react';
 
 export default function AccSelect({ account, name, onChange, label }) {
@@ -24,6 +24,7 @@ export default function AccSelect({ account, name, onChange, label }) {
   }, []);
   return (
     <Form.Select
+    placeholder='帳戶'
       label={label}
       value={account}
       name={name}

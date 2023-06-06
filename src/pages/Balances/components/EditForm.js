@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Button, Modal, Menu } from 'semantic-ui-react';
-import AccSelect from '../components/AccSelect';
-
+import AccSelect from './AccSelect';
+import CateSelect from './CateSelect'
 export default function EditForm({
   open,
   setOpen,
@@ -29,11 +29,16 @@ export default function EditForm({
   };
 
   const handleAccChange = (e,obj) => {
-    // console.log(obj.options)
-    const name = obj.options.filter(row=>row.value==obj.value)
-    // console.log(name[0].text)
+   
+    // 無法直接用 obj.text 取得下拉選項的文字
+    // 改成從 options 篩選出選項的文字
+    const name = obj.options.filter(row=>row.value==obj.value)   
     setItem({ ...item, account: {id:obj.value,name:name[0].text} });
-    // console.log(item)
+    
+  };
+
+  const handleCateChange = (e,obj) => {   
+    setItem({ ...item, cate: obj.value });   
   };
 
   return (
@@ -68,6 +73,10 @@ export default function EditForm({
         <Form>
           <Form.Field>
             <AccSelect onChange={handleAccChange} />
+          </Form.Field>
+
+          <Form.Field>
+            <CateSelect onChange={handleCateChange} />
           </Form.Field>
 
           <Form.Field>

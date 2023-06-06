@@ -15,7 +15,7 @@ import {
 import YearSelect from '../components/YearSelect';
 import MonthSelect from '../components/MonthSelect';
 import CateSelect from '../components/CateSelect';
-import AccSelect from '../components/AccSelect';
+// import AccSelect from '../components/AccSelect';
 
 export default function Spending() {
   const [search, setSearch] = useState('');

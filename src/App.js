@@ -2,7 +2,7 @@ import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import Notebook from './pages/NoteBook';
 import Spending from './pages/Spending';
-import Balance from './pages/Balance';
+import Balance from './pages/Balances/Balance';
 
 import Login from './pages/Login';
 
