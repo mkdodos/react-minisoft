@@ -9,6 +9,7 @@ export default function Balance() {
   const [acc, setAcc] = useState('');
   const [open, setOpen] = useState(false);
   const [isIncome, setIsIncome] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const defaultItem = {
     title: '',
@@ -43,17 +44,12 @@ export default function Balance() {
           if (row.income) total2 += row.income * 1;
         });
 
-        // var numbers = [4, 2, 5, 1, 3];
-        // data.sort(function (a, b) {
-        //   return a.createdAt - b.createdAt;
-        // });
-        // console.log(data);
-
+       
         setRows(data);
       });
   };
 
-  // 帳戶下拉選取
+  // 帳戶下拉選取(篩選用)
   const handleAccChange = (e, obj) => {
     db.collection('balances')
       .where('user', '==', user)
@@ -66,7 +62,7 @@ export default function Balance() {
           return { ...doc.data(), id: doc.id };
         });
         setRows(data);
-        setAcc(obj.value);
+        // setAcc(obj.value);
         // console.log(obj)
       });
 
@@ -75,6 +71,7 @@ export default function Balance() {
 
   // 儲存
   const handleSaveItem = () => {
+    setLoading(true)
     // 取得目前帳戶餘額
     const acc = item.account.id;
     db.collection('accounts')
@@ -128,6 +125,7 @@ export default function Balance() {
             setItem(defaultItem);
             setOpen(false);
             get10();
+            setLoading(false)
           });
       });
   };
@@ -149,6 +147,7 @@ export default function Balance() {
         isIncome={isIncome}
         setIsIncome={setIsIncome}
         item={item}
+        loading={loading}
       />
       <Grid columns={2}>
         <Grid.Row>

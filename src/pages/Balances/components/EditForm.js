@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Button, Modal, Menu } from 'semantic-ui-react';
 import AccSelect from './AccSelect';
-import CateSelect from './CateSelect'
+import CateSelect from './CateSelect';
 export default function EditForm({
   open,
   setOpen,
@@ -11,6 +11,7 @@ export default function EditForm({
   saveItem,
   setItem,
   item,
+  
 }) {
   // 設定作用中項目樣式
   // 設定金額為收入或支出
@@ -28,17 +29,15 @@ export default function EditForm({
     // console.log(item)
   };
 
-  const handleAccChange = (e,obj) => {
-   
+  const handleAccChange = (e, obj) => {
     // 無法直接用 obj.text 取得下拉選項的文字
     // 改成從 options 篩選出選項的文字
-    const name = obj.options.filter(row=>row.value==obj.value)   
-    setItem({ ...item, account: {id:obj.value,name:name[0].text} });
-    
+    const name = obj.options.filter((row) => row.value == obj.value);
+    setItem({ ...item, account: { id: obj.value, name: name[0].text } });
   };
 
-  const handleCateChange = (e,obj) => {   
-    setItem({ ...item, cate: obj.value });   
+  const handleCateChange = (e, obj) => {
+    setItem({ ...item, cate: obj.value });
   };
 
   return (
@@ -72,14 +71,6 @@ export default function EditForm({
 
         <Form>
           <Form.Field>
-            <AccSelect onChange={handleAccChange} />
-          </Form.Field>
-
-          <Form.Field>
-            <CateSelect onChange={handleCateChange} />
-          </Form.Field>
-
-          <Form.Field>
             <label>日期</label>
             <input
               name="date"
@@ -89,6 +80,14 @@ export default function EditForm({
               onChange={handleChange}
             />
           </Form.Field>
+          <Form.Field>
+            <AccSelect onChange={handleAccChange} />
+          </Form.Field>
+
+          <Form.Field>
+            <CateSelect onChange={handleCateChange} />
+          </Form.Field>
+
           <Form.Field>
             <label>項目</label>
             <input
