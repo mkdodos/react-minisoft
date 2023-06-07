@@ -11,7 +11,6 @@ export default function EditForm({
   saveItem,
   setItem,
   item,
-  
 }) {
   // 設定作用中項目樣式
   // 設定金額為收入或支出
@@ -81,11 +80,11 @@ export default function EditForm({
             />
           </Form.Field>
           <Form.Field>
-            <AccSelect onChange={handleAccChange} />
+            <AccSelect account={item.account?.id} onChange={handleAccChange} />
           </Form.Field>
 
           <Form.Field>
-            <CateSelect onChange={handleCateChange} />
+            <CateSelect cate={item.cate} onChange={handleCateChange} />
           </Form.Field>
 
           <Form.Field>
@@ -93,18 +92,18 @@ export default function EditForm({
             <input
               name="title"
               placeholder=""
-              // value={item.title}
+              value={item.title}
               onChange={handleChange}
             />
           </Form.Field>
           <Form.Field>
             <label>金額</label>
             <input
-              name="amt"
+              name={isIncome ? 'income' : 'expense'}
               type="number"
               placeholder=""
               // value={item.amt}
-              // value={isIncome?item.income:item.expense}
+              value={isIncome ? item.income : item.expense}
               onChange={handleChange}
             />
           </Form.Field>

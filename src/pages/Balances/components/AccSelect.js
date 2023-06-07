@@ -15,9 +15,9 @@ export default function AccSelect({ account, name, onChange, label }) {
       .get()
       .then((snapshot) => {
         const data = snapshot.docs.map((doc) => {
-          const name = doc.data().name
-          // value 存放 id 在儲存時才能用 id 去取得帳戶餘額 
-          return { text:name , value: doc.id, key: doc.id };
+          const name = doc.data().name;
+          // value 存放 id 在儲存時才能用 id 去取得帳戶餘額
+          return { text: name, value: doc.id, key: doc.id };
         });
         // console.log(data);
         setRows(data);
@@ -26,7 +26,7 @@ export default function AccSelect({ account, name, onChange, label }) {
   }, []);
   return (
     <Form.Select
-    placeholder='帳戶'
+      placeholder="帳戶"
       label={label}
       value={account}
       name={name}

@@ -10,6 +10,8 @@ export default function Balance() {
   const [open, setOpen] = useState(false);
   const [isIncome, setIsIncome] = useState(false);
   const [loading, setLoading] = useState(false);
+  // 判斷新增或編輯(-1為新增)
+  const [editedIndex, setEditedIndex] = useState(-1);
 
   const defaultItem = {
     title: '',
@@ -22,6 +24,12 @@ export default function Balance() {
   useEffect(() => {
     get10();
   }, []);
+
+
+  useEffect(() => {
+    console.log(isIncome)
+  }, [isIncome]);
+
 
   // 最近10筆資料
   const get10 = () => {
@@ -44,7 +52,6 @@ export default function Balance() {
           if (row.income) total2 += row.income * 1;
         });
 
-       
         setRows(data);
       });
   };
@@ -71,70 +78,95 @@ export default function Balance() {
 
   // 儲存
   const handleSaveItem = () => {
-    setLoading(true)
-    // 取得目前帳戶餘額
-    const acc = item.account.id;
-    db.collection('accounts')
-      .doc(acc)
-      .get()
-      .then((doc) => {
-        // 目前帳戶餘額
-        const currentAmt = doc.data().balance * 1;
-        // 收入或支出
-        let newAmt = item.amt;
-        newAmt = isIncome ? newAmt * 1 : newAmt * -1;
+    if (editedIndex > -1) {
+      // 更新收支資料
+      db.collection('balances')
+        .doc(item.id)
+        .update(item)
+        .then(() => {
+          console.log(item);
+          setOpen(false);
+        });
+    } else {
+      setLoading(true);
+      // 取得目前帳戶餘額
+      const acc = item.account.id;
+      db.collection('accounts')
+        .doc(acc)
+        .get()
+        .then((doc) => {
+          // 目前帳戶餘額
+          const currentAmt = doc.data().balance * 1;
+          // 收入或支出
+          let newAmt = item.amt;
+          newAmt = isIncome ? newAmt * 1 : newAmt * -1;
 
-        // 計算更新後餘額
-        const updatedAmt = currentAmt + newAmt;
-        console.log(updatedAmt);
+          // 計算更新後餘額
+          const updatedAmt = currentAmt + newAmt;
+          console.log(updatedAmt);
 
-        // 更新帳戶餘額
-        const row = { balance: updatedAmt };
-        db.collection('accounts').doc(acc).update(row);
+          // 更新帳戶餘額
+          const row = { balance: updatedAmt };
+          db.collection('accounts').doc(acc).update(row);
 
-        let newItem = {
-          createdAt: Date.now(),
-          date: item.date,
-          user: user,
-          title: item.title,
-          account: { ...item.account, balance: updatedAmt },
-          cate: item.cate
-        };
-
-        // 判斷收入或支出給不同欄位名稱
-        if (isIncome) {
-          newItem = {
-            ...newItem,
-            income: item.amt,
+          let newItem = {
+            createdAt: Date.now(),
+            date: item.date,
+            user: user,
+            title: item.title,
+            account: { ...item.account, balance: updatedAmt },
+            cate: item.cate,
           };
-        } else {
-          newItem = {
-            ...newItem,
-            expense: item.amt,
-          };
-        }
 
-        // console.log(newItem);
-        // return;
+          // 判斷收入或支出給不同欄位名稱
+          if (isIncome) {
+            newItem = {
+              ...newItem,
+              income: item.amt,
+            };
+          } else {
+            newItem = {
+              ...newItem,
+              expense: item.amt,
+            };
+          }
 
-        // 新增一筆收支
-        db.collection('balances')
-          .add(newItem)
-          .then((doc) => {
-            console.log(doc.id);
-            setItem(defaultItem);
-            setOpen(false);
-            get10();
-            setLoading(false)
-          });
-      });
+          // 新增一筆收支
+          db.collection('balances')
+            .add(newItem)
+            .then((doc) => {
+              console.log(doc.id);
+              setItem(defaultItem);
+              setOpen(false);
+              get10();
+              setLoading(false);
+            });
+        });
+    }
   };
+
+  // 編輯儲存
 
   // 新增
   const handleNewItem = () => {
-    setOpen(true);  
+    setOpen(true);
+  };
 
-   
+  // 點選列
+  const handleRowClick = (row, index) => {
+    // console.log(index);
+    setEditedIndex(index);
+    // 記錄 row
+    setItem(row);
+    // 開啟表單
+    setOpen(true);
+    // 依收入或支出顯示相對應頁
+    if (row.income) {
+      setIsIncome(true);
+    } else {
+      setIsIncome(false);
+    }
+    console.log(item);
   };
 
   return (
@@ -179,10 +211,12 @@ export default function Balance() {
         </Table.Header>
 
         <Table.Body>
-          {rows.map((row) => {
+          {rows.map((row, index) => {
             return (
-              <Table.Row key={row.id}>
-              
+              <Table.Row
+                key={row.id}
+                onClick={() => handleRowClick(row, index)}
+              >
                 <Table.Cell>{row.date}</Table.Cell>
                 <Table.Cell>{row.account?.name}</Table.Cell>
                 <Table.Cell>{row.cate}</Table.Cell>
