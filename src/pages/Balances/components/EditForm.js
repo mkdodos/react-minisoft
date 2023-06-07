@@ -9,6 +9,7 @@ export default function EditForm({
   setIsIncome,
   loading,
   saveItem,
+  deleteItem,
   setItem,
   item,
 }) {
@@ -22,12 +23,14 @@ export default function EditForm({
     }
   }
 
-  // 表單輸入時,設定 item 的值
+  // 金額,項目輸入時,設定 item 的值
   const handleChange = (e) => {
+    console.log(item)
     setItem({ ...item, [e.target.name]: e.target.value });
     // console.log(item)
   };
 
+  // 帳戶
   const handleAccChange = (e, obj) => {
     // 無法直接用 obj.text 取得下拉選項的文字
     // 改成從 options 篩選出選項的文字
@@ -35,6 +38,7 @@ export default function EditForm({
     setItem({ ...item, account: { id: obj.value, name: name[0].text } });
   };
 
+  // 類別
   const handleCateChange = (e, obj) => {
     setItem({ ...item, cate: obj.value });
   };
@@ -99,11 +103,12 @@ export default function EditForm({
           <Form.Field>
             <label>金額</label>
             <input
-              name={isIncome ? 'income' : 'expense'}
+              // name={isIncome ? 'income' : 'expense'}
+              name='amt'
               type="number"
               placeholder=""
-              // value={item.amt}
-              value={isIncome ? item.income : item.expense}
+              value={item.amt}
+              // value={isIncome ? item.income : item.expense}
               onChange={handleChange}
             />
           </Form.Field>
@@ -112,6 +117,9 @@ export default function EditForm({
       <Modal.Actions>
         <Button loading={loading} floated="right" primary onClick={saveItem}>
           Save
+        </Button>
+        <Button loading={loading}  floated="left" color='red' onClick={deleteItem}>
+          Delete
         </Button>
       </Modal.Actions>
     </Modal>

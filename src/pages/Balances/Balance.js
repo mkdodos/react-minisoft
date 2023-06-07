@@ -25,11 +25,9 @@ export default function Balance() {
     get10();
   }, []);
 
-
   useEffect(() => {
-    console.log(isIncome)
-  }, [isIncome]);
-
+    // console.log(item);
+  }, [item]);
 
   // 最近10筆資料
   const get10 = () => {
@@ -44,7 +42,7 @@ export default function Balance() {
           return { ...doc.data(), id: doc.id };
         });
 
-        console.log(snapshot.size);
+        // console.log(snapshot.size);
         let total = 0;
         let total2 = 0;
         data.forEach((row) => {
@@ -77,15 +75,32 @@ export default function Balance() {
   };
 
   // 儲存
+  const handleDeleteItem = () => {
+    db.collection('balances')
+      .doc(item.id)
+      .delete()
+      .then(() => {
+        setOpen(false);
+        get10();
+        setItem(defaultItem);
+        setEditedIndex(-1);
+      });
+  };
+
+  // 儲存
   const handleSaveItem = () => {
     if (editedIndex > -1) {
+      console.log(item);
       // 更新收支資料
       db.collection('balances')
         .doc(item.id)
         .update(item)
         .then(() => {
-          console.log(item);
+          // console.log(item);
           setOpen(false);
+          get10();
+          setEditedIndex(-1);
+          setItem(defaultItem);
         });
     } else {
       setLoading(true);
@@ -97,18 +112,24 @@ export default function Balance() {
         .then((doc) => {
           // 目前帳戶餘額
           const currentAmt = doc.data().balance * 1;
+          console.log(currentAmt);
+          // return;
           // 收入或支出
-          let newAmt = item.amt;
-          newAmt = isIncome ? newAmt * 1 : newAmt * -1;
+
+          // let amt = isIncome ? item.isIncome * 1 : item.expense * -1;
+          let amt = isIncome ? item.amt * 1 : item.amt * -1;
 
           // 計算更新後餘額
-          const updatedAmt = currentAmt + newAmt;
+          const updatedAmt = currentAmt + amt;
           console.log(updatedAmt);
+
+          // return;
 
           // 更新帳戶餘額
           const row = { balance: updatedAmt };
           db.collection('accounts').doc(acc).update(row);
 
+          // return;
           let newItem = {
             createdAt: Date.now(),
             date: item.date,
@@ -122,20 +143,25 @@ export default function Balance() {
           if (isIncome) {
             newItem = {
               ...newItem,
+              // income: item.income,
               income: item.amt,
             };
           } else {
             newItem = {
               ...newItem,
+              // expense: item.expense,
               expense: item.amt,
             };
           }
 
+          console.log(newItem)
+
+          // return;
           // 新增一筆收支
           db.collection('balances')
             .add(newItem)
             .then((doc) => {
-              console.log(doc.id);
+              // console.log(doc.id);
               setItem(defaultItem);
               setOpen(false);
               get10();
@@ -166,7 +192,7 @@ export default function Balance() {
     } else {
       setIsIncome(false);
     }
-    console.log(item);
+    // console.log(item);
   };
 
   return (
@@ -175,6 +201,7 @@ export default function Balance() {
         open={open}
         setItem={setItem}
         saveItem={handleSaveItem}
+        deleteItem={handleDeleteItem}
         setOpen={setOpen}
         isIncome={isIncome}
         setIsIncome={setIsIncome}
