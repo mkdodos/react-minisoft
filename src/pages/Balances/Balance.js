@@ -90,11 +90,22 @@ export default function Balance() {
   // 儲存
   const handleSaveItem = () => {
     if (editedIndex > -1) {
-      console.log(item);
+      
+       // 要修改的資料
+       let newItem = {
+        updatedAt: Date.now(),
+        date: item.date,
+        // user: user,
+        title: item.title,
+        // account: { ...item.account, balance: updatedAmt },
+        cate: item.cate,
+      };
+      // console.log(newItem);
+      // return; 
       // 更新收支資料
       db.collection('balances')
         .doc(item.id)
-        .update(item)
+        .update(newItem)
         .then(() => {
           // console.log(item);
           setOpen(false);
@@ -113,23 +124,21 @@ export default function Balance() {
           // 目前帳戶餘額
           const currentAmt = doc.data().balance * 1;
           console.log(currentAmt);
-          // return;
-          // 收入或支出
-
-          // let amt = isIncome ? item.isIncome * 1 : item.expense * -1;
+      
           let amt = isIncome ? item.amt * 1 : item.amt * -1;
 
           // 計算更新後餘額
           const updatedAmt = currentAmt + amt;
           console.log(updatedAmt);
 
-          // return;
+         
 
           // 更新帳戶餘額
           const row = { balance: updatedAmt };
           db.collection('accounts').doc(acc).update(row);
 
-          // return;
+         
+          // 要新增的資料
           let newItem = {
             createdAt: Date.now(),
             date: item.date,
@@ -154,7 +163,7 @@ export default function Balance() {
             };
           }
 
-          console.log(newItem)
+          console.log(newItem);
 
           // return;
           // 新增一筆收支
@@ -198,6 +207,7 @@ export default function Balance() {
   return (
     <div>
       <EditForm
+        editedIndex={editedIndex}
         open={open}
         setItem={setItem}
         saveItem={handleSaveItem}

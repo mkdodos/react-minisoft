@@ -12,6 +12,7 @@ export default function EditForm({
   deleteItem,
   setItem,
   item,
+  editedIndex,
 }) {
   // 設定作用中項目樣式
   // 設定金額為收入或支出
@@ -25,7 +26,7 @@ export default function EditForm({
 
   // 金額,項目輸入時,設定 item 的值
   const handleChange = (e) => {
-    console.log(item)
+    console.log(item);
     setItem({ ...item, [e.target.name]: e.target.value });
     // console.log(item)
   };
@@ -51,26 +52,31 @@ export default function EditForm({
         setOpen(false);
       }}
     >
+      {/* 編輯時不修改帳戶和金額,若有記錯,使用沖回方式,例支出多記100,就新增一筆收入100沖銷,再新增一筆正確的資料
+      這樣才能完整呈現整個記帳過程餘額的變化     
+      */}
       <Modal.Header>編輯表單</Modal.Header>
       <Modal.Content>
-        <Menu fluid widths={2} pointing secondary>
-          <Menu.Item
-            color="teal"
-            name="income"
-            active={isIncome}
-            onClick={handleItemClick}
-          >
-            收入
-          </Menu.Item>
-          <Menu.Item
-            color="orange"
-            name="expense"
-            active={!isIncome}
-            onClick={handleItemClick}
-          >
-            支出
-          </Menu.Item>
-        </Menu>
+        {editedIndex == -1 && (
+          <Menu fluid widths={2} pointing secondary>
+            <Menu.Item
+              color="teal"
+              name="income"
+              active={isIncome}
+              onClick={handleItemClick}
+            >
+              收入
+            </Menu.Item>
+            <Menu.Item
+              color="orange"
+              name="expense"
+              active={!isIncome}
+              onClick={handleItemClick}
+            >
+              支出
+            </Menu.Item>
+          </Menu>
+        )}
 
         <Form>
           <Form.Field>
@@ -84,7 +90,12 @@ export default function EditForm({
             />
           </Form.Field>
           <Form.Field>
-            <AccSelect account={item.account?.id} onChange={handleAccChange} />
+            {editedIndex == -1 && (
+              <AccSelect
+                account={item.account?.id}
+                onChange={handleAccChange}
+              />
+            )}
           </Form.Field>
 
           <Form.Field>
@@ -100,25 +111,33 @@ export default function EditForm({
               onChange={handleChange}
             />
           </Form.Field>
-          <Form.Field>
-            <label>金額</label>
-            <input
-              // name={isIncome ? 'income' : 'expense'}
-              name='amt'
-              type="number"
-              placeholder=""
-              value={item.amt}
-              // value={isIncome ? item.income : item.expense}
-              onChange={handleChange}
-            />
-          </Form.Field>
+
+          {editedIndex == -1 && (
+            <Form.Field>
+              <label>金額</label>
+              <input
+                // name={isIncome ? 'income' : 'expense'}
+                name="amt"
+                type="number"
+                placeholder=""
+                value={item.amt}
+                // value={isIncome ? item.income : item.expense}
+                onChange={handleChange}
+              />
+            </Form.Field>
+          )}
         </Form>
       </Modal.Content>
       <Modal.Actions>
         <Button loading={loading} floated="right" primary onClick={saveItem}>
           Save
         </Button>
-        <Button loading={loading}  floated="left" color='red' onClick={deleteItem}>
+        <Button
+          loading={loading}
+          floated="left"
+          color="red"
+          onClick={deleteItem}
+        >
           Delete
         </Button>
       </Modal.Actions>
