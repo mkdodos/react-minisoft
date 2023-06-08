@@ -32,11 +32,11 @@ export default function Balance() {
   // 最近10筆資料
   const get10 = () => {
     db.collection('balances')
-      .limit(10)
+      .limit(20)
       .where('user', '==', user)
-      .where('account.id', '==', acc)
+      // .where('account.id', '==', acc)
       .orderBy('date', 'desc')
-      .orderBy('createdAt', 'desc')
+      // .orderBy('createdAt', 'desc')
       .get()
       .then((snapshot) => {
         let data = snapshot.docs.map((doc) => {
@@ -51,6 +51,12 @@ export default function Balance() {
           if (row.income) total2 += row.income * 1;
         });
 
+
+        // 使用本地排序,避免舊資料沒有 createAt 值,使用 firebase orderBy 會無法顯示
+        data=data.sort((a,b)=>{
+          return b.createdAt-a.createdAt
+        })
+
         setRows(data);
       });
   };
@@ -61,7 +67,7 @@ export default function Balance() {
       .where('user', '==', user)
       .where('account.id', '==', obj.value)
       .orderBy('date', 'desc')
-      .orderBy('createdAt','desc')
+      // .orderBy('createdAt', 'desc')
       .limit(10)
       .get()
       .then((snapshot) => {
@@ -70,7 +76,7 @@ export default function Balance() {
         });
         setRows(data);
         setAcc(obj.value);
-        console.log(obj.value)
+        console.log(obj.value);
       });
 
     // setAcc(obj.value);
@@ -92,35 +98,33 @@ export default function Balance() {
   // 儲存
   const handleSaveItem = () => {
     if (editedIndex > -1) {
-      
-       // 要修改的資料
-       let newItem = {
+      // 要修改的資料
+      let newItem = {
         updatedAt: Date.now(),
         date: item.date,
         // user: user,
         title: item.title,
-        account: {...item.account, balance:item.account.balance },
+        account: { ...item.account, balance: item.account.balance },
         // cate: item.cate,
       };
 
-       // 類別有資料才寫入
-       if(item.cate){
-        newItem = {...newItem,cate:item.cate}
+      // 類別有資料才寫入
+      if (item.cate) {
+        newItem = { ...newItem, cate: item.cate };
       }
       // console.log(item);
       // console.log(newItem);
-      // return; 
+      // return;
       // 更新收支資料
       db.collection('balances')
         .doc(item.id)
         .update(newItem)
         .then(() => {
-          
           setOpen(false);
           get10();
           setEditedIndex(-1);
           setItem(defaultItem);
-          console.log(acc)
+          console.log(acc);
         });
     } else {
       setLoading(true);
@@ -133,20 +137,17 @@ export default function Balance() {
           // 目前帳戶餘額
           const currentAmt = doc.data().balance * 1;
           console.log(currentAmt);
-      
+
           let amt = isIncome ? item.amt * 1 : item.amt * -1;
 
           // 計算更新後餘額
           const updatedAmt = currentAmt + amt;
           console.log(updatedAmt);
 
-         
-
           // 更新帳戶餘額
           const row = { balance: updatedAmt };
           db.collection('accounts').doc(acc).update(row);
 
-         
           // 要新增的資料
           let newItem = {
             createdAt: Date.now(),
@@ -158,10 +159,9 @@ export default function Balance() {
           };
 
           // 類別有資料才寫入
-          if(item.cate){
-            newItem = {...newItem,cate:item.cate}
+          if (item.cate) {
+            newItem = { ...newItem, cate: item.cate };
           }
-          
 
           // 判斷收入或支出給不同欄位名稱
           if (isIncome) {
@@ -219,6 +219,19 @@ export default function Balance() {
     // console.log(item);
   };
 
+  //
+  const timeStampToDT = (ts) => {
+    if (ts) {
+      let dt = new Date(ts);
+      let minutes = dt.getMinutes();
+      let seconds = dt.getSeconds();
+      if (seconds < 10) seconds = '0' + seconds;
+      if (minutes < 10) minutes = '0' + minutes;
+      return `${dt.getHours()}:${minutes}:${seconds}`;
+    }
+    return '';
+  };
+
   return (
     <div>
       <EditForm
@@ -253,6 +266,7 @@ export default function Balance() {
           <Table.Row>
             {/* <Table.HeaderCell>id</Table.HeaderCell> */}
             <Table.HeaderCell width={2}>日期</Table.HeaderCell>
+            <Table.HeaderCell width={2}>at</Table.HeaderCell>
             <Table.HeaderCell>帳戶</Table.HeaderCell>
             <Table.HeaderCell>類別</Table.HeaderCell>
             <Table.HeaderCell>項目</Table.HeaderCell>
@@ -270,6 +284,7 @@ export default function Balance() {
                 onClick={() => handleRowClick(row, index)}
               >
                 <Table.Cell>{row.date}</Table.Cell>
+                <Table.Cell>{timeStampToDT(row.createdAt)}</Table.Cell>
                 <Table.Cell>{row.account?.name}</Table.Cell>
                 <Table.Cell>{row.cate}</Table.Cell>
                 <Table.Cell>{row.title}</Table.Cell>
