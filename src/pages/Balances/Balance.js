@@ -34,6 +34,7 @@ export default function Balance() {
     db.collection('balances')
       .limit(10)
       .where('user', '==', user)
+      .where('account.id', '==', acc)
       .orderBy('date', 'desc')
       .orderBy('createdAt', 'desc')
       .get()
@@ -60,6 +61,7 @@ export default function Balance() {
       .where('user', '==', user)
       .where('account.id', '==', obj.value)
       .orderBy('date', 'desc')
+      .orderBy('createdAt','desc')
       .limit(10)
       .get()
       .then((snapshot) => {
@@ -67,14 +69,14 @@ export default function Balance() {
           return { ...doc.data(), id: doc.id };
         });
         setRows(data);
-        // setAcc(obj.value);
-        // console.log(obj)
+        setAcc(obj.value);
+        console.log(obj.value)
       });
 
     // setAcc(obj.value);
   };
 
-  // 儲存
+  // 刪除
   const handleDeleteItem = () => {
     db.collection('balances')
       .doc(item.id)
@@ -97,9 +99,15 @@ export default function Balance() {
         date: item.date,
         // user: user,
         title: item.title,
-        // account: { ...item.account, balance: updatedAmt },
-        cate: item.cate,
+        account: {...item.account, balance:item.account.balance },
+        // cate: item.cate,
       };
+
+       // 類別有資料才寫入
+       if(item.cate){
+        newItem = {...newItem,cate:item.cate}
+      }
+      // console.log(item);
       // console.log(newItem);
       // return; 
       // 更新收支資料
@@ -107,11 +115,12 @@ export default function Balance() {
         .doc(item.id)
         .update(newItem)
         .then(() => {
-          // console.log(item);
+          
           setOpen(false);
           get10();
           setEditedIndex(-1);
           setItem(defaultItem);
+          console.log(acc)
         });
     } else {
       setLoading(true);
@@ -145,8 +154,14 @@ export default function Balance() {
             user: user,
             title: item.title,
             account: { ...item.account, balance: updatedAmt },
-            cate: item.cate,
+            // cate: item.cate,
           };
+
+          // 類別有資料才寫入
+          if(item.cate){
+            newItem = {...newItem,cate:item.cate}
+          }
+          
 
           // 判斷收入或支出給不同欄位名稱
           if (isIncome) {

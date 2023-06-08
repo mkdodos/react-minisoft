@@ -31,6 +31,12 @@ export default function EditForm({
     // console.log(item)
   };
 
+  // 餘額
+  const handleBalanceChange = (e) => {
+    setItem({ ...item, account: {...item.account, balance: e.target.value } });
+    // console.log(item)
+  };
+
   // 帳戶
   const handleAccChange = (e, obj) => {
     // 無法直接用 obj.text 取得下拉選項的文字
@@ -116,13 +122,23 @@ export default function EditForm({
             <Form.Field>
               <label>金額</label>
               <input
-                // name={isIncome ? 'income' : 'expense'}
                 name="amt"
                 type="number"
                 placeholder=""
                 value={item.amt}
-                // value={isIncome ? item.income : item.expense}
                 onChange={handleChange}
+              />
+            </Form.Field>
+          )}
+
+          {editedIndex > -1 && (
+            <Form.Field>
+              <label>餘額</label>
+              <input
+                name="balance"
+                type="number"
+                value={item.account.balance}
+                onChange={handleBalanceChange}
               />
             </Form.Field>
           )}
