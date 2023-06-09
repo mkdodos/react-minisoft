@@ -13,6 +13,7 @@ export default function EditForm({
   setItem,
   item,
   editedIndex,
+  
 }) {
   // 設定作用中項目樣式
   // 設定金額為收入或支出
@@ -100,6 +101,7 @@ export default function EditForm({
               <AccSelect
                 account={item.account?.id}
                 onChange={handleAccChange}
+               
               />
             )}
           </Form.Field>

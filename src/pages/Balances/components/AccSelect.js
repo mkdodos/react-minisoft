@@ -6,10 +6,10 @@ export default function AccSelect({ account, name, onChange, label }) {
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
+   
     const currentUser = localStorage.getItem('user');
 
-    db.collection('accounts')
-      // .limit(10)
+    db.collection('accounts')    
       .where('user', '==', currentUser)
       .orderBy('prior')
       .get()
@@ -19,10 +19,11 @@ export default function AccSelect({ account, name, onChange, label }) {
           // value 存放 id 在儲存時才能用 id 去取得帳戶餘額
           return { text: name, value: doc.id, key: doc.id };
         });
-        // console.log(data);
+        
         setRows(data);
-        // setRowsCopy(data);
+       
       });
+
   }, []);
   return (
     <Form.Select

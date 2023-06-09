@@ -27,29 +27,38 @@ export default function Balance() {
 
   const user = localStorage.getItem('user');
   useEffect(() => {
-   
-    // 取得排序最前面的帳戶
-    db.collection('accounts').where('prior','==',1).get().then(snapshot=>{
-      const doc = snapshot.docs[0];
-      console.log(doc.id)
-      console.log(doc.data().name)
-      setItem({...item,account:{id:doc.id,name:doc.data().name}})
-      get10(doc.id);
-    })
-   
+    getAccOptions()
+    get10();
   }, []);
 
   useEffect(() => {
     // console.log(item);
   }, [item]);
 
-  
+  const getAccOptions = ()=>{
+    const currentUser = localStorage.getItem('user');
+
+    db.collection('accounts')    
+      .where('user', '==', currentUser)
+      .orderBy('prior')
+      .get()
+      .then((snapshot) => {
+        const data = snapshot.docs.map((doc) => {
+          const name = doc.data().name;
+          // value 存放 id 在儲存時才能用 id 去取得帳戶餘額
+          return { text: name, value: doc.id, key: doc.id };
+        });
+        
+        setAccOptions(data);
+       
+      });
+  }
   // 最近10筆資料
-  const get10 = (acc) => {
+  const get10 = () => {
     db.collection('balances')
       .limit(20)
       .where('user', '==', user)
-      .where('account.id', '==', acc)
+      // .where('account.id', '==', acc)
       .orderBy('date', 'desc')
       // .orderBy('createdAt', 'desc')
       .get()
@@ -92,9 +101,6 @@ export default function Balance() {
         setRows(data);
         setAcc(obj.value);
         setAccBalance(data[0].account.balance)
-
-        const name = obj.options.filter((row) => row.value == obj.value);
-        setItem({ ...item, account: { id: obj.value, name: name[0].text } });
         // console.log(data[0].account.balance);
       });
 
@@ -140,7 +146,7 @@ export default function Balance() {
         .update(newItem)
         .then(() => {
           setOpen(false);
-          get10(item.account.id);
+          get10();
           setEditedIndex(-1);
           setItem(defaultItem);
           console.log(acc);
@@ -149,7 +155,6 @@ export default function Balance() {
       setLoading(true);
       // 取得目前帳戶餘額
       const acc = item.account.id;
-      // const balance = accOptions
       db.collection('accounts')
         .doc(acc)
         .get()
@@ -208,7 +213,7 @@ export default function Balance() {
               // console.log(doc.id);
               setItem(defaultItem);
               setOpen(false);
-              get10(acc);
+              get10();
               setLoading(false);
             });
         });
@@ -220,9 +225,6 @@ export default function Balance() {
   // 新增
   const handleNewItem = () => {
     setOpen(true);
-    setEditedIndex(-1)
-    // 設定編輯表單的帳戶為查詢下拉選中的帳戶
-    console.log(acc)
   };
 
   // 點選列
@@ -268,13 +270,12 @@ export default function Balance() {
         setIsIncome={setIsIncome}
         item={item}
         loading={loading}
-       
       />
       <Grid columns={3}>
         <Grid.Row>
           <Grid.Column>
             {' '}
-            <AccSelect account={item.account?.id} onChange={handleAccChange} options={accOptions} />
+            <AccSelect onChange={handleAccChange} options={accOptions} />
           </Grid.Column>
           <Grid.Column width={3}>
             {' '}
