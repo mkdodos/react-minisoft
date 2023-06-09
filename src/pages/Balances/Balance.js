@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { db_money2022 as db } from '../../utils/firebase';
-import { Button, Grid, Statistic, StatisticValue, Table } from 'semantic-ui-react';
+import {
+  Button,
+  Grid,
+  Statistic,
+  StatisticValue,
+  Table,
+} from 'semantic-ui-react';
 import AccSelect from './components/AccSelect';
 import EditForm from './components/EditForm';
 
@@ -27,23 +33,23 @@ export default function Balance() {
 
   const user = localStorage.getItem('user');
   useEffect(() => {
-   
     // 取得排序最前面的帳戶
-    db.collection('accounts').where('prior','==',1).get().then(snapshot=>{
-      const doc = snapshot.docs[0];
-      console.log(doc.id)
-      console.log(doc.data().name)
-      setItem({...item,account:{id:doc.id,name:doc.data().name}})
-      get10(doc.id);
-    })
-   
+    db.collection('accounts')
+      .where('prior', '==', 1)
+      .get()
+      .then((snapshot) => {
+        const doc = snapshot.docs[0];
+        console.log(doc.id);
+        console.log(doc.data().name);
+        setItem({ ...item, account: { id: doc.id, name: doc.data().name } });
+        get10(doc.id);
+      });
   }, []);
 
   useEffect(() => {
     // console.log(item);
   }, [item]);
 
-  
   // 最近10筆資料
   const get10 = (acc) => {
     db.collection('balances')
@@ -66,11 +72,10 @@ export default function Balance() {
           if (row.income) total2 += row.income * 1;
         });
 
-
         // 使用本地排序,避免舊資料沒有 createAt 值,使用 firebase orderBy 會無法顯示
-        data=data.sort((a,b)=>{
-          return b.createdAt-a.createdAt
-        })
+        data = data.sort((a, b) => {
+          return b.createdAt - a.createdAt;
+        });
 
         setRows(data);
       });
@@ -89,9 +94,15 @@ export default function Balance() {
         let data = snapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
+
+        // 使用本地排序,避免舊資料沒有 createAt 值,使用 firebase orderBy 會無法顯示
+        data = data.sort((a, b) => {
+          return b.createdAt - a.createdAt;
+        });
+
         setRows(data);
         setAcc(obj.value);
-        setAccBalance(data[0].account.balance)
+        setAccBalance(data[0].account.balance);
 
         const name = obj.options.filter((row) => row.value == obj.value);
         setItem({ ...item, account: { id: obj.value, name: name[0].text } });
@@ -108,8 +119,8 @@ export default function Balance() {
       .delete()
       .then(() => {
         setOpen(false);
-        get10();
-        setItem(defaultItem);
+        get10(item.account.id);
+        // setItem(defaultItem);
         setEditedIndex(-1);
       });
   };
@@ -166,7 +177,12 @@ export default function Balance() {
 
           // 更新帳戶餘額
           const row = { balance: updatedAmt };
-          db.collection('accounts').doc(acc).update(row);
+          db.collection('accounts')
+            .doc(acc)
+            .update(row)
+            .then(() => {
+              setAccBalance(updatedAmt);
+            });
 
           // 要新增的資料
           let newItem = {
@@ -206,7 +222,8 @@ export default function Balance() {
             .add(newItem)
             .then((doc) => {
               // console.log(doc.id);
-              setItem(defaultItem);
+              // setItem(defaultItem);
+              // setItem(defaultItem);
               setOpen(false);
               get10(acc);
               setLoading(false);
@@ -219,10 +236,12 @@ export default function Balance() {
 
   // 新增
   const handleNewItem = () => {
+    // 設定編輯表單的帳戶為查詢下拉選中的帳戶,金額項目設定預設值
+    setItem({ ...item, ...defaultItem });
     setOpen(true);
-    setEditedIndex(-1)
-    // 設定編輯表單的帳戶為查詢下拉選中的帳戶
-    console.log(acc)
+    setEditedIndex(-1);
+
+    console.log(acc);
   };
 
   // 點選列
@@ -268,19 +287,26 @@ export default function Balance() {
         setIsIncome={setIsIncome}
         item={item}
         loading={loading}
-       
       />
       <Grid columns={3}>
         <Grid.Row>
           <Grid.Column>
             {' '}
-            <AccSelect account={item.account?.id} onChange={handleAccChange} options={accOptions} />
+            <AccSelect
+              account={item.account?.id}
+              onChange={handleAccChange}
+              options={accOptions}
+            />
           </Grid.Column>
           <Grid.Column width={3}>
             {' '}
             <Button onClick={handleNewItem}>新增</Button>
           </Grid.Column>
-          <Grid.Column><Statistic><StatisticValue>{accBalance}</StatisticValue></Statistic></Grid.Column>
+          <Grid.Column>
+            <Statistic>
+              <StatisticValue>{accBalance}</StatisticValue>
+            </Statistic>
+          </Grid.Column>
         </Grid.Row>
       </Grid>
 
