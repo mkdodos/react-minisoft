@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { db_money2022 as db } from '../../utils/firebase';
-import { Button, Grid, Table } from 'semantic-ui-react';
+import { Button, Grid, Statistic, StatisticValue, Table } from 'semantic-ui-react';
 import AccSelect from './components/AccSelect';
 import EditForm from './components/EditForm';
 
 export default function Balance() {
   const [rows, setRows] = useState([]);
   const [acc, setAcc] = useState('');
+  // 帳戶餘額
+  const [accBalance, setAccBalance] = useState(0);
   const [open, setOpen] = useState(false);
   const [isIncome, setIsIncome] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -76,7 +78,8 @@ export default function Balance() {
         });
         setRows(data);
         setAcc(obj.value);
-        console.log(obj.value);
+        setAccBalance(data[0].account.balance)
+        // console.log(data[0].account.balance);
       });
 
     // setAcc(obj.value);
@@ -246,16 +249,17 @@ export default function Balance() {
         item={item}
         loading={loading}
       />
-      <Grid columns={2}>
+      <Grid columns={3}>
         <Grid.Row>
           <Grid.Column>
             {' '}
             <AccSelect onChange={handleAccChange} />
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column width={3}>
             {' '}
             <Button onClick={handleNewItem}>新增</Button>
           </Grid.Column>
+          <Grid.Column><Statistic><StatisticValue>{accBalance}</StatisticValue></Statistic></Grid.Column>
         </Grid.Row>
       </Grid>
 
