@@ -6,8 +6,12 @@ import {
   Statistic,
   StatisticValue,
   Table,
+  Divider,
+  Header,
+  Icon
 } from 'semantic-ui-react';
 import AccSelect from './components/AccSelect';
+import CateSelect from './components/CateSelect';
 import EditForm from './components/EditForm';
 
 export default function Balance() {
@@ -85,6 +89,31 @@ export default function Balance() {
         setRows(data);
       });
   };
+
+
+
+  // 類別下拉選取(篩選用)
+  const handleCateChange = (e,obj)=>{
+
+    // 篩選資料
+    db.collection('balances')
+    .where('user','==',user)
+    .where('cate','==',obj.value)
+    .orderBy('date', 'desc')
+    .limit(15)
+    .get()
+    .then(snapshot=>{
+      let data = snapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+      setRows(data)
+    })
+   
+    // 下拉的value設定item.cate
+    // 選取後要設定值才能正常顯示選取的項目
+    setItem({ ...item, cate: obj.value });
+    console.log(obj.value)
+  }
 
   // 帳戶下拉選取(篩選用)
   const handleAccChange = (e, obj) => {
@@ -279,6 +308,25 @@ export default function Balance() {
     return '';
   };
 
+  // 取得星期幾
+  const getWeekDay = (date)=>{
+
+    const dt = new Date(date);
+    
+    let day = '';
+    switch(dt.getDay()){
+      case 0 : day = '日';break; 
+      case 1 : day ='一';break; 
+      case 2 : day='二';break; 
+      case 3 : day='三';break; 
+      case 4 : day='四';break; 
+      case 5 : day='五';break; 
+      case 6 : day='六';break; 
+    }
+    
+    return day;
+  }
+
   const handleMoreData = () => {
     // 從最後一筆再取出資料
 
@@ -297,7 +345,7 @@ export default function Balance() {
 
         lastDocRef.current = snapshot.docs[snapshot.docs.length - 1];
         // 載入更多的資料加入到原陣列
-        setRows([...rows,...data]);
+        setRows([...rows, ...data]);
       });
 
     console.log(acc);
@@ -317,7 +365,7 @@ export default function Balance() {
         item={item}
         loading={loading}
       />
-      <Grid columns={3}>
+      <Grid columns={4}>
         <Grid.Row>
           <Grid.Column>
             {' '}
@@ -327,10 +375,18 @@ export default function Balance() {
               options={accOptions}
             />
           </Grid.Column>
-          <Grid.Column width={3}>
+          <Grid.Column>
+           
+            <CateSelect
+              cate={item.cate}
+              onChange={handleCateChange}
+              options={accOptions}
+            />
+          </Grid.Column>
+          <Grid.Column>
             {' '}
-            {/* <Button onClick={handleNewItem}>新增</Button> */}
-            <Button onClick={handleMoreData}>載入更多</Button>
+            <Button onClick={handleNewItem}>新增</Button>
+            {/* <Button onClick={handleMoreData}>載入更多</Button> */}
           </Grid.Column>
           <Grid.Column>
             <Statistic>
@@ -347,7 +403,7 @@ export default function Balance() {
           <Table.Row>
             {/* <Table.HeaderCell>id</Table.HeaderCell> */}
             <Table.HeaderCell width={2}>日期</Table.HeaderCell>
-            <Table.HeaderCell width={2}>at</Table.HeaderCell>
+            {/* <Table.HeaderCell width={2}>at</Table.HeaderCell> */}
             <Table.HeaderCell>帳戶</Table.HeaderCell>
             <Table.HeaderCell>類別</Table.HeaderCell>
             <Table.HeaderCell>項目</Table.HeaderCell>
@@ -355,7 +411,7 @@ export default function Balance() {
             <Table.HeaderCell>支出</Table.HeaderCell>
             <Table.HeaderCell>餘額</Table.HeaderCell>
             <Table.HeaderCell>類型</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
+            {/* <Table.HeaderCell></Table.HeaderCell> */}
           </Table.Row>
         </Table.Header>
 
@@ -366,8 +422,8 @@ export default function Balance() {
                 key={row.id}
                 onClick={() => handleRowClick(row, index)}
               >
-                <Table.Cell>{row.date}</Table.Cell>
-                <Table.Cell>{timeStampToDT(row.createdAt)}</Table.Cell>
+                <Table.Cell>{row.date} ({getWeekDay(row.date)})</Table.Cell>
+                {/* <Table.Cell>{timeStampToDT(row.createdAt)}</Table.Cell> */}
                 <Table.Cell>{row.account?.name}</Table.Cell>
                 <Table.Cell>{row.cate}</Table.Cell>
                 <Table.Cell>{row.title}</Table.Cell>
@@ -375,12 +431,17 @@ export default function Balance() {
                 <Table.Cell>{row.expense}</Table.Cell>
                 <Table.Cell positive>{row.account?.balance}</Table.Cell>
                 <Table.Cell>{row.type}</Table.Cell>
-                <Table.Cell>{row.account.id}</Table.Cell>
+                {/* <Table.Cell>{getWeekDay(row.date)}</Table.Cell> */}
               </Table.Row>
             );
           })}
         </Table.Body>
       </Table>
+      <Divider horizontal>
+        <Header as="h4" onClick={handleMoreData}>         
+          More
+        </Header>
+      </Divider>
     </div>
   );
 }
