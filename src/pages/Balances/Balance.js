@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { db_money2022 as db } from '../../utils/firebase';
 import {
   Button,
@@ -32,6 +32,10 @@ export default function Balance() {
   const [item, setItem] = useState(defaultItem);
 
   const user = localStorage.getItem('user');
+
+  // 記錄最後一筆 id
+  const lastDocRef = useRef();
+
   useEffect(() => {
     // 取得排序最前面的帳戶
     db.collection('accounts')
@@ -53,7 +57,7 @@ export default function Balance() {
   // 最近10筆資料
   const get10 = (acc) => {
     db.collection('balances')
-      .limit(20)
+      .limit(2)
       .where('user', '==', user)
       .where('account.id', '==', acc)
       .orderBy('date', 'desc')
@@ -77,6 +81,7 @@ export default function Balance() {
           return b.createdAt - a.createdAt;
         });
 
+        lastDocRef.current = snapshot.docs[snapshot.docs.length - 1];
         setRows(data);
       });
   };
@@ -88,7 +93,7 @@ export default function Balance() {
       .where('account.id', '==', obj.value)
       .orderBy('date', 'desc')
       // .orderBy('createdAt', 'desc')
-      .limit(10)
+      .limit(2)
       .get()
       .then((snapshot) => {
         let data = snapshot.docs.map((doc) => {
@@ -274,6 +279,30 @@ export default function Balance() {
     return '';
   };
 
+  const handleMoreData = () => {
+    // 從最後一筆再取出資料
+
+    const acc = item.account.id;
+    db.collection('balances')
+      .limit(2)
+      .where('user', '==', user)
+      .where('account.id', '==', acc)
+      .orderBy('date', 'desc')
+      .startAfter(lastDocRef.current)
+      .get()
+      .then((snapshot) => {
+        let data = snapshot.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id };
+        });
+
+        lastDocRef.current = snapshot.docs[snapshot.docs.length - 1];
+        // 載入更多的資料加入到原陣列
+        setRows([...rows,...data]);
+      });
+
+    console.log(acc);
+  };
+
   return (
     <div>
       <EditForm
@@ -300,7 +329,8 @@ export default function Balance() {
           </Grid.Column>
           <Grid.Column width={3}>
             {' '}
-            <Button onClick={handleNewItem}>新增</Button>
+            {/* <Button onClick={handleNewItem}>新增</Button> */}
+            <Button onClick={handleMoreData}>載入更多</Button>
           </Grid.Column>
           <Grid.Column>
             <Statistic>
@@ -324,6 +354,8 @@ export default function Balance() {
             <Table.HeaderCell>收入</Table.HeaderCell>
             <Table.HeaderCell>支出</Table.HeaderCell>
             <Table.HeaderCell>餘額</Table.HeaderCell>
+            <Table.HeaderCell>類型</Table.HeaderCell>
+            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -342,6 +374,8 @@ export default function Balance() {
                 <Table.Cell>{row.income}</Table.Cell>
                 <Table.Cell>{row.expense}</Table.Cell>
                 <Table.Cell positive>{row.account?.balance}</Table.Cell>
+                <Table.Cell>{row.type}</Table.Cell>
+                <Table.Cell>{row.account.id}</Table.Cell>
               </Table.Row>
             );
           })}
