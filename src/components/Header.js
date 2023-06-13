@@ -1,4 +1,4 @@
-import { Button, Menu, Icon } from 'semantic-ui-react';
+import { Button, Menu, Icon, Dropdown } from 'semantic-ui-react';
 import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -23,18 +23,34 @@ export default function Header() {
   }
   return (
     <Menu pointing secondary>
+      <Menu.Item  as={Link} to="/balance">
+      <Icon name='dollar' />
+        收支
+      </Menu.Item>
       <Menu.Item as={Link} to="/notes">
+      <Icon name='book' />
         記事本
       </Menu.Item>
-      <Menu.Item as={Link} to="/balance">
-        記帳
-      </Menu.Item>
-      <Menu.Item as={Link} to="/spending">
-        記帳(舊資料)
-      </Menu.Item>
-      <Menu.Item as={Link} to="/notebook">
-        記事本
-      </Menu.Item>
+    
+      
+      <Dropdown text='設定' item>
+        <Dropdown.Menu>
+          <Dropdown.Item as={Link} to="/spending">帳戶</Dropdown.Item>
+          <Dropdown.Item as={Link} to="/notebook">類別</Dropdown.Item>
+          <Dropdown.Item as={Link} to="/cates-note">記事類別</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+
+     
+      
+      <Dropdown text='舊資料' item>
+        <Dropdown.Menu>
+          <Dropdown.Item as={Link} to="/spending">記帳</Dropdown.Item>
+          <Dropdown.Item as={Link} to="/notebook">記事本</Dropdown.Item>
+        </Dropdown.Menu>
+
+      </Dropdown>
+      
       {user && (
         <Menu.Item onClick={handleLogout}>
           <Icon name="sign-out" />

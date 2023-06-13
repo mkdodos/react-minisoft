@@ -5,7 +5,7 @@ import TableList from './components/TableList';
 import EditForm from './components/EditForm';
 import CateSelect from './components/CateSelect';
 
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 import { Container, Button, Icon, Segment } from 'semantic-ui-react';
 
@@ -36,17 +36,22 @@ export default function Index() {
 
   // 取得資料
   useEffect(() => {
-    dbCol.get().then((snapshot) => {
-      const data = snapshot.docs.map((doc) => {
-        return { ...doc.data(), id: doc.id };
-      });
+    dbCol
+      .orderBy('date', 'desc')
+      .limit(2)
+      .get()
+      .then((snapshot) => {
+        const data = snapshot.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id };
+        });
 
-      setRows(data);
-    });
+        setRows(data);
+      });
   }, []);
 
   // 編輯(設定索引和編輯列)
   const editRow = (row, index) => {
+    console.log(row)
     setEditRowIndex(index);
     setRow(row);
     setOpen(true);
@@ -111,10 +116,26 @@ export default function Index() {
     setOpen(true);
   };
 
+  // 類別篩選
+  const handleCateChange = (e,{value})=>{
+    dbCol
+    .orderBy('date', 'desc')
+    .limit(2)
+    .where('cate','==',value)
+    .get()
+    .then((snapshot) => {
+      const data = snapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+
+      setRows(data);
+    });
+    console.log(value)
+  }
+
   return (
     <Container>
-         <Link to='../catesNote'>類別</Link>
-      <CateSelect/>
+      <CateSelect onChange={handleCateChange} />
       <Segment>
         <Button onClick={newRow}>
           <Icon name="plus" />

@@ -38,7 +38,7 @@ export default function App() {
                 path="/balance"
               />
 
-              <Route element={<Protected Component={CatesNote} />} path="/catesNote" />
+              <Route element={<Protected Component={CatesNote} />} path="/cates-note" />
               <Route element={<Protected Component={Notes} />} path="/notes" />
 
 

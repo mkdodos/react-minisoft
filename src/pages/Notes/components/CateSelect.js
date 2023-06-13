@@ -4,7 +4,7 @@ import { Dropdown, Form } from 'semantic-ui-react';
 import { db_money2022 as db } from '../../../utils/firebase';
 
 
-export default function CateSelect({ width, cate, onChange }) {
+export default function CateSelect({ width, value, onChange }) {
   // const url = 'http://localhost:8888/react-minisoft/mysql/cate.php';
   const [options, setOptions] = useState([]);
   const user = localStorage.getItem('user');
@@ -29,7 +29,7 @@ export default function CateSelect({ width, cate, onChange }) {
       onChange={onChange}
       placeholder="類別"
       options={options}
-      value={cate}
+      value={value}
     ></Form.Select>
   );
 }
