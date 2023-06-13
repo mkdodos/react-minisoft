@@ -3,15 +3,15 @@ import { db_money2022 as db } from '../../utils/firebase';
 
 import TableList from './components/TableList';
 import EditForm from './components/EditForm';
-import CateSelect from './components/CateSelect';
 
-import {Link} from 'react-router-dom'
 
 import { Container, Button, Icon, Segment } from 'semantic-ui-react';
 
 export default function Index() {
+  // 使用者
+  const user = localStorage.getItem('user');
   // firebase 集合
-  const dbCol = db.collection('notes');
+  const dbCol = db.collection('catesNote');
 
   // 資料陣列
   const [rows, setRows] = useState([]);
@@ -55,11 +55,12 @@ export default function Index() {
   // 儲存(新增或更新)
   const saveRow = () => {
     setLoading(true);
+    
     // 更新
     if (editRowIndex > -1) {
       dbCol
         .doc(row.id)
-        .update(row)
+        .update({...row,user})
         .then(() => {
           const newRows = rows.slice();
           Object.assign(newRows[editRowIndex], row);
@@ -113,8 +114,7 @@ export default function Index() {
 
   return (
     <Container>
-         <Link to='../catesNote'>類別</Link>
-      <CateSelect/>
+    
       <Segment>
         <Button onClick={newRow}>
           <Icon name="plus" />
