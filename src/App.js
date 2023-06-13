@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import Notebook from './pages/NoteBook';
 import Spending from './pages/Spending';
 import Balance from './pages/Balances/Balance';
+import Notes from './pages/Notes';
 
 import Login from './pages/Login';
 
@@ -30,12 +31,14 @@ export default function App() {
             </Route> */}
 
               {/* <Route element={<Notebook />} path="/notebook" /> */}
-              
+
               <Route
                 element={<Protected Component={Balance} />}
                 path="/balance"
               />
-              
+
+              <Route element={<Protected Component={Notes} />} path="/notes" />
+
               <Route
                 element={<Protected Component={Spending} />}
                 path="/spending"

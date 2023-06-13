@@ -23,6 +23,9 @@ export default function Header() {
   }
   return (
     <Menu pointing secondary>
+      <Menu.Item as={Link} to="/notes">
+        記事本
+      </Menu.Item>
       <Menu.Item as={Link} to="/balance">
         記帳
       </Menu.Item>
