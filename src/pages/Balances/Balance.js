@@ -9,6 +9,7 @@ import {
   Divider,
   Header,
   Icon,
+  Label
 } from 'semantic-ui-react';
 import AccSelect from './components/AccSelect';
 import CateSelect from './components/CateSelect';
@@ -429,9 +430,9 @@ export default function Balance() {
         <Table.Header>
           <Table.Row>
             {/* <Table.HeaderCell>id</Table.HeaderCell> */}
-            <Table.HeaderCell width={2}>日期</Table.HeaderCell>
+            <Table.HeaderCell width={3}>日期</Table.HeaderCell>
             {/* <Table.HeaderCell width={2}>at</Table.HeaderCell> */}
-            <Table.HeaderCell>帳戶</Table.HeaderCell>
+            {/* <Table.HeaderCell>帳戶</Table.HeaderCell> */}
             <Table.HeaderCell>類別</Table.HeaderCell>
             <Table.HeaderCell>項目</Table.HeaderCell>
             <Table.HeaderCell>收入</Table.HeaderCell>
@@ -451,9 +452,10 @@ export default function Balance() {
               >
                 <Table.Cell>
                   {dateExcludeCurrentYear(row.date)} ({getWeekDay(row.date)})
+                  {/* <Label>2022</Label> */}
                 </Table.Cell>
                 {/* <Table.Cell>{timeStampToDT(row.createdAt)}</Table.Cell> */}
-                <Table.Cell>{row.account?.name}</Table.Cell>
+                {/* <Table.Cell>{row.account?.name}</Table.Cell> */}
                 <Table.Cell>{row.cate}</Table.Cell>
                 <Table.Cell>{row.title}</Table.Cell>
                 <Table.Cell>{row.income}</Table.Cell>

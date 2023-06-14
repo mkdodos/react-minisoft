@@ -52,7 +52,7 @@ export default function EditForm({
                 type="text"
                 value={row.prior}
                 onChange={inputChange}
-                name="content"
+                name="prior"
               />
             </Form.Field>
 

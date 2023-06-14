@@ -76,8 +76,7 @@ export default function Index() {
           setLoading(false);
         });
     } else {
-      // 新增
-
+      // 新增     
       dbCol.add(row).then((doc) => {
         const newRows = rows.slice();
         newRows.unshift({ ...row, id: doc.id });

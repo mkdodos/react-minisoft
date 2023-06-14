@@ -18,8 +18,8 @@ export default function Index() {
 
   // 表單預設值
   const defalutItem = {
-    date: new Date().toISOString().slice(0, 10),
-    content: '',
+    name: '',
+    prior: '',
   };
 
   // 編輯列
@@ -74,13 +74,14 @@ export default function Index() {
     } else {
       // 新增
 
-      dbCol.add(row).then((doc) => {
+     
+      dbCol.add({...row,user}).then((doc) => {
         const newRows = rows.slice();
         newRows.unshift({ ...row, id: doc.id });
         // 將資料加到表格中,包含剛新增的id,做為刪除之用
         // setRows([...rows, { ...row, id: doc.id }]);
         setRows(newRows);
-        console.log('add');
+        
         // 設為初始值
         setRow(defalutItem);
         setEditRowIndex(-1);
