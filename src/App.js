@@ -5,6 +5,7 @@ import Spending from './pages/Spending';
 import Balance from './pages/Balances/Balance';
 import CatesNote from './pages/CatesNote';
 import Notes from './pages/Notes';
+import Credits from './pages/Credits';
 
 import Login from './pages/Login';
 
@@ -37,6 +38,9 @@ export default function App() {
                 element={<Protected Component={Balance} />}
                 path="/balance"
               />
+
+<Route element={<Protected Component={Credits} />} path="/credits" />
+
 
               <Route element={<Protected Component={CatesNote} />} path="/cates-note" />
               <Route element={<Protected Component={Notes} />} path="/notes" />
