@@ -9,7 +9,7 @@ import {
   Divider,
   Header,
   Icon,
-  Label
+  Label,
 } from 'semantic-ui-react';
 import AccSelect from './components/AccSelect';
 import CateSelect from './components/CateSelect';
@@ -29,6 +29,9 @@ export default function Balance() {
   // 判斷新增或編輯(-1為新增)
   const [editedIndex, setEditedIndex] = useState(-1);
 
+  // 判斷資料是否到最後一筆(more data 就改成 end)
+  const [isEnd, setIsEnd] = useState(false);
+
   const defaultItem = {
     title: '',
     amt: '',
@@ -38,6 +41,8 @@ export default function Balance() {
 
   const user = localStorage.getItem('user');
 
+  // 每次顯示幾筆
+  const perRecords = 5;
   // 記錄最後一筆 id
   const lastDocRef = useRef();
 
@@ -59,10 +64,10 @@ export default function Balance() {
     // console.log(item);
   }, [item]);
 
-  // 最近10筆資料
+  // 最近數筆資料
   const get10 = (acc) => {
     db.collection('balances')
-      .limit(2)
+      .limit(perRecords)
       .where('user', '==', user)
       .where('account.id', '==', acc)
       .orderBy('date', 'desc')
@@ -91,36 +96,99 @@ export default function Balance() {
       });
   };
 
+  // 從最後一筆再取出資料
+  const handleMoreData = () => {
+    if (!lastDocRef.current) {
+      return;
+    }
+    // 有可能是帳戶或類別篩選
+    // 做不同條件設定
+    const acc = item.account.id;
+    if (acc) {
+      db.collection('balances')
+        .limit(perRecords)
+        .where('user', '==', user)
+        .where('account.id', '==', acc)
+        .orderBy('date', 'desc')
+        .startAfter(lastDocRef.current)
+        .get()
+        .then((snapshot) => {
+          let data = snapshot.docs.map((doc) => {
+            return { ...doc.data(), id: doc.id };
+          });
+
+          // console.log(snapshot.size)
+          if (snapshot.size == 0 || snapshot.size < perRecords) {
+            
+            setIsEnd(true);
+          }
+
+          lastDocRef.current = snapshot.docs[snapshot.docs.length - 1];
+          // 載入更多的資料加入到原陣列
+          setRows([...rows, ...data]);
+        });
+    } else {
+      db.collection('balances')
+        .limit(perRecords)
+        .where('user', '==', user)
+        .where('cate', '==', item.cate)
+        .orderBy('date', 'desc')
+        .startAfter(lastDocRef.current)
+        .get()
+        .then((snapshot) => {
+          let data = snapshot.docs.map((doc) => {
+            return { ...doc.data(), id: doc.id };
+          });
+
+          if (snapshot.size == 0 || snapshot.size < perRecords) {
+            setIsEnd(true);
+          }
+
+          lastDocRef.current = snapshot.docs[snapshot.docs.length - 1];
+          // 載入更多的資料加入到原陣列
+          setRows([...rows, ...data]);
+        });
+    }
+  };
+
   // 類別下拉選取(篩選用)
   const handleCateChange = (e, obj) => {
+    setIsEnd(false);
+    setItem({ ...item, cate: obj.value, account: { ...item.account, id: '' } });
+    // console.log(rows)
+    // setRows([])
+    // return
     // 篩選資料
     db.collection('balances')
       .where('user', '==', user)
       .where('cate', '==', obj.value)
       .orderBy('date', 'desc')
-      .limit(15)
+      .limit(perRecords)
       .get()
       .then((snapshot) => {
         let data = snapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
         setRows(data);
+        lastDocRef.current = snapshot.docs[snapshot.docs.length - 1];
       });
 
     // 下拉的value設定item.cate
     // 選取後要設定值才能正常顯示選取的項目
-    setItem({ ...item, cate: obj.value });
+    // setItem({ ...item, cate: obj.value });
+
     console.log(obj.value);
   };
 
   // 帳戶下拉選取(篩選用)
   const handleAccChange = (e, obj) => {
+    setIsEnd(false)
     db.collection('balances')
       .where('user', '==', user)
       .where('account.id', '==', obj.value)
       .orderBy('date', 'desc')
       // .orderBy('createdAt', 'desc')
-      .limit(2)
+      .limit(perRecords)
       .get()
       .then((snapshot) => {
         let data = snapshot.docs.map((doc) => {
@@ -134,10 +202,16 @@ export default function Balance() {
 
         setRows(data);
         setAcc(obj.value);
-        setAccBalance(data[0].account.balance);
+        setAccBalance(data[0]?.account.balance);
 
         const name = obj.options.filter((row) => row.value == obj.value);
-        setItem({ ...item, account: { id: obj.value, name: name[0].text } });
+        setItem({
+          ...item,
+          cate: '',
+          account: { id: obj.value, name: name[0].text },
+        });
+
+        lastDocRef.current = snapshot.docs[snapshot.docs.length - 1];
         // console.log(data[0].account.balance);
       });
 
@@ -338,30 +412,6 @@ export default function Balance() {
     return day;
   };
 
-  const handleMoreData = () => {
-    // 從最後一筆再取出資料
-
-    const acc = item.account.id;
-    db.collection('balances')
-      .limit(2)
-      .where('user', '==', user)
-      .where('account.id', '==', acc)
-      .orderBy('date', 'desc')
-      .startAfter(lastDocRef.current)
-      .get()
-      .then((snapshot) => {
-        let data = snapshot.docs.map((doc) => {
-          return { ...doc.data(), id: doc.id };
-        });
-
-        lastDocRef.current = snapshot.docs[snapshot.docs.length - 1];
-        // 載入更多的資料加入到原陣列
-        setRows([...rows, ...data]);
-      });
-
-    console.log(acc);
-  };
-
   // 日期非當年才顯示年份
   const dateExcludeCurrentYear = (date) => {
     // 當年
@@ -469,8 +519,14 @@ export default function Balance() {
         </Table.Body>
       </Table>
       <Divider horizontal>
-        <Header as="h4" onClick={handleMoreData}>
-          More
+        <Header as="h4">
+          {isEnd ? (
+            'End'
+          ) : (
+            <Button basic primary onClick={handleMoreData}>
+              More
+            </Button>
+          )}
         </Header>
       </Divider>
     </div>
