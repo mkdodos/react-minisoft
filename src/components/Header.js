@@ -23,6 +23,10 @@ export default function Header() {
   }
   return (
     <Menu pointing secondary>
+      <Menu.Item as={Link} to="/dashboard">
+        <Icon name="chart bar" />
+        統計
+      </Menu.Item>
       <Menu.Item as={Link} to="/balance">
         <Icon name="dollar" />
         收支

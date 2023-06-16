@@ -6,7 +6,7 @@ import Balance from './pages/Balances/Balance';
 import CatesNote from './pages/CatesNote';
 import Notes from './pages/Notes';
 import Credits from './pages/Credits';
-
+import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 
 import { AuthProvider } from './contexts/AuthContext';
@@ -28,23 +28,25 @@ export default function App() {
           <Header />
           <Container>
             <Routes>
-              {/* <Route element={<PrivateRoutes />}>
-              <Route element={<Spending />} path="/spending" />
-            </Route> */}
-
-              {/* <Route element={<Notebook />} path="/notebook" /> */}
-
+            <Route
+                element={<Protected Component={Dashboard} />}
+                path="/dashboard"
+              />
               <Route
                 element={<Protected Component={Balance} />}
                 path="/balance"
               />
 
-<Route element={<Protected Component={Credits} />} path="/credits" />
+              <Route
+                element={<Protected Component={Credits} />}
+                path="/credits"
+              />
 
-
-              <Route element={<Protected Component={CatesNote} />} path="/cates-note" />
+              <Route
+                element={<Protected Component={CatesNote} />}
+                path="/cates-note"
+              />
               <Route element={<Protected Component={Notes} />} path="/notes" />
-
 
               <Route
                 element={<Protected Component={Spending} />}
