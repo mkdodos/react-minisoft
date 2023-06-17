@@ -40,31 +40,29 @@ export default function Accounts() {
   const dbCol = db.collection('accounts');
   React.useEffect(() => {
     dbCol
-      // .orderBy('balance','desc')
+
+      .orderBy('prior')
+
       .where('user', '==', currentUser)
       .get()
       .then((snapshot) => {
         let temp = 0;
         let data = snapshot.docs.map((doc) => {
-          temp += doc.data().balance * 1;
+          const d = doc.data();
+          if (d.name != '房貸A' && d.name != '房貸B') temp += d.balance * 1;
           return {
             ...doc.data(),
             id: doc.id,
             // 將金額字串轉為數字才能正確做排序
-            balance: parseInt(doc.data().balance),
+            balance: parseInt(d.balance),
           };
         });
-        data = _.sortBy(data, 'balance');
-        // data = data.reverse()
-        data = data.slice().reverse();
+        // data = _.sortBy(data, 'balance');
+        // data = data.slice().reverse();
+        data = data.filter(row=>row.name!='房貸A')
+        data = data.filter(row=>row.name!='房貸B')
         setRows(data);
-        console.log(temp);
         setTotal(temp);
-        // setRows(
-        //   snapshot.docs.map((doc) => {
-        //     return { ...doc.data(), id: doc.id };
-        //   })
-        // );
       });
   }, []);
 
@@ -121,6 +119,12 @@ export default function Accounts() {
     dbCol.doc(row.id).delete();
     setRows(rows.filter((obj) => obj.id !== row.id));
     setModalOpen(false);
+  }
+
+  function sortByBalance() {
+    let data = _.sortBy(rows, 'balance');    
+    data = data.slice().reverse();
+    setRows(data);   
   }
 
   return (
@@ -184,7 +188,9 @@ export default function Accounts() {
         <Table.Header>
           <Table.Row>
             {schema.map((obj, i) => (
-              <Table.HeaderCell key={i}>{obj.text}</Table.HeaderCell>
+              <Table.HeaderCell onClick={sortByBalance} key={i}>
+                {obj.text}
+              </Table.HeaderCell>
             ))}
           </Table.Row>
         </Table.Header>

@@ -52,11 +52,11 @@ export default function Balance() {
       .where('prior', '==', 1)
       .get()
       .then((snapshot) => {
-        const doc = snapshot.docs[0];
-        console.log(doc.id);
-        console.log(doc.data().name);
-        setItem({ ...item, account: { id: doc.id, name: doc.data().name } });
+        const doc =  snapshot.docs[0] 
+        const acc = snapshot.docs[0].data();
+        setItem({ ...item, account: { id: doc.id, name: acc.name } });
         get10(doc.id);
+        setAccBalance(acc.balance);
       });
   }, []);
 
@@ -119,7 +119,6 @@ export default function Balance() {
 
           // console.log(snapshot.size)
           if (snapshot.size == 0 || snapshot.size < perRecords) {
-            
             setIsEnd(true);
           }
 
@@ -182,7 +181,7 @@ export default function Balance() {
 
   // 帳戶下拉選取(篩選用)
   const handleAccChange = (e, obj) => {
-    setIsEnd(false)
+    setIsEnd(false);
     db.collection('balances')
       .where('user', '==', user)
       .where('account.id', '==', obj.value)
