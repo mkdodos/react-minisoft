@@ -8,6 +8,7 @@ import Notes from './pages/Notes';
 import Credits from './pages/Credits';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
+import Accounts from './pages/Accounts';
 
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -29,6 +30,10 @@ export default function App() {
           <Container>
             <Routes>
             <Route
+                element={<Protected Component={Accounts} />}
+                path="/accounts"
+              />
+              <Route
                 element={<Protected Component={Dashboard} />}
                 path="/dashboard"
               />

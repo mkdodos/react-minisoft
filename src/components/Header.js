@@ -42,10 +42,10 @@ export default function Header() {
 
       <Dropdown text="設定" item>
         <Dropdown.Menu>
-          <Dropdown.Item as={Link} to="/spending">
+          <Dropdown.Item as={Link} to="/accounts">
             帳戶
           </Dropdown.Item>
-          <Dropdown.Item as={Link} to="/notebook">
+          <Dropdown.Item as={Link} to="/cates">
             類別
           </Dropdown.Item>
           <Dropdown.Item as={Link} to="/cates-note">
