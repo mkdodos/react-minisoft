@@ -14,7 +14,7 @@ import {
 
 import YearSelect from '../components/YearSelect';
 import MonthSelect from '../components/MonthSelect';
-import CateSelect from '../components/CateSelect';
+import CateMiniSelect from '../components/CateMiniSelect';
 // import AccSelect from '../components/AccSelect';
 
 export default function Spending() {
@@ -119,7 +119,7 @@ export default function Spending() {
 
       <Form unstackable>
         <Form.Group>
-          <CateSelect width={8} cate={cate} onChange={handleCateChange} />
+          <CateMiniSelect width={8} cate={cate} onChange={handleCateChange} />
 
           <Form.Input fluid width={8} value={search} onChange={handleSearch} />
         </Form.Group>

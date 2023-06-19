@@ -7,6 +7,7 @@ import SearchBar from './components/SearchBar';
 import DataList from './components/DataList';
 import ModalForm from './components/ModalForm';
 
+
 import {
   Container,
   Button,
@@ -171,6 +172,8 @@ export default function Index() {
     setLoading(true);
     // 更新
     if (editRowIndex > -1) {
+      // console.log(row)
+      // return;
       dbCol
         .doc(row.id)
         .update(row)
@@ -207,6 +210,7 @@ export default function Index() {
 
   // 刪除
   const deleteRow = (row) => {
+    if(!window.confirm('確定刪除嗎?'))return;
     setLoading(true);
     dbCol
       .doc(row.id)

@@ -11,6 +11,7 @@ export default function DataList({ rows, editRow }) {
                 <Table.Cell>
                   <Header as="h4">{row.note}</Header>
                   <span>{row.consumeDate} </span>
+                  <Label>{row.cate}</Label>
                 </Table.Cell>
                 <Table.Cell textAlign="right">
                   <Label  basic color='teal'>

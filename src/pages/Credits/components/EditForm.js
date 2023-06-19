@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Form, Button, Checkbox } from 'semantic-ui-react';
+import CateSelect from '../../../components/CateSelect';
 
-export default function EditForm({ 
-  row,
-  setRow,
-  saveRow,
-  loading,
-}) {
+export default function EditForm({ row, setRow, saveRow, loading }) {
   useEffect(() => {}, []);
 
   // 輸入資料時同時設定 row
@@ -14,10 +10,14 @@ export default function EditForm({
     setRow({ ...row, [e.target.name]: e.target.value });
   };
 
+  const handleCateChange = (e,{value}) => {
+    setRow({ ...row, cate: value });
+  };
+
   return (
     <div>
       <Form>
-        <Form.Field>
+      <Form.Field>
           <label>期數</label>
           <input
             type="number"
@@ -36,6 +36,12 @@ export default function EditForm({
             name="consumeDate"
           />
         </Form.Field>
+        <Form.Field>
+          <label>類別</label>
+          <CateSelect onChange={handleCateChange} />
+        </Form.Field>
+        
+      
         <Form.Field>
           <label>項目</label>
           <input
