@@ -6,6 +6,7 @@ import Balance from './pages/Balances/Balance';
 import CatesNote from './pages/CatesNote';
 import Notes from './pages/Notes';
 import Credits from './pages/Credits';
+import Section from './pages/Credits/components/Section';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Accounts from './pages/Accounts';
@@ -29,7 +30,7 @@ export default function App() {
           <Header />
           <Container>
             <Routes>
-            <Route
+              <Route
                 element={<Protected Component={Accounts} />}
                 path="/accounts"
               />
@@ -45,6 +46,11 @@ export default function App() {
               <Route
                 element={<Protected Component={Credits} />}
                 path="/credits"
+              />
+
+              <Route
+                element={<Protected Component={Section} />}
+                path="/credits-section"
               />
 
               <Route

@@ -11,7 +11,7 @@ export default function SearchBar({
   filter,
   handleFilter,
   handleInputChange,
-  handleSectionChange
+  handleSectionChange,
 }) {
   return (
     <div>
@@ -25,34 +25,33 @@ export default function SearchBar({
         <Modal.Header>篩選表單</Modal.Header>
         <Modal.Content>
           <Form>
+          <Form.Field>
+              <label>期數</label>
+              <SectionDropdown
+                filter={filter}
+                handleSectionChange={handleSectionChange}
+              />
+            </Form.Field>
             <Form.Field>
               <label>項目</label>
-
               <Input
-                value={filter.note}
-                // placeholder="note"
+                value={filter.note}                
                 onChange={handleInputChange}
                 name="note"
                 size="small"
               />
             </Form.Field>
-            <Form.Field>
-              <label>期數</label>
-              <SectionDropdown filter={filter} handleSectionChange={handleSectionChange} />  
-            </Form.Field>
-
            
+
             <Button onClick={handleFilter}>篩選</Button>
           </Form>
 
-       
           {/* <Input
             value={filter.section}
             onChange={handleInputChange}
             name="section"
             size="small"
           /> */}
-         
         </Modal.Content>
         <Modal.Actions></Modal.Actions>
       </Modal>

@@ -51,6 +51,9 @@ export default function Header() {
           <Dropdown.Item as={Link} to="/cates-note">
             記事類別
           </Dropdown.Item>
+          <Dropdown.Item as={Link} to="/credits-section">
+            信用卡期數
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
 
