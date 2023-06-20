@@ -1,7 +1,8 @@
 import React from 'react';
 import { Form, Button, Modal, Menu } from 'semantic-ui-react';
 import AccSelect from './AccSelect';
-import CateSelect from './CateSelect';
+// import CateSelect from './CateSelect';
+import CateSelect from '../../../components/CateSelect';
 export default function EditForm({
   open,
   setOpen,

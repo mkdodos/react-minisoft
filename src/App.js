@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import Notebook from './pages/NoteBook';
 import Spending from './pages/Spending';
 import Balance from './pages/Balances/Balance';
+import Cates from './pages/Cates';
 import CatesNote from './pages/CatesNote';
 import Notes from './pages/Notes';
 import Credits from './pages/Credits';
@@ -51,6 +52,11 @@ export default function App() {
               <Route
                 element={<Protected Component={Section} />}
                 path="/credits-section"
+              />
+
+<Route
+                element={<Protected Component={Cates} />}
+                path="/cates"
               />
 
               <Route

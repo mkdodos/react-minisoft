@@ -12,8 +12,11 @@ import {
   Label,
 } from 'semantic-ui-react';
 import AccSelect from './components/AccSelect';
-import CateSelect from './components/CateSelect';
+// import CateSelect from './components/CateSelect';
 import EditForm from './components/EditForm';
+
+import CateSelect from '../../components/CateSelect';
+
 
 export default function Balance() {
   const [rows, setRows] = useState([]);
