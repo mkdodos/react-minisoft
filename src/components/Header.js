@@ -23,22 +23,26 @@ export default function Header() {
   }
   return (
     <Menu pointing secondary>
-      {/* <Menu.Item as={Link} to="/dashboard">
-        <Icon name="chart bar" />
-        統計
-      </Menu.Item> */}
+     
       <Menu.Item as={Link} to="/balance">
-        <Icon name="dollar" />
+        {/* <Icon name="dollar" /> */}
         收支
       </Menu.Item>
+
       {/* <Menu.Item as={Link} to="/notes">
         <Icon name="book" />
         記事本
       </Menu.Item> */}
 
-      {/* <Menu.Item as={Link} to="/credits">       
+      <Menu.Item as={Link} to="/credits">       
         信用卡
-      </Menu.Item> */}
+      </Menu.Item>
+
+
+      <Menu.Item as={Link} to="/dashboard">
+        <Icon name="chart bar" />
+        統計
+      </Menu.Item>
 
       <Dropdown text="設定" item>
         <Dropdown.Menu>
@@ -54,10 +58,22 @@ export default function Header() {
           <Dropdown.Item as={Link} to="/credits-section">
             信用卡期數
           </Dropdown.Item>
+          <Dropdown.Item>
+            <Dropdown text="舊資料">
+              <Dropdown.Menu>
+                <Dropdown.Item as={Link} to="/spending">
+                  記帳
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/notebook">
+                  記事本
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
 
-      <Dropdown text="舊資料" item>
+      {/* <Dropdown text="舊資料" item>
         <Dropdown.Menu>
           <Dropdown.Item as={Link} to="/spending">
             記帳
@@ -66,12 +82,16 @@ export default function Header() {
             記事本
           </Dropdown.Item>
         </Dropdown.Menu>
-      </Dropdown>
+      </Dropdown> */}
+
+      {/* <Menu.Item as={Link} to="/balance">
+        <Icon name="angle right" />
+      </Menu.Item> */}
 
       {user && (
-        <Menu.Item onClick={handleLogout} >
-          <Icon name="sign-out" />
-          登出
+        <Menu.Item onClick={handleLogout}>
+          <Icon name="sign-out"  />
+         
         </Menu.Item>
       )}
     </Menu>

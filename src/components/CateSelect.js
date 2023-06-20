@@ -26,7 +26,8 @@ export default function CateSelect({ width, cate, onChange }) {
       onChange={onChange}
       placeholder="類別"
       options={options}
-      value={cate}
+      value={cate}     
+      search
     ></Form.Select>
   );
 }
