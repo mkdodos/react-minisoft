@@ -23,22 +23,22 @@ export default function Header() {
   }
   return (
     <Menu pointing secondary>
-      <Menu.Item as={Link} to="/dashboard">
+      {/* <Menu.Item as={Link} to="/dashboard">
         <Icon name="chart bar" />
         統計
-      </Menu.Item>
+      </Menu.Item> */}
       <Menu.Item as={Link} to="/balance">
         <Icon name="dollar" />
         收支
       </Menu.Item>
-      <Menu.Item as={Link} to="/notes">
+      {/* <Menu.Item as={Link} to="/notes">
         <Icon name="book" />
         記事本
-      </Menu.Item>
+      </Menu.Item> */}
 
-      <Menu.Item as={Link} to="/credits">       
+      {/* <Menu.Item as={Link} to="/credits">       
         信用卡
-      </Menu.Item>
+      </Menu.Item> */}
 
       <Dropdown text="設定" item>
         <Dropdown.Menu>
@@ -69,7 +69,7 @@ export default function Header() {
       </Dropdown>
 
       {user && (
-        <Menu.Item onClick={handleLogout}>
+        <Menu.Item onClick={handleLogout} >
           <Icon name="sign-out" />
           登出
         </Menu.Item>

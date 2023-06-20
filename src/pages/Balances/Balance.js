@@ -13,10 +13,12 @@ import {
 } from 'semantic-ui-react';
 import AccSelect from './components/AccSelect';
 // import CateSelect from './components/CateSelect';
+import SearchBar from './components/SearchBar';
 import EditForm from './components/EditForm';
 
 import CateSelect from '../../components/CateSelect';
-
+import TableList from './components/TableList';
+import TableListSmall from './components/TableListSmall';
 
 export default function Balance() {
   const [rows, setRows] = useState([]);
@@ -55,7 +57,7 @@ export default function Balance() {
       .where('prior', '==', 1)
       .get()
       .then((snapshot) => {
-        const doc =  snapshot.docs[0] 
+        const doc = snapshot.docs[0];
         const acc = snapshot.docs[0].data();
         setItem({ ...item, account: { id: doc.id, name: acc.name } });
         get10(doc.id);
@@ -382,56 +384,6 @@ export default function Balance() {
     return '';
   };
 
-  // 取得星期幾
-  const getWeekDay = (date) => {
-    const dt = new Date(date);
-
-    let day = '';
-    switch (dt.getDay()) {
-      case 0:
-        day = '日';
-        break;
-      case 1:
-        day = '一';
-        break;
-      case 2:
-        day = '二';
-        break;
-      case 3:
-        day = '三';
-        break;
-      case 4:
-        day = '四';
-        break;
-      case 5:
-        day = '五';
-        break;
-      case 6:
-        day = '六';
-        break;
-    }
-
-    return day;
-  };
-
-  // 日期非當年才顯示年份
-  const dateExcludeCurrentYear = (date) => {
-    // 當年
-    const currentYear = new Date().getFullYear();
-    // 每一筆日期的年
-    const dataYear = date.slice(0, 4);
-    // 省略年的日期
-    const excludedDate = date.slice(5);
-
-    // 日期為當年回傳省略年的日期
-    if (currentYear == dataYear) {
-      return excludedDate;
-    }
-
-    // 非當年日期正常顯示
-    return date;
-  };
-
   return (
     <div>
       <EditForm
@@ -446,7 +398,35 @@ export default function Balance() {
         item={item}
         loading={loading}
       />
-      <Grid columns={4}>
+
+      {/* <Grid columns={4}>
+        <Grid.Row>
+          <Grid.Column>
+            <AccSelect
+              account={item.account?.id}
+              onChange={handleAccChange}
+              options={accOptions}
+            />
+          </Grid.Column>
+          <Grid.Column>
+            <CateSelect
+              cate={item.cate}
+              onChange={handleCateChange}
+              options={accOptions}
+            />
+          </Grid.Column>
+          <Grid.Column>
+            <Button onClick={handleNewItem}>新增</Button>
+          </Grid.Column>
+          <Grid.Column>
+            <Statistic>
+              <StatisticValue>{accBalance}</StatisticValue>
+            </Statistic>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid> */}
+
+      <Grid columns={2}>
         <Grid.Row>
           <Grid.Column>
             {' '}
@@ -462,64 +442,34 @@ export default function Balance() {
               onChange={handleCateChange}
               options={accOptions}
             />
-          </Grid.Column>
-          <Grid.Column>
-            {' '}
-            <Button onClick={handleNewItem}>新增</Button>
-            {/* <Button onClick={handleMoreData}>載入更多</Button> */}
-          </Grid.Column>
-          <Grid.Column>
-            <Statistic>
-              <StatisticValue>{accBalance}</StatisticValue>
-            </Statistic>
-          </Grid.Column>
+          </Grid.Column>         
         </Grid.Row>
       </Grid>
+     
+     
+      <Grid columns={2}>
+          <Grid.Row>
+            <Grid.Column>
+              {/* <Header>{rows.length}</Header> */}
 
-      {/* <Button onClick={handleSaveItem}>儲存</Button> */}
+              <Statistic horizontal color='teal'>
+                <Statistic.Value>{accBalance}</Statistic.Value>
+              </Statistic>
+            </Grid.Column>
+            <Grid.Column verticalAlign="middle">
+              <Button onClick={handleNewItem} floated="right" color="yellow">
+                ADD
+              </Button>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
 
-      <Table celled unstackable>
-        <Table.Header>
-          <Table.Row>
-            {/* <Table.HeaderCell>id</Table.HeaderCell> */}
-            <Table.HeaderCell width={3}>日期</Table.HeaderCell>
-            {/* <Table.HeaderCell width={2}>at</Table.HeaderCell> */}
-            {/* <Table.HeaderCell>帳戶</Table.HeaderCell> */}
-            <Table.HeaderCell>類別</Table.HeaderCell>
-            <Table.HeaderCell>項目</Table.HeaderCell>
-            <Table.HeaderCell>收入</Table.HeaderCell>
-            <Table.HeaderCell>支出</Table.HeaderCell>
-            <Table.HeaderCell>餘額</Table.HeaderCell>
-            <Table.HeaderCell>類型</Table.HeaderCell>
-            {/* <Table.HeaderCell></Table.HeaderCell> */}
-          </Table.Row>
-        </Table.Header>
+        <Divider />
 
-        <Table.Body>
-          {rows.map((row, index) => {
-            return (
-              <Table.Row
-                key={row.id}
-                onClick={() => handleRowClick(row, index)}
-              >
-                <Table.Cell>
-                  {dateExcludeCurrentYear(row.date)} ({getWeekDay(row.date)})
-                  {/* <Label>2022</Label> */}
-                </Table.Cell>
-                {/* <Table.Cell>{timeStampToDT(row.createdAt)}</Table.Cell> */}
-                {/* <Table.Cell>{row.account?.name}</Table.Cell> */}
-                <Table.Cell>{row.cate}</Table.Cell>
-                <Table.Cell>{row.title}</Table.Cell>
-                <Table.Cell>{row.income}</Table.Cell>
-                <Table.Cell>{row.expense}</Table.Cell>
-                <Table.Cell positive>{row.account?.balance}</Table.Cell>
-                <Table.Cell>{row.type}</Table.Cell>
-                {/* <Table.Cell>{}</Table.Cell> */}
-              </Table.Row>
-            );
-          })}
-        </Table.Body>
-      </Table>
+
+      <TableListSmall onRowClick={handleRowClick} rows={rows} />
+      {/* <TableList onRowClick={handleRowClick} rows={rows} /> */}
+
       <Divider horizontal>
         <Header as="h4">
           {isEnd ? (
