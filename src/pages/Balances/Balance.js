@@ -52,22 +52,8 @@ export default function Balance() {
   const lastDocRef = useRef();
 
   // 依螢幕寬度設定版面(小於360設為true)
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
 
-  useEffect(() => {
-    // 取得排序最前面的帳戶
-    db.collection('accounts')
-      .where('prior', '==', 1)
-      .get()
-      .then((snapshot) => {
-        const doc = snapshot.docs[0];
-        const acc = snapshot.docs[0].data();
-        setItem({ ...item, account: { id: doc.id, name: acc.name } });
-        get10(doc.id);
-        setAccBalance(acc.balance);
-        // console.log(detectScreenSize());
-      });
-  }, []);
 
   // 依螢幕大小,改變顯示版面
   useEffect(() => {
@@ -86,6 +72,32 @@ export default function Balance() {
     };
   }, []);
 
+
+
+  useEffect(() => {
+
+    if (window.innerWidth <= 600) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+
+
+    // 取得排序最前面的帳戶
+    db.collection('accounts')
+      .where('prior', '==', 1)
+      .get()
+      .then((snapshot) => {
+        const doc = snapshot.docs[0];
+        const acc = snapshot.docs[0].data();
+        setItem({ ...item, account: { id: doc.id, name: acc.name } });
+        get10(doc.id);
+        setAccBalance(acc.balance);
+        // console.log(detectScreenSize());
+      });
+  }, []);
+
+  
   // 最近數筆資料
   const get10 = (acc) => {
     db.collection('balances')
