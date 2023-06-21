@@ -51,7 +51,8 @@ export default function Balance() {
   // 記錄最後一筆 id
   const lastDocRef = useRef();
 
-  useEffect(() => {
+  useEffect(() => {   
+   
     // 取得排序最前面的帳戶
     db.collection('accounts')
       .where('prior', '==', 1)
@@ -62,6 +63,7 @@ export default function Balance() {
         setItem({ ...item, account: { id: doc.id, name: acc.name } });
         get10(doc.id);
         setAccBalance(acc.balance);
+        // console.log(editedIndex)
       });
   }, []);
 
@@ -237,7 +239,9 @@ export default function Balance() {
 
   // 儲存
   const handleSaveItem = () => {
+    
     if (editedIndex > -1) {
+     
       // 要修改的資料
       let newItem = {
         updatedAt: Date.now(),
@@ -267,6 +271,7 @@ export default function Balance() {
           console.log(acc);
         });
     } else {
+     
       setLoading(true);
       // 取得目前帳戶餘額
       const acc = item.account.id;

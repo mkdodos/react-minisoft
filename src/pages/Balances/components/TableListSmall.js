@@ -55,12 +55,12 @@ export default function TableListSmall({ rows, onRowClick }) {
     <div>
       <Table unstackable>
         <Table.Body>
-          {rows.map((row) => {
+          {rows.map((row,index) => {
             return (
               <Table.Row
                 key={row.id}
                 onClick={() => {
-                  onRowClick(row);
+                  onRowClick(row,index);
                 }}
               >
                 <Table.Cell>
