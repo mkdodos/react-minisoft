@@ -51,8 +51,10 @@ export default function Balance() {
   // 記錄最後一筆 id
   const lastDocRef = useRef();
 
-  useEffect(() => {   
-   
+  // 依螢幕寬度設定版面(小於360設為true)
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
     // 取得排序最前面的帳戶
     db.collection('accounts')
       .where('prior', '==', 1)
@@ -63,13 +65,31 @@ export default function Balance() {
         setItem({ ...item, account: { id: doc.id, name: acc.name } });
         get10(doc.id);
         setAccBalance(acc.balance);
-        // console.log(editedIndex)
+        // console.log(detectScreenSize());
       });
   }, []);
 
+  
+  
+  // 依螢幕大小,改變顯示版面
   useEffect(() => {
-    // console.log(item);
-  }, [item]);
+    const handleWindowResize = () => {
+      if (window.innerWidth <= 600) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
+
+  
+ 
 
   // 最近數筆資料
   const get10 = (acc) => {
@@ -239,9 +259,7 @@ export default function Balance() {
 
   // 儲存
   const handleSaveItem = () => {
-    
     if (editedIndex > -1) {
-     
       // 要修改的資料
       let newItem = {
         updatedAt: Date.now(),
@@ -271,7 +289,6 @@ export default function Balance() {
           console.log(acc);
         });
     } else {
-     
       setLoading(true);
       // 取得目前帳戶餘額
       const acc = item.account.id;
@@ -447,33 +464,34 @@ export default function Balance() {
               onChange={handleCateChange}
               options={accOptions}
             />
-          </Grid.Column>         
+          </Grid.Column>
         </Grid.Row>
       </Grid>
-     
-     
+
       <Grid columns={2}>
-          <Grid.Row>
-            <Grid.Column>
-              {/* <Header>{rows.length}</Header> */}
+        <Grid.Row>
+          <Grid.Column>
+            {/* <Header>{rows.length}</Header> */}
 
-              <Statistic horizontal color='teal'>
-                <Statistic.Value>{accBalance}</Statistic.Value>
-              </Statistic>
-            </Grid.Column>
-            <Grid.Column verticalAlign="middle">
-              <Button onClick={handleNewItem} floated="right" color="yellow">
-                ADD
-              </Button>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+            <Statistic horizontal color="teal">
+              <Statistic.Value>{accBalance}</Statistic.Value>
+            </Statistic>
+          </Grid.Column>
+          <Grid.Column verticalAlign="middle">
+            <Button onClick={handleNewItem} floated="right" color="yellow">
+              ADD
+            </Button>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
 
-        <Divider />
+      <Divider />
 
-
-      <TableListSmall onRowClick={handleRowClick} rows={rows} />
-      {/* <TableList onRowClick={handleRowClick} rows={rows} /> */}
+      {isMobile ? (
+        <TableListSmall onRowClick={handleRowClick} rows={rows} />
+      ) : (
+        <TableList onRowClick={handleRowClick} rows={rows} />
+      )}
 
       <Divider horizontal>
         <Header as="h4">
