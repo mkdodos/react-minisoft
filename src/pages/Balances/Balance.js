@@ -69,8 +69,6 @@ export default function Balance() {
       });
   }, []);
 
-  
-  
   // 依螢幕大小,改變顯示版面
   useEffect(() => {
     const handleWindowResize = () => {
@@ -87,9 +85,6 @@ export default function Balance() {
       window.removeEventListener('resize', handleWindowResize);
     };
   }, []);
-
-  
- 
 
   // 最近數筆資料
   const get10 = (acc) => {
@@ -246,6 +241,7 @@ export default function Balance() {
 
   // 刪除
   const handleDeleteItem = () => {
+    if (!window.confirm('確定刪除嗎?')) return;
     db.collection('balances')
       .doc(item.id)
       .delete()
@@ -289,9 +285,20 @@ export default function Balance() {
           console.log(acc);
         });
     } else {
-      setLoading(true);
-      // 取得目前帳戶餘額
+      // 新增資料
+      console.log(item);
+      // return
+
+      // 取得目前帳戶
       const acc = item.account.id;
+      // 如果沒有acc在後面更新帳戶餘額會發生錯誤
+      // 在此做檢查
+      if (!acc) {
+        window.alert('請選擇帳戶');
+        return;
+      }
+
+      setLoading(true);
       // const balance = accOptions
       db.collection('accounts')
         .doc(acc)
