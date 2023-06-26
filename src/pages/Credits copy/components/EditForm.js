@@ -6,7 +6,7 @@ export default function EditForm({ row, setRow, saveRow, loading }) {
   useEffect(() => {}, []);
 
   // 輸入資料時同時設定 row
-  const inputChange = (e) => {    
+  const inputChange = (e) => {
     setRow({ ...row, [e.target.name]: e.target.value });
   };
 
@@ -38,7 +38,7 @@ export default function EditForm({ row, setRow, saveRow, loading }) {
         </Form.Field>
         <Form.Field>
           <label>類別</label>
-          <CateSelect cate={row.cate} onChange={handleCateChange} />
+          <CateSelect onChange={handleCateChange} />
         </Form.Field>
         
       
@@ -55,10 +55,11 @@ export default function EditForm({ row, setRow, saveRow, loading }) {
         <Form.Field>
           <label>金額</label>
           <input
-            type="number"            
-            value={row.expense}
+            type="number"
+            placeholder=""
+            value={row.amt}
             onChange={inputChange}
-            name="expense"
+            name="amt"
           />
         </Form.Field>
 

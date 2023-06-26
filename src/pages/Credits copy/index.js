@@ -41,7 +41,7 @@ export default function Index() {
   const defalutItem = {
     consumeDate: new Date().toISOString().slice(0, 10),
     note: '',
-    expense: '',
+    amt: '',
     section: activeSection,
   };
 
@@ -97,7 +97,7 @@ export default function Index() {
         // dbCol.limit(1).where('section','==','1').get().then((snapshot) => {
         dbCol
           .limit(2)
-          .orderBy('createdAt', 'desc')
+          .orderBy('createdAt','desc')
           .get()
           .then((snapshot) => {
             const data = snapshot.docs.map((doc) => {
@@ -118,7 +118,7 @@ export default function Index() {
   const sortData = (data, column) => {
     data = data.slice().sort(function (a, b) {
       if (column == 'date') return a.consumeDate > b.consumeDate ? 1 : -1;
-      if (column == 'expense') return a.expense * 1 > b.expense * 1 ? 1 : -1;
+      if (column == 'amt') return a.amt * 1 > b.amt * 1 ? 1 : -1;
     });
     if (direction == 'decending') data.reverse();
     setRows(data);
@@ -154,10 +154,8 @@ export default function Index() {
     setFilter({ ...filter, section: obj.value });
   };
 
-  // 篩選
   const handleFilter = () => {
     let newData = rowsCopy;
-    console.log(newData)
 
     newData = newData.filter((row) => {
       for (let key in filter) {
@@ -198,19 +196,20 @@ export default function Index() {
         });
     } else {
       // 新增
-      const item = { ...row, createdAt: Date.now() };
-      
-      dbCol.add(item).then((doc) => {
+      dbCol.add(row).then((doc) => {
         const newRows = rows.slice();
+        newRows.unshift({ ...row, id: doc.id });
         // 將資料加到表格中,包含剛新增的id,做為刪除之用
-        newRows.unshift({ ...item, id: doc.id });
+        // setRows([...rows, { ...row, id: doc.id }]);
         setRows(newRows);
-        setRowsCopy(newRows);
+        // setRowsCopy(newRows);
+        // console.log(rowsCopy)
         // 設為初始值
         setRow(defalutItem);
         setEditRowIndex(-1);
         setOpen(false);
         setLoading(false);
+        // console.log(newRows)
       });
     }
   };
@@ -234,7 +233,6 @@ export default function Index() {
 
   // 編輯(設定索引和編輯列)
   const editRow = (row, index) => {
-    console.log(row)
     setEditRowIndex(index);
     setRow(row);
     setOpen(true);
@@ -306,15 +304,15 @@ export default function Index() {
           <Button
             icon
             onClick={() => {
-              setColumn('expense');
-              sortData(rows, 'expense');
+              setColumn('amt');
+              sortData(rows, 'amt');
             }}
           >
             金額
-            {direction == 'decending' && column == 'expense' && (
+            {direction == 'decending' && column == 'amt' && (
               <Icon name="angle up" />
             )}
-            {direction == 'acending' && column == 'expense' && (
+            {direction == 'acending' && column == 'amt' && (
               <Icon name="angle down" />
             )}
           </Button>
