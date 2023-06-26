@@ -40,7 +40,7 @@ export default function Index() {
   // 表單預設值
   const defalutItem = {
     date: new Date().toISOString().slice(0, 10),
-    note: '',
+    title: '',
     expense: '',
     section: activeSection,
   };
@@ -64,10 +64,10 @@ export default function Index() {
     section: activeSection,
   });
 
-
   // 帳戶
-  const account = {id:'W501yDlEge8dFiitskVj',name:'信用卡'}
+  const [account,setAccount] = useState({});
 
+  // const account = { id: 'W501yDlEge8dFiitskVj', name: '信用卡' };
 
   // 尋找期數資料表,若無和目前日期相符的期數,就自動新增
   const autoAddSection = () => {
@@ -90,37 +90,49 @@ export default function Index() {
   };
   // 取得資料
   useEffect(() => {
-    autoAddSection();
-    // 取得最新期數
-    db.collection('sections')
-      .orderBy('section', 'desc')
+    autoAddSection(); 
+    db.collection('accounts')
+      .where('type', '==', 'credits')
       .get()
       .then((snapshot) => {
-        const section = snapshot.docs[0].data().section;
-        setActiveSection(section);
-
-        // dbCol.limit(1).where('section','==','1').get().then((snapshot) => {
-        dbCol
-          .limit(12)
-          // .orderBy('createdAt', 'desc')
-          .where('account.id','==','W501yDlEge8dFiitskVj')
-          // .where('section','==','11206')
+        // 信用卡帳戶
+        const acc = snapshot.docs[0];
+        setAccount({...acc.data(),id:acc.id})
+        db.collection('sections')
+          .orderBy('section', 'desc')
           .get()
           .then((snapshot) => {
-            const data = snapshot.docs.map((doc) => {
-              return { ...doc.data(), id: doc.id };
-            });
-            console.log(data);
-            setRows(data);
-            setRowsCopy(data);
+            // 最新期數
+            const section = snapshot.docs[0].data().section;
+            setActiveSection(section);
+            console.log(acc.id)
+            // 信用卡消費資料
+            dbCol
+              .limit(12)
+              .orderBy('createdAt','desc')
+              .where('account.id', '==', acc.id)
+              .get()
+              .then((snapshot) => {
+                const data = snapshot.docs.map((doc) => {
+                  return { ...doc.data(), id: doc.id };
+                });
+                console.log(data);
+                setRows(data);
+                setRowsCopy(data);
 
-            // 預設載入當期資料
-            const newData = data.slice().filter((row) => row.section == section);
-            setRows(newData);
+                // 預設載入當期資料
+                const newData = data
+                  .slice()
+                  .filter((row) => row.section == section);
+                setRows(newData);
+
+                console.log(newData)
+              });
           });
       });
   }, []);
 
+  
   // 排序
   const sortData = (data, column) => {
     data = data.slice().sort(function (a, b) {
@@ -164,7 +176,7 @@ export default function Index() {
   // 篩選
   const handleFilter = () => {
     let newData = rowsCopy;
-    console.log(newData)
+    console.log(newData);
 
     newData = newData.filter((row) => {
       for (let key in filter) {
@@ -205,10 +217,10 @@ export default function Index() {
         });
     } else {
       // 新增
-      const user = localStorage.getItem('user')
-     
-      const item = { ...row,user,account, createdAt: Date.now() };
-      
+      const user = localStorage.getItem('user');
+
+      const item = { ...row, user, account, createdAt: Date.now() };
+
       dbCol.add(item).then((doc) => {
         const newRows = rows.slice();
         // 將資料加到表格中,包含剛新增的id,做為刪除之用
@@ -243,7 +255,7 @@ export default function Index() {
 
   // 編輯(設定索引和編輯列)
   const editRow = (row, index) => {
-    console.log(row)
+    console.log(row);
     setEditRowIndex(index);
     setRow(row);
     setOpen(true);

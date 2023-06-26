@@ -59,8 +59,8 @@ export default function Accounts() {
         });
         // data = _.sortBy(data, 'balance');
         // data = data.slice().reverse();
-        data = data.filter(row=>row.name!='房貸A')
-        data = data.filter(row=>row.name!='房貸B')
+        data = data.filter((row) => row.name != '房貸A');
+        data = data.filter((row) => row.name != '房貸B');
         setRows(data);
         setTotal(temp);
       });
@@ -68,12 +68,12 @@ export default function Accounts() {
 
   // 儲存
   function handleSave() {
-    const { name, balance, prior } = row;
+    const { name, balance, prior,type } = row;
     if (editedIndex > -1) {
       dbCol
         // 順序要存成數字,方便排序
         .doc(row.id)
-        .update({ name, balance, prior: Number(prior) })
+        .update({ name, balance, prior: Number(prior),type })
         .then(() => {
           let newItemList = rows.slice();
           Object.assign(newItemList[editedIndex], row);
@@ -83,7 +83,7 @@ export default function Accounts() {
           console.log(row.id);
         });
     } else {
-      dbCol.add({ name, balance, prior, user: currentUser }).then((doc) => {
+      dbCol.add({ ...row, user: currentUser }).then((doc) => {
         setModalOpen(false);
         setRow(defalutItem);
         setRows([...rows, { ...row, id: doc.id }]);
@@ -122,9 +122,9 @@ export default function Accounts() {
   }
 
   function sortByBalance() {
-    let data = _.sortBy(rows, 'balance');    
+    let data = _.sortBy(rows, 'balance');
     data = data.slice().reverse();
-    setRows(data);   
+    setRows(data);
   }
 
   return (
@@ -161,6 +161,10 @@ export default function Accounts() {
                 value={row.balance}
                 onChange={handleChange}
               />
+            </Form.Field>
+            <Form.Field>
+              <label>類型</label>
+              <input name="type" value={row.type} onChange={handleChange} />
             </Form.Field>
           </Form>
         </Modal.Content>
@@ -204,8 +208,8 @@ export default function Accounts() {
                 key={row.id}
               >
                 {/* <Table.Cell>{row.id}</Table.Cell> */}
-                <Table.Cell>{row.id}</Table.Cell>
                 <Table.Cell>{row.name}</Table.Cell>
+                <Table.Cell>{row.prior}</Table.Cell>
                 <Table.Cell>{numberFormat(row.balance)}</Table.Cell>
               </Table.Row>
             );

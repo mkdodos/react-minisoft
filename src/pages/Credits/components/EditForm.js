@@ -45,9 +45,9 @@ export default function EditForm({ row, setRow, saveRow, loading }) {
           <label>項目</label>
           <input
             placeholder=""
-            value={row.note}
+            value={row.title}
             onChange={inputChange}
-            name="note"
+            name="title"
           />
         </Form.Field>
 
