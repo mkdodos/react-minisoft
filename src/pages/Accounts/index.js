@@ -204,8 +204,8 @@ export default function Accounts() {
                 key={row.id}
               >
                 {/* <Table.Cell>{row.id}</Table.Cell> */}
+                <Table.Cell>{row.id}</Table.Cell>
                 <Table.Cell>{row.name}</Table.Cell>
-                <Table.Cell>{row.prior}</Table.Cell>
                 <Table.Cell>{numberFormat(row.balance)}</Table.Cell>
               </Table.Row>
             );

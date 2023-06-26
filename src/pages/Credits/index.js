@@ -39,7 +39,7 @@ export default function Index() {
 
   // 表單預設值
   const defalutItem = {
-    consumeDate: new Date().toISOString().slice(0, 10),
+    date: new Date().toISOString().slice(0, 10),
     note: '',
     expense: '',
     section: activeSection,
@@ -63,6 +63,11 @@ export default function Index() {
   const [filter, setFilter] = useState({
     section: activeSection,
   });
+
+
+  // 帳戶
+  const account = {id:'W501yDlEge8dFiitskVj',name:'信用卡'}
+
 
   // 尋找期數資料表,若無和目前日期相符的期數,就自動新增
   const autoAddSection = () => {
@@ -96,8 +101,10 @@ export default function Index() {
 
         // dbCol.limit(1).where('section','==','1').get().then((snapshot) => {
         dbCol
-          .limit(2)
-          .orderBy('createdAt', 'desc')
+          .limit(12)
+          // .orderBy('createdAt', 'desc')
+          .where('account.id','==','W501yDlEge8dFiitskVj')
+          // .where('section','==','11206')
           .get()
           .then((snapshot) => {
             const data = snapshot.docs.map((doc) => {
@@ -108,8 +115,8 @@ export default function Index() {
             setRowsCopy(data);
 
             // 預設載入當期資料
-            // const newData = data.slice().filter((row) => row.section == section);
-            // setRows(newData);
+            const newData = data.slice().filter((row) => row.section == section);
+            setRows(newData);
           });
       });
   }, []);
@@ -198,7 +205,9 @@ export default function Index() {
         });
     } else {
       // 新增
-      const item = { ...row, createdAt: Date.now() };
+      const user = localStorage.getItem('user')
+     
+      const item = { ...row,user,account, createdAt: Date.now() };
       
       dbCol.add(item).then((doc) => {
         const newRows = rows.slice();

@@ -9,21 +9,18 @@ export default function DataList({ rows, editRow }) {
             return (
               <Table.Row key={row.id} onClick={() => editRow(row, index)}>
                 <Table.Cell>
-                  <Header as="h4">{row.note}</Header>
-                  <span>{row.consumeDate} </span>
+                  <Header as="h4">{row.title}</Header>
+                  <span>{row.date} </span>
                   <Label>{row.cate}</Label>
                 </Table.Cell>
                 <Table.Cell textAlign="right">
                   <Label  basic color='teal'>
                     {row.section}
                   </Label>
-                  {/* <Label color="teal" basic>
-                    ${row.amt}
-                  </Label> */}
-                  {/* ${row.amt} */}
+               
                 </Table.Cell>
                 <Table.Cell>
-                {/* ${row.amt} */}
+            
                 ${row.expense}
                 </Table.Cell>
               </Table.Row>

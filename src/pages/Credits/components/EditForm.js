@@ -30,10 +30,9 @@ export default function EditForm({ row, setRow, saveRow, loading }) {
           <label>日期</label>
           <input
             type="date"
-            value={row.consumeDate}
-            placeholder=""
+            value={row.date}           
             onChange={inputChange}
-            name="consumeDate"
+            name="date"
           />
         </Form.Field>
         <Form.Field>
