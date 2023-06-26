@@ -342,6 +342,7 @@ export default function Balance() {
             user: user,
             title: item.title,
             account: { ...item.account, balance: updatedAmt },
+            section:item.section
             // cate: item.cate,
           };
 

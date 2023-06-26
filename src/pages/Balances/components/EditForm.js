@@ -111,6 +111,18 @@ export default function EditForm({
             <CateSelect cate={item.cate} onChange={handleCateChange} />
           </Form.Field>
 
+          
+          <Form.Field>
+            <label>期數</label>
+            <input
+              name="section"             
+              value={item.section}
+              onChange={handleChange}
+            />
+          </Form.Field>
+
+
+          
           <Form.Field>
             <label>項目</label>
             <input

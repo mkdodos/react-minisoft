@@ -7,7 +7,6 @@ import SearchBar from './components/SearchBar';
 import DataList from './components/DataList';
 import ModalForm from './components/ModalForm';
 
-
 import {
   Container,
   Button,
@@ -50,7 +49,8 @@ export default function Index() {
   const [row, setRow] = useState(defalutItem);
 
   // firebase 集合
-  const dbCol = db.collection('credits');
+  // const dbCol = db.collection('credits');
+  const dbCol = db.collection('balances');
 
   // 排序
   const [direction, setDirection] = useState('acending');
@@ -81,7 +81,7 @@ export default function Index() {
         if (currentSection != section) {
           db.collection('sections').add({ section });
         }
-      });   
+      });
   };
   // 取得資料
   useEffect(() => {
@@ -94,17 +94,23 @@ export default function Index() {
         const section = snapshot.docs[0].data().section;
         setActiveSection(section);
 
-        dbCol.get().then((snapshot) => {
-          const data = snapshot.docs.map((doc) => {
-            return { ...doc.data(), id: doc.id };
-          });
-          setRows(data);
-          setRowsCopy(data);
+        // dbCol.limit(1).where('section','==','1').get().then((snapshot) => {
+        dbCol
+          .limit(2)
+          .orderBy('createdAt','desc')
+          .get()
+          .then((snapshot) => {
+            const data = snapshot.docs.map((doc) => {
+              return { ...doc.data(), id: doc.id };
+            });
+            console.log(data);
+            setRows(data);
+            setRowsCopy(data);
 
-          // 預設載入當期資料
-          const newData = data.slice().filter((row) => row.section == section);
-          setRows(newData);
-        });
+            // 預設載入當期資料
+            // const newData = data.slice().filter((row) => row.section == section);
+            // setRows(newData);
+          });
       });
   }, []);
 
@@ -210,7 +216,7 @@ export default function Index() {
 
   // 刪除
   const deleteRow = (row) => {
-    if(!window.confirm('確定刪除嗎?'))return;
+    if (!window.confirm('確定刪除嗎?')) return;
     setLoading(true);
     dbCol
       .doc(row.id)

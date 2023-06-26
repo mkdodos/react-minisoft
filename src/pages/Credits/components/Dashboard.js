@@ -8,7 +8,8 @@ export default function Dashboard({ rows }) {
   const calTotal = () => {
     let sum = 0;
     rows.map((row) => {
-      sum += Number(row.amt);
+      // sum += Number(row.amt);
+      sum += Number(row.expense);
     });
     setTotal(sum);
   };

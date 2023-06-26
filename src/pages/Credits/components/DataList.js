@@ -23,7 +23,8 @@ export default function DataList({ rows, editRow }) {
                   {/* ${row.amt} */}
                 </Table.Cell>
                 <Table.Cell>
-                ${row.amt}
+                {/* ${row.amt} */}
+                ${row.expense}
                 </Table.Cell>
               </Table.Row>
             );
