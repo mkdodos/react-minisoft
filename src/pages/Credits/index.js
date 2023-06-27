@@ -17,6 +17,8 @@ import {
 } from 'semantic-ui-react';
 
 export default function Index() {
+  const user = localStorage.getItem('user');
+
   // 編輯表單開關
   const [open, setOpen] = useState(false);
 
@@ -26,9 +28,10 @@ export default function Index() {
   // 載入中
   const [loading, setLoading] = useState(false);
 
-  // 資料集合
+  // 原始資料,顯示於表格
   const [rows, setRows] = useState([]);
 
+  // 篩選用
   const [rowsCopy, setRowsCopy] = useState([]);
 
   // 編輯列索引
@@ -65,7 +68,7 @@ export default function Index() {
   });
 
   // 帳戶
-  const [account,setAccount] = useState({});
+  const [account, setAccount] = useState({});
 
   // const account = { id: 'W501yDlEge8dFiitskVj', name: '信用卡' };
 
@@ -88,16 +91,72 @@ export default function Index() {
         }
       });
   };
+
+  //
+  const importData = () => {
+    db.collection('credits')
+      .where('section', '==', '11206')
+      .get()
+      .then((snapshot) => {
+        const data = snapshot.docs.map((doc) => {
+          const d = doc.data();
+          let row = {
+            date: d.consumeDate,
+            // cate: d.cate,
+            title: d.note,
+            section: d.section,
+            expense: d.amt,
+            user,
+            account: { id: account.id, name: account.name },
+            createdAt: Date.now(),
+          };
+
+          if(d.cate!=undefined){
+            row={...row,cate:d.cate}
+          }
+
+          db.collection('balances').add(row)
+
+          // console.log(row)
+
+          // return row;
+        });
+
+        // db.collection('balances').add({
+        //   createdAt: Date.now(),
+        //   date: '2023-05-13',
+        //   cate: '旅遊',
+        //   title: '良人煮鍋',
+        //   section: '11205',
+        //   expense: '6060',
+        //   user: 'mkdodos@gmail.com',
+        //   account: {
+        //     id: 'W501yDlEge8dFiitskVj',
+        //     name: '信用卡',
+        //   },
+        // });
+
+        // console.log(data);
+        // console.log(snapshot.size)
+      });
+  };
+
+  //
+
+  //
+
   // 取得資料
   useEffect(() => {
-    autoAddSection(); 
+    // importData();
+
+    autoAddSection();
     db.collection('accounts')
       .where('type', '==', 'credits')
       .get()
       .then((snapshot) => {
         // 信用卡帳戶
         const acc = snapshot.docs[0];
-        setAccount({...acc.data(),id:acc.id})
+        setAccount({ ...acc.data(), id: acc.id });
         db.collection('sections')
           .orderBy('section', 'desc')
           .get()
@@ -105,18 +164,23 @@ export default function Index() {
             // 最新期數
             const section = snapshot.docs[0].data().section;
             setActiveSection(section);
-            console.log(acc.id)
+            // console.log(acc.id);
             // 信用卡消費資料
             dbCol
-              .limit(12)
-              .orderBy('createdAt','desc')
+            // 加了 limit 條件,會讓 where 可篩資料變少 
+            // .limit(12) 
+            .orderBy('date', 'desc') 
+            .orderBy('createdAt', 'desc')
+             
               .where('account.id', '==', acc.id)
+              // .where('account.id', '==', acc.id)
+           
               .get()
               .then((snapshot) => {
                 const data = snapshot.docs.map((doc) => {
                   return { ...doc.data(), id: doc.id };
                 });
-                console.log(data);
+                // console.log(data);
                 setRows(data);
                 setRowsCopy(data);
 
@@ -126,13 +190,12 @@ export default function Index() {
                   .filter((row) => row.section == section);
                 setRows(newData);
 
-                console.log(newData)
+                console.log(section);
               });
           });
       });
   }, []);
 
-  
   // 排序
   const sortData = (data, column) => {
     data = data.slice().sort(function (a, b) {
@@ -205,7 +268,9 @@ export default function Index() {
         .doc(row.id)
         .update(row)
         .then(() => {
-          const newRows = rows.slice();
+          // 原本寫 rows.slice(), 資料會少
+          // 改成 rowsCopy.slice()
+          const newRows = rowsCopy.slice();
           Object.assign(newRows[editRowIndex], row);
           setRows(newRows);
           setRowsCopy(newRows);
@@ -217,16 +282,32 @@ export default function Index() {
         });
     } else {
       // 新增
-      const user = localStorage.getItem('user');
 
       const item = { ...row, user, account, createdAt: Date.now() };
 
       dbCol.add(item).then((doc) => {
-        const newRows = rows.slice();
+        const newRows = rowsCopy.slice();
         // 將資料加到表格中,包含剛新增的id,做為刪除之用
         newRows.unshift({ ...item, id: doc.id });
-        setRows(newRows);
+     
         setRowsCopy(newRows);
+      
+       
+        // 新增完做篩選為當期
+        const newData = newRows
+        .slice()
+        .filter((row) => row.section == activeSection);
+
+
+     
+        setRows(newData);
+      
+          
+  
+       
+      //  });
+
+       
         // 設為初始值
         setRow(defalutItem);
         setEditRowIndex(-1);
@@ -244,10 +325,18 @@ export default function Index() {
       .doc(row.id)
       .delete()
       .then(() => {
-        const newRows = rows.slice();
+        const newRows = rowsCopy.slice();
         newRows.splice(editRowIndex, 1);
-        setRows(newRows);
         setRowsCopy(newRows);
+
+          // 刪除完做篩選為當期
+          const newData = newRows
+          .slice()
+          .filter((row) => row.section == activeSection);
+
+
+        setRows(newData);
+        
         setOpen(false);
         setLoading(false);
       });

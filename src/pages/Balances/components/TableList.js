@@ -57,14 +57,13 @@ export default function TableList({ rows, onRowClick }) {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell width={3}>日期</Table.HeaderCell>
-
+            <Table.HeaderCell>帳戶</Table.HeaderCell>
             <Table.HeaderCell>類別</Table.HeaderCell>
             <Table.HeaderCell>項目</Table.HeaderCell>
             <Table.HeaderCell>收入</Table.HeaderCell>
             <Table.HeaderCell>支出</Table.HeaderCell>
             <Table.HeaderCell>餘額</Table.HeaderCell>
             <Table.HeaderCell>類型</Table.HeaderCell>
-            {/* <Table.HeaderCell></Table.HeaderCell> */}
           </Table.Row>
         </Table.Header>
 
@@ -75,6 +74,7 @@ export default function TableList({ rows, onRowClick }) {
                 <Table.Cell>
                   {dateExcludeCurrentYear(row.date)} ({getWeekDay(row.date)})
                 </Table.Cell>
+                <Table.Cell>{row.account.name}</Table.Cell>
                 <Table.Cell>{row.cate}</Table.Cell>
                 <Table.Cell>{row.title}</Table.Cell>
                 <Table.Cell>{row.income}</Table.Cell>
