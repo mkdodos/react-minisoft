@@ -27,11 +27,8 @@ export default function Index() {
   const handleFilter = (e, { value }) => {
     const section = value;
     setSection(section);
-    // console.log(section)
-    // return;
     // 本地篩選
     let rows = localDataCopy.filter((item) => item.section.includes(section));
-
     // 有查到本地資料
     if (rows.length > 0) {
       let total = 0;
@@ -42,88 +39,58 @@ export default function Index() {
       setLocalData(rows);
       console.log('local');
     } else {
-      // 沒查到本地資料
-      // 從遠端查詢
-      db.collection('balances')
-        .where('section', '==', section)
-        // .orderBy('expense','desc')
-        .get()
-        .then((snapshot) => {
-          if (snapshot.size > 0) {
-            // 有查到
-            let total = 0;
-            let data = snapshot.docs.map((doc) => {
-              let d = doc.data();
-              total += Number(d.expense);
-              return { ...doc.data(), id: doc.id };
-            });
-            // 排序
-            data = data.sort((a, b) => {
-              return a.expense * 1 < b.expense * 1 ? 1 : -1;
-            });
-
-            SetTotal(total);
-            // 將資料存入本地
-            setLocalDataCopy([...localDataCopy, ...data]);
-            // 顯示剛從遠端取得的資料
-
-            setLocalData(data);
-            console.log('有查到');
-          }
-          // 沒查到
-          else {
-            console.log('無');
-            setLocalData([{ id: '1', title: '查無資料' }]);
-          }
-        });
-      // console.log('no');
+      // 沒查到本地資料,再從遠端查詢
+      fetchRemoteData(section);
     }
-    // console.log(localData)
   };
 
   // 取得遠端資料
-  const fetchRemoteData = () => {
+  const fetchRemoteData = (section) => {
+    db.collection('balances')
+      .where('section', '==', section)
+      .get()
+      .then((snapshot) => {
+        // 無資料
+        if (snapshot.size == 0) {
+          console.log('no');
+          SetTotal(0);
+          setLocalData([{ id: '1', title: '查無資料' }]);
+          return;
+        }
+        // 有資料
+        let total = 0;
+        let data = snapshot.docs.map((doc) => {
+          let d = doc.data();
+          total += Number(d.expense);
+          return { ...d, id: doc.id };
+        });
+
+        // 排序
+        data = data.sort((a, b) => {
+          return a.expense * 1 < b.expense * 1 ? 1 : -1;
+        });
+
+        // 設定顯示的資料
+        setLocalData(data);
+        // 將資料加入本地
+        setLocalDataCopy([...localDataCopy, ...data]);
+        // 設定加總  
+        SetTotal(total);
+       
+      });
+    // });
+  };
+
+  useEffect(() => {
+    console.clear();
     db.collection('sections')
       .orderBy('section', 'desc')
       .get()
       .then((snapshot) => {
         const section = snapshot.docs[0].data().section;
         setSection(section);
-        // setNewestSection(section);
-        db.collection('balances')
-          .where('section', '==', section)
-          .get()
-          .then((snapshot) => {
-            let total = 0;
-            let data = snapshot.docs.map((doc) => {
-              let d = doc.data();
-              total += Number(d.expense);
-              return { ...d, id: doc.id };
-            });
-
-            // 排序
-            data = data.sort((a, b) => {
-              return a.expense * 1 < b.expense * 1 ? 1 : -1;
-            });
-
-            // 將資料存入本地
-            setLocalData(data);
-            setLocalDataCopy(data);
-            SetTotal(total);
-            // console.log(data);
-          });
+        fetchRemoteData(section);
       });
-  };
-  // 設定 section
-  // const handleSectionChange = (e,{value}) => {
-  //   console.log(value)
-  //   setSection(value);
-  // };
-
-  useEffect(() => {
-    console.clear();
-    // fetchNewestSection();
-    fetchRemoteData();
   }, []);
   return (
     <div>
