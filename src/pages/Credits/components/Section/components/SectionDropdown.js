@@ -3,7 +3,7 @@ import { Dropdown } from 'semantic-ui-react';
 import { useEffect, useState } from 'react';
 import { db_money2022 as db } from '../../../../../utils/firebase';
 
-export default function SectionDropdown({ onChange }) {
+export default function SectionDropdown({ onChange,value }) {
   // 編輯列
   const [rows, setRows] = useState([]);
   // firebase 集合
@@ -34,6 +34,7 @@ export default function SectionDropdown({ onChange }) {
         fluid
         selection
         options={rows}
+        value={value}
       />
     </div>
   );
