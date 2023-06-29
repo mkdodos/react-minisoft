@@ -30,11 +30,14 @@ export default function Index() {
     expense: '',
     section: newestSection,
   };
-
   // 編輯列
   const [row, setRow] = useState(defalutItem);
+  // 編輯列索引
+  const [editRowIndex, setEditRowIndex] = useState(-1);
   // 編輯表單開關
   const [open, setOpen] = useState(false);
+  // 載入中
+  const [loading, setLoading] = useState(false);
 
   // *************方法************
   // 取得信用卡帳戶(type=credits)
@@ -112,19 +115,38 @@ export default function Index() {
 
   // add
   const handleCreate = () => {
-    
+    setEditRowIndex(-1)
+    setOpen(true);
     // const item = { ...row, user, account, createdAt: Date.now() };
-
     // console.log(item);
   };
 
   // 編輯(設定索引和編輯列)
   const editRow = (row, index) => {
-    setOpen(true)
-    // console.log(row);
-    // setEditRowIndex(index);
+
+    setOpen(true);
+    setEditRowIndex(index)
     setRow(row);
-    
+  };
+
+  // 儲存(新增或更新)
+  const saveRow = () => {
+    setLoading(true);
+    // 更新
+    if (editRowIndex > -1) {
+     
+      
+    } else {
+      // 新增
+      const item = { ...row, user, account, createdAt: Date.now() };
+      console.log(item)
+      // db.collection('balances').add(item).then((doc) => {   
+      //   setRow(defalutItem);
+      //   setEditRowIndex(-1);
+      //   setOpen(false);
+      //   setLoading(false);
+      // });
+    }
   };
 
   useEffect(() => {
@@ -158,7 +180,7 @@ export default function Index() {
         // setRows={setRows}
         row={row}
         setRow={setRow}
-        // saveRow={saveRow}
+        saveRow={saveRow}
         // deleteRow={deleteRow}
         // loading={loading}
       />
