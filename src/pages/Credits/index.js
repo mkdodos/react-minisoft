@@ -4,6 +4,7 @@ import { db_money2022 as db } from '../../utils/firebase';
 import numberFormat from '../../utils/numberFormat';
 import DataList from './components/DataList';
 import SectionDropdown from './components/Section/components/SectionDropdown';
+import ModalForm from './components/ModalForm';
 
 export default function Index() {
   // *************資料************
@@ -17,36 +18,42 @@ export default function Index() {
   const [localDataCopy, setLocalDataCopy] = useState([]);
   // 使用者
   const user = localStorage.getItem('user');
-  // 帳戶
-  const [accountId, setAccountId] = useState('');
+  // 帳戶(新增消費時會用到)
+  const [account, setAccount] = useState('');
   // 當期總金額
   const [total, SetTotal] = useState(0);
 
+  // 表單預設值
+  const defalutItem = {
+    date: new Date().toISOString().slice(0, 10),
+    title: '',
+    expense: '',
+    section: newestSection,
+  };
+
+  // 編輯列
+  const [row, setRow] = useState(defalutItem);
+  // 編輯表單開關
+  const [open, setOpen] = useState(false);
+
   // *************方法************
-  // 查詢
-  const handleFilter = (e, { value }) => {
-    const section = value;
-    setSection(section);
-    // 本地篩選
-    let rows = localDataCopy.filter((item) => item.section.includes(section));
-    // 有查到本地資料
-    if (rows.length > 0) {
-      let total = 0;
-      rows.map((row) => {
-        total += Number(row.expense);
+  // 取得信用卡帳戶(type=credits)
+  const getCreditAcc = () => {
+    db.collection('accounts')
+      .where('user', '==', user)
+      .where('type', '==', 'credits')
+      .get()
+      .then((snapshot) => {
+        if (snapshot.size == 0) return;
+        const acc = snapshot.docs[0];
+        setAccount({ ...acc.data(), id: acc.id });
       });
-      SetTotal(total);
-      setLocalData(rows);
-      console.log('local');
-    } else {
-      // 沒查到本地資料,再從遠端查詢
-      fetchRemoteData(section);
-    }
   };
 
   // 取得遠端資料
   const fetchRemoteData = (section) => {
     db.collection('balances')
+      .where('user', '==', user)
       .where('section', '==', section)
       .get()
       .then((snapshot) => {
@@ -70,19 +77,60 @@ export default function Index() {
           return a.expense * 1 < b.expense * 1 ? 1 : -1;
         });
 
+        console.log(data);
+
         // 設定顯示的資料
         setLocalData(data);
         // 將資料加入本地
         setLocalDataCopy([...localDataCopy, ...data]);
-        // 設定加總  
+        // 設定加總
         SetTotal(total);
-       
       });
     // });
   };
 
+  // 查詢
+  const handleFilter = (e, { value }) => {
+    const section = value;
+    setSection(section);
+    // 本地篩選
+    let rows = localDataCopy.filter((item) => item.section.includes(section));
+    // 有查到本地資料
+    if (rows.length > 0) {
+      let total = 0;
+      rows.map((row) => {
+        total += Number(row.expense);
+      });
+      SetTotal(total);
+      setLocalData(rows);
+      console.log('local');
+    } else {
+      // 沒查到本地資料,再從遠端查詢
+      fetchRemoteData(section);
+    }
+  };
+
+  // add
+  const handleCreate = () => {
+    
+    // const item = { ...row, user, account, createdAt: Date.now() };
+
+    // console.log(item);
+  };
+
+  // 編輯(設定索引和編輯列)
+  const editRow = (row, index) => {
+    setOpen(true)
+    // console.log(row);
+    // setEditRowIndex(index);
+    setRow(row);
+    
+  };
+
   useEffect(() => {
     console.clear();
+    getCreditAcc();
+
     db.collection('sections')
       .orderBy('section', 'desc')
       .get()
@@ -101,10 +149,22 @@ export default function Index() {
         </Statistic>
       </Segment>
 
-      {/* <Input onChange={handleSectionChange} /> */}
-      {/* <Button onClick={handleFilter}>查詢</Button> */}
+      <Button onClick={handleCreate}>新增</Button>
+
+      <ModalForm
+        open={open}
+        setOpen={setOpen}
+        // rows={rows}
+        // setRows={setRows}
+        row={row}
+        setRow={setRow}
+        // saveRow={saveRow}
+        // deleteRow={deleteRow}
+        // loading={loading}
+      />
+
       <Divider />
-      <DataList rows={localData} />
+      <DataList rows={localData} editRow={editRow} />
     </div>
   );
 }

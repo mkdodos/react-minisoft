@@ -32,7 +32,7 @@ export default function Login() {
         // console.log(userCredential)
         // 寫入 user 值 email
         localStorage.setItem('user', userCredential.user.email);
-        navigate('/notebook');
+        navigate('/credits');
       });
   };
   useEffect(() => {
