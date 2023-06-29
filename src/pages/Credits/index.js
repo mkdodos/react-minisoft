@@ -64,7 +64,8 @@ export default function Index() {
         if (snapshot.size == 0) {
           console.log('no');
           SetTotal(0);
-          setLocalData([{ id: '1', title: '查無資料' }]);
+          // setLocalData([{ id: '1', title: '查無資料' }]);
+          setLocalData([]);
           return;
         }
         // 有資料
@@ -115,7 +116,7 @@ export default function Index() {
 
   // add
   const newRow = () => {
-    setEditRowIndex(-1)
+    setEditRowIndex(-1);
     setOpen(true);
     setRow(defalutItem);
     // const item = { ...row, user, account, createdAt: Date.now() };
@@ -124,9 +125,8 @@ export default function Index() {
 
   // 編輯(設定索引和編輯列)
   const editRow = (row, index) => {
-
     setOpen(true);
-    setEditRowIndex(index)
+    setEditRowIndex(index);
     setRow(row);
   };
 
@@ -135,18 +135,25 @@ export default function Index() {
     setLoading(true);
     // 更新
     if (editRowIndex > -1) {
-     
-      
     } else {
       // 新增
-      const item = { ...row, user, account, createdAt: Date.now() };
+      let item = { ...row, user, account, createdAt: Date.now() };
       // console.log(item)
-      db.collection('balances').add(item).then((doc) => {   
-        setRow(defalutItem);
-        setEditRowIndex(-1);
-        setOpen(false);
-        setLoading(false);
-      });
+      db.collection('balances')
+        .add(item)
+        .then((doc) => {
+          // const newRows = localDataCopy.slice();
+          // 將資料加到表格中,包含剛新增的id,做為刪除之用
+          // newRows.unshift({ ...item, id: doc.id });
+          item = { ...item, id: doc.id }
+          setLocalDataCopy([...localDataCopy,item]);
+          setLocalData([item,...localData]);
+          SetTotal(total+item.expense*1)
+          setRow(defalutItem);
+          setEditRowIndex(-1);
+          setOpen(false);
+          setLoading(false);
+        });
     }
   };
 
@@ -159,8 +166,8 @@ export default function Index() {
       .get()
       .then((snapshot) => {
         const section = snapshot.docs[0].data().section;
-        setNewestSection(section)
-        console.log(section)
+        setNewestSection(section);
+        console.log(section);
         setSection(section);
         fetchRemoteData(section);
       });
