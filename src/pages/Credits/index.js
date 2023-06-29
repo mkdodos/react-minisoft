@@ -28,7 +28,7 @@ export default function Index() {
     date: new Date().toISOString().slice(0, 10),
     title: '',
     expense: '',
-    section: newestSection,
+    section,
   };
   // 編輯列
   const [row, setRow] = useState(defalutItem);
@@ -114,9 +114,10 @@ export default function Index() {
   };
 
   // add
-  const handleCreate = () => {
+  const newRow = () => {
     setEditRowIndex(-1)
     setOpen(true);
+    setRow(defalutItem);
     // const item = { ...row, user, account, createdAt: Date.now() };
     // console.log(item);
   };
@@ -139,13 +140,13 @@ export default function Index() {
     } else {
       // 新增
       const item = { ...row, user, account, createdAt: Date.now() };
-      console.log(item)
-      // db.collection('balances').add(item).then((doc) => {   
-      //   setRow(defalutItem);
-      //   setEditRowIndex(-1);
-      //   setOpen(false);
-      //   setLoading(false);
-      // });
+      // console.log(item)
+      db.collection('balances').add(item).then((doc) => {   
+        setRow(defalutItem);
+        setEditRowIndex(-1);
+        setOpen(false);
+        setLoading(false);
+      });
     }
   };
 
@@ -158,6 +159,8 @@ export default function Index() {
       .get()
       .then((snapshot) => {
         const section = snapshot.docs[0].data().section;
+        setNewestSection(section)
+        console.log(section)
         setSection(section);
         fetchRemoteData(section);
       });
@@ -171,7 +174,7 @@ export default function Index() {
         </Statistic>
       </Segment>
 
-      <Button onClick={handleCreate}>新增</Button>
+      <Button onClick={newRow}>新增</Button>
 
       <ModalForm
         open={open}
@@ -182,7 +185,7 @@ export default function Index() {
         setRow={setRow}
         saveRow={saveRow}
         // deleteRow={deleteRow}
-        // loading={loading}
+        loading={loading}
       />
 
       <Divider />
