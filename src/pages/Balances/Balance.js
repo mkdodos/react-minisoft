@@ -47,7 +47,7 @@ export default function Balance() {
   const user = localStorage.getItem('user');
 
   // 每次顯示幾筆
-  const perRecords = 5;
+  const perRecords = 10;
   // 記錄最後一筆 id
   const lastDocRef = useRef();
 
@@ -121,9 +121,9 @@ export default function Balance() {
         });
 
         // 使用本地排序,避免舊資料沒有 createAt 值,使用 firebase orderBy 會無法顯示
-        data = data.sort((a, b) => {
-          return b.createdAt - a.createdAt;
-        });
+        // data = data.sort((a, b) => {
+        //   return b.createdAt - a.createdAt;
+        // });
 
         lastDocRef.current = snapshot.docs[snapshot.docs.length - 1];
         setRows(data);
@@ -267,11 +267,13 @@ export default function Balance() {
 
   // 儲存
   const handleSaveItem = () => {
+    setLoading(true)
     if (editedIndex > -1) {
       // 要修改的資料
       let newItem = {
         updatedAt: Date.now(),
         date: item.date,
+        expense:item.expense,
         // user: user,
         title: item.title,
         account: { ...item.account, balance: item.account.balance },
@@ -294,7 +296,7 @@ export default function Balance() {
           get10(item.account.id);
           setEditedIndex(-1);
           setItem(defaultItem);
-          console.log(acc);
+          setLoading(false)
         });
     } else {
       // 新增資料
@@ -441,32 +443,7 @@ export default function Balance() {
         loading={loading}
       />
 
-      {/* <Grid columns={4}>
-        <Grid.Row>
-          <Grid.Column>
-            <AccSelect
-              account={item.account?.id}
-              onChange={handleAccChange}
-              options={accOptions}
-            />
-          </Grid.Column>
-          <Grid.Column>
-            <CateSelect
-              cate={item.cate}
-              onChange={handleCateChange}
-              options={accOptions}
-            />
-          </Grid.Column>
-          <Grid.Column>
-            <Button onClick={handleNewItem}>新增</Button>
-          </Grid.Column>
-          <Grid.Column>
-            <Statistic>
-              <StatisticValue>{accBalance}</StatisticValue>
-            </Statistic>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid> */}
+      
 
       <Grid columns={2}>
         <Grid.Row>

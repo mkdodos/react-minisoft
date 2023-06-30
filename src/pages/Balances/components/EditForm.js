@@ -112,14 +112,14 @@ export default function EditForm({
           </Form.Field>
 
           
-          <Form.Field>
+          {/* <Form.Field>
             <label>期數</label>
             <input
               name="section"             
               value={item.section}
               onChange={handleChange}
             />
-          </Form.Field>
+          </Form.Field> */}
 
 
           
@@ -133,21 +133,21 @@ export default function EditForm({
             />
           </Form.Field>
 
-          {editedIndex == -1 && (
+          {/* {editedIndex == -1 && ( */}
             <Form.Field>
               <label>金額</label>
               <input
-                name="amt"
+                name="expense"
                 type="number"
                 placeholder=""
-                value={item.amt}
+                value={item.expense}
                 onChange={handleChange}
               />
             </Form.Field>
-          )}
+          {/* )} */}
 
-          {editedIndex > -1 && (
-            <Form.Field>
+          {/* {editedIndex > -1 && ( */}
+            {/* <Form.Field>
               <label>餘額</label>
               <input
                 name="balance"
@@ -155,8 +155,8 @@ export default function EditForm({
                 value={item.account.balance}
                 onChange={handleBalanceChange}
               />
-            </Form.Field>
-          )}
+            </Form.Field> */}
+          {/* )} */}
         </Form>
       </Modal.Content>
       <Modal.Actions>
