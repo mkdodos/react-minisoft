@@ -46,6 +46,26 @@ export default function Index() {
   // 載入中
   const [loading, setLoading] = useState(false);
 
+  // 排序
+  const [sortDirection, setSortDirection] = useState('acending');
+
+  // *************useEffect************
+  useEffect(() => {
+    console.clear();
+    getCreditAcc();
+
+    db.collection('sections')
+      .orderBy('section', 'desc')
+      .get()
+      .then((snapshot) => {
+        const section = snapshot.docs[0].data().section;
+        setNewestSection(section);
+        console.log(section);
+        setSection(section);
+        fetchRemoteData(section);
+      });
+  }, []);
+
   // *************方法************
   // 取得信用卡帳戶(type=credits)
   const getCreditAcc = () => {
@@ -63,6 +83,7 @@ export default function Index() {
   // 取得遠端資料
   const fetchRemoteData = (section) => {
     db.collection('balances')
+      // .orderBy('date', 'desc')
       .where('user', '==', user)
       .where('section', '==', section)
       .get()
@@ -83,15 +104,13 @@ export default function Index() {
           return { ...d, id: doc.id };
         });
 
-        // 排序
-        data = data.sort((a, b) => {
-          return a.expense * 1 < b.expense * 1 ? 1 : -1;
+        data.sort((a, b) => {
+          return a.date < b.date ? 1 : -1;
         });
-
-        console.log(data);
 
         // 設定顯示的資料
         setLocalData(data);
+        // handleSortDataByDate()
         // 將資料加入本地
         setLocalDataCopy([...localDataCopy, ...data]);
         // 設定加總
@@ -180,7 +199,7 @@ export default function Index() {
           // 將資料加到表格中,包含剛新增的id,做為刪除之用
           // newRows.unshift({ ...item, id: doc.id });
           item = { ...item, id: doc.id };
-          setLocalDataCopy([item,...localDataCopy]);
+          setLocalDataCopy([item, ...localDataCopy]);
           setLocalData([item, ...localData]);
           SetTotal(total + item.expense * 1);
           setRow(defalutItem);
@@ -211,29 +230,49 @@ export default function Index() {
         newData2.splice(index, 1);
         setLocalDataCopy(newData2);
 
-        SetTotal(total - localData[editRowIndex].expense*1);
-
+        SetTotal(total - localData[editRowIndex].expense * 1);
 
         setOpen(false);
         setLoading(false);
       });
   };
 
-  useEffect(() => {
-    console.clear();
-    getCreditAcc();
-
-    db.collection('sections')
-      .orderBy('section', 'desc')
-      .get()
-      .then((snapshot) => {
-        const section = snapshot.docs[0].data().section;
-        setNewestSection(section);
-        console.log(section);
-        setSection(section);
-        fetchRemoteData(section);
+  const handleSortData = () => {
+    // 排序
+    // localData.sort() 不能這樣寫,要加 slice
+    let data = localData.slice();
+    if (sortDirection == 'acending') {
+      data.sort((a, b) => {
+        return a.expense * 1 > b.expense * 1 ? 1 : -1;
       });
-  }, []);
+      setSortDirection('decending');
+    } else {
+      data.sort((a, b) => {
+        return a.expense * 1 < b.expense * 1 ? 1 : -1;
+      });
+      setSortDirection('acending');
+    }
+
+    setLocalData(data);
+  };
+
+  const handleSortDataByDate = () => {
+    let data = localData.slice();
+    if (sortDirection == 'acending') {
+      data.sort((a, b) => {
+        return a.date > b.date ? 1 : -1;
+      });
+      setSortDirection('decending');
+    } else {
+      data.sort((a, b) => {
+        return a.date < b.date ? 1 : -1;
+      });
+      setSortDirection('acending');
+    }
+
+    setLocalData(data);
+  };
+
   return (
     <div>
       <SectionDropdown value={section} onChange={handleFilter} />
@@ -244,6 +283,9 @@ export default function Index() {
       </Segment>
 
       <Button onClick={newRow}>新增</Button>
+      <Button onClick={handleSortDataByDate}>日期排序</Button>
+      <Button onClick={handleSortData}>金額排序</Button>
+      
 
       <ModalForm
         open={open}
