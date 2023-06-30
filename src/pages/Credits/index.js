@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Divider, Statistic, Segment } from 'semantic-ui-react';
+import {
+  Button,
+  Input,
+  Divider,
+  Statistic,
+  Segment,
+  Grid,
+} from 'semantic-ui-react';
 import { db_money2022 as db } from '../../utils/firebase';
 import numberFormat from '../../utils/numberFormat';
 import DataList from './components/DataList';
@@ -134,7 +141,34 @@ export default function Index() {
   const saveRow = () => {
     setLoading(true);
     // 更新
+
     if (editRowIndex > -1) {
+      db.collection('balances')
+        .doc(row.id)
+        .update(row)
+        .then(() => {
+          let newRows = localData.slice();
+          Object.assign(newRows[editRowIndex], row);
+          setLocalData(newRows);
+
+          // 下面3行會導致資料列有多新增的情況
+          // newRows = localDataCopy.slice();
+          // Object.assign(newRows[editRowIndex], row);
+          // setLocalDataCopy(newRows);
+
+          // 更新加總
+          let total = 0;
+          newRows.map((row) => {
+            total = total + row.expense * 1;
+          });
+          SetTotal(total);
+
+          // 設為初始值
+          setRow(defalutItem);
+          setEditRowIndex(-1);
+          setOpen(false);
+          setLoading(false);
+        });
     } else {
       // 新增
       let item = { ...row, user, account, createdAt: Date.now() };
@@ -145,16 +179,41 @@ export default function Index() {
           // const newRows = localDataCopy.slice();
           // 將資料加到表格中,包含剛新增的id,做為刪除之用
           // newRows.unshift({ ...item, id: doc.id });
-          item = { ...item, id: doc.id }
-          setLocalDataCopy([...localDataCopy,item]);
-          setLocalData([item,...localData]);
-          SetTotal(total+item.expense*1)
+          item = { ...item, id: doc.id };
+          setLocalDataCopy([...localDataCopy, item]);
+          setLocalData([item, ...localData]);
+          SetTotal(total + item.expense * 1);
           setRow(defalutItem);
           setEditRowIndex(-1);
           setOpen(false);
           setLoading(false);
         });
     }
+  };
+
+  // 刪除
+  const deleteRow = (row) => {
+    if (!window.confirm('確定刪除嗎?')) return;
+    setLoading(true);
+    db.collection('balances')
+      .doc(row.id)
+      .delete()
+      .then(() => {
+        let newData = localData.slice();
+        newData.splice(editRowIndex, 1);
+        setLocalData(newData);
+
+        const isLargeNumber = (element) => element.id === row.id;
+        const index = localDataCopy.findIndex(isLargeNumber);
+        // console.log();
+
+        let newData2 = localDataCopy.slice();
+        newData2.splice(index, 1);
+        setLocalDataCopy(newData2);
+
+        setOpen(false);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -191,12 +250,22 @@ export default function Index() {
         row={row}
         setRow={setRow}
         saveRow={saveRow}
-        // deleteRow={deleteRow}
+        deleteRow={deleteRow}
         loading={loading}
       />
 
       <Divider />
-      <DataList rows={localData} editRow={editRow} />
+      <Grid columns={2}>
+        <Grid.Row>
+          <Grid.Column>
+            <DataList rows={localData} editRow={editRow} />
+          </Grid.Column>
+          <Grid.Column>
+            {' '}
+            <DataList rows={localDataCopy} editRow={editRow} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </div>
   );
 }
