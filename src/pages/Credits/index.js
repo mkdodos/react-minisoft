@@ -180,7 +180,7 @@ export default function Index() {
           // 將資料加到表格中,包含剛新增的id,做為刪除之用
           // newRows.unshift({ ...item, id: doc.id });
           item = { ...item, id: doc.id };
-          setLocalDataCopy([...localDataCopy, item]);
+          setLocalDataCopy([item,...localDataCopy]);
           setLocalData([item, ...localData]);
           SetTotal(total + item.expense * 1);
           setRow(defalutItem);
@@ -210,6 +210,9 @@ export default function Index() {
         let newData2 = localDataCopy.slice();
         newData2.splice(index, 1);
         setLocalDataCopy(newData2);
+
+        SetTotal(total - localData[editRowIndex].expense*1);
+
 
         setOpen(false);
         setLoading(false);
@@ -255,17 +258,17 @@ export default function Index() {
       />
 
       <Divider />
-      <Grid columns={2}>
+      <DataList rows={localData} editRow={editRow} />
+      {/* <Grid columns={2}>
         <Grid.Row>
           <Grid.Column>
             <DataList rows={localData} editRow={editRow} />
           </Grid.Column>
-          <Grid.Column>
-            {' '}
+          <Grid.Column>           
             <DataList rows={localDataCopy} editRow={editRow} />
           </Grid.Column>
         </Grid.Row>
-      </Grid>
+      </Grid> */}
     </div>
   );
 }
