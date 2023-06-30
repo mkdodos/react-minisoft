@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Button,
-  Input,
+  Icon,
   Divider,
   Statistic,
   Segment,
@@ -48,6 +48,7 @@ export default function Index() {
 
   // 排序
   const [sortDirection, setSortDirection] = useState('acending');
+  const [sortColumn, setSortColumn] = useState('');
 
   // *************useEffect************
   useEffect(() => {
@@ -239,6 +240,7 @@ export default function Index() {
 
   const handleSortData = () => {
     // 排序
+    setSortColumn('expense');
     // localData.sort() 不能這樣寫,要加 slice
     let data = localData.slice();
     if (sortDirection == 'acending') {
@@ -257,6 +259,7 @@ export default function Index() {
   };
 
   const handleSortDataByDate = () => {
+    setSortColumn('date');
     let data = localData.slice();
     if (sortDirection == 'acending') {
       data.sort((a, b) => {
@@ -282,10 +285,26 @@ export default function Index() {
         </Statistic>
       </Segment>
 
-      <Button onClick={newRow}>新增</Button>
-      <Button onClick={handleSortDataByDate}>日期排序</Button>
-      <Button onClick={handleSortData}>金額排序</Button>
-      
+      <Button onClick={newRow} color="teal">新增</Button>
+
+      <Button onClick={handleSortDataByDate}>
+        日期排序{" "} 
+        {sortColumn == 'date' && sortDirection == 'acending' && (
+          <Icon name="angle down" />
+        )}
+        {sortColumn == 'date' && sortDirection == 'decending' && (
+          <Icon name="angle up" />
+        )}
+      </Button>
+      <Button onClick={handleSortData}>
+        金額排序{" "} 
+        {sortColumn == 'expense' && sortDirection == 'acending' && (
+          <Icon name="angle down" />
+        )}
+        {sortColumn == 'expense' && sortDirection == 'decending' && (
+          <Icon name="angle up" />
+        )}
+      </Button>
 
       <ModalForm
         open={open}
