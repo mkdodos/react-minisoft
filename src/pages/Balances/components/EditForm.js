@@ -137,10 +137,12 @@ export default function EditForm({
             <Form.Field>
               <label>金額</label>
               <input
-                name="expense"
+                // name="expense"
+                name="amt"
                 type="number"
                 placeholder=""
-                value={item.expense}
+                // value={item.expense}
+                value={item.amt}
                 onChange={handleChange}
               />
             </Form.Field>

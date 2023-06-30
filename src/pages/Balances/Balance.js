@@ -39,6 +39,7 @@ export default function Balance() {
 
   const defaultItem = {
     title: '',
+    // expense: '',
     amt: '',
     date: new Date().toISOString().slice(0, 10),
   };
@@ -53,7 +54,6 @@ export default function Balance() {
 
   // 依螢幕寬度設定版面(小於360設為true)
   const [isMobile, setIsMobile] = useState(true);
-
 
   // 依螢幕大小,改變顯示版面
   useEffect(() => {
@@ -72,16 +72,12 @@ export default function Balance() {
     };
   }, []);
 
-
-
   useEffect(() => {
-
     if (window.innerWidth <= 600) {
       setIsMobile(true);
     } else {
       setIsMobile(false);
     }
-
 
     // 取得排序最前面的帳戶
     db.collection('accounts')
@@ -97,7 +93,6 @@ export default function Balance() {
       });
   }, []);
 
-  
   // 最近數筆資料
   const get10 = (acc) => {
     db.collection('balances')
@@ -267,18 +262,33 @@ export default function Balance() {
 
   // 儲存
   const handleSaveItem = () => {
-    setLoading(true)
+    setLoading(true);
     if (editedIndex > -1) {
       // 要修改的資料
       let newItem = {
         updatedAt: Date.now(),
         date: item.date,
-        expense:item.expense,
+
         // user: user,
         title: item.title,
         account: { ...item.account, balance: item.account.balance },
         // cate: item.cate,
       };
+
+      // 判斷收入或支出給不同欄位名稱
+      if (isIncome) {
+        newItem = {
+          ...newItem,
+
+          income: item.amt,
+        };
+      } else {
+        newItem = {
+          ...newItem,
+
+          expense: item.amt,
+        };
+      }
 
       // 類別有資料才寫入
       if (item.cate) {
@@ -296,7 +306,7 @@ export default function Balance() {
           get10(item.account.id);
           setEditedIndex(-1);
           setItem(defaultItem);
-          setLoading(false)
+          setLoading(false);
         });
     } else {
       // 新增資料
@@ -320,14 +330,9 @@ export default function Balance() {
         .then((doc) => {
           // 目前帳戶餘額
           const currentAmt = doc.data().balance * 1;
-          console.log(currentAmt);
-
           let amt = isIncome ? item.amt * 1 : item.amt * -1;
-
           // 計算更新後餘額
           const updatedAmt = currentAmt + amt;
-          console.log(updatedAmt);
-
           // 更新帳戶餘額
           const row = { balance: updatedAmt };
           db.collection('accounts')
@@ -344,7 +349,7 @@ export default function Balance() {
             user: user,
             title: item.title,
             account: { ...item.account, balance: updatedAmt },
-            section:item.section
+            // section:item.section
             // cate: item.cate,
           };
 
@@ -368,16 +373,11 @@ export default function Balance() {
             };
           }
 
-          console.log(newItem);
-
           // return;
           // 新增一筆收支
           db.collection('balances')
             .add(newItem)
             .then((doc) => {
-              // console.log(doc.id);
-              // setItem(defaultItem);
-              // setItem(defaultItem);
               setOpen(false);
               get10(acc);
               setLoading(false);
@@ -400,19 +400,18 @@ export default function Balance() {
 
   // 點選列
   const handleRowClick = (row, index) => {
-    // console.log(index);
     setEditedIndex(index);
-    // 記錄 row
-    setItem(row);
     // 開啟表單
     setOpen(true);
-    // 依收入或支出顯示相對應頁
+    // 依收入或支出設定amt
     if (row.income) {
+      row = { ...row, amt: row.income };
       setIsIncome(true);
     } else {
+      row = { ...row, amt: row.expense };
       setIsIncome(false);
     }
-    // console.log(item);
+    setItem(row);
   };
 
   //
@@ -442,8 +441,6 @@ export default function Balance() {
         item={item}
         loading={loading}
       />
-
-      
 
       <Grid columns={2}>
         <Grid.Row>
