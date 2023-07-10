@@ -80,7 +80,7 @@ export default function Dashboard() {
             id: doc.id,
             ...doc.data(),
             // 將金額字串轉為數字才能正確做排序
-            // expense: parseInt(doc.data().expense),
+            expense: parseInt(doc.data().expense),
           };
         });
 

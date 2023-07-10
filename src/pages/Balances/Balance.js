@@ -271,7 +271,8 @@ export default function Balance() {
 
         // user: user,
         title: item.title,
-        account: { ...item.account, balance: item.account.balance },
+        // account: { ...item.account, balance: item.account.balance },
+        account: { ...item.account },
         // cate: item.cate,
       };
 

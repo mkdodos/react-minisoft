@@ -12,6 +12,8 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Accounts from './pages/Accounts';
 
+import AccountsOrg from './pages/AccountsOrg';
+
 import { AuthProvider } from './contexts/AuthContext';
 
 import Protected from './routes/Protected';
@@ -31,6 +33,10 @@ export default function App() {
           <Header />
           <Container>
             <Routes>
+            <Route
+                element={<AccountsOrg/>}
+                path="/accounts-org"
+              />
               <Route
                 element={<Protected Component={Accounts} />}
                 path="/accounts"
