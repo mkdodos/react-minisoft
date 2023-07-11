@@ -4,7 +4,7 @@ import { List, Table } from 'semantic-ui-react';
 
 export default function DataView({ rows, rowDispatch, rowsDispatch }) {
   function handleSort() {
-    rowsDispatch({ type: 'SORT_ROW' });
+    rowsDispatch({ type: 'SORT_ROW', payload: 'asc' });
     console.log('abc');
   }
   return (

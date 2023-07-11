@@ -10,19 +10,23 @@ import { initRow } from './initRow';
 import BalanceTotal from './components/BalanceTotal';
 
 export default function Index() {
-  const [rows, rowsDispatch] = useReducer(rowsReducer, []);
-  // const initRow = { name: '', prior: '',balance:'' };
+  // const [rows, rowsDispatch] = useReducer(rowsReducer, []);
+  const [state, rowsDispatch] = useReducer(rowsReducer, {
+    rows: [],
+    direction: null,
+  });
+
   const [row, rowDispatch] = useReducer(rowReducer, initRow);
   useEffect(() => {
     const fetchAccounts = async () => {
       const [data] = await Promise.all([fetchData()]);
       rowsDispatch({ type: 'INIT_ROWS', payload: data });
-      
     };
 
     fetchAccounts();
   }, []);
 
+  const { rows, direction } = state;
   return (
     <div>
       <EditForm
@@ -30,6 +34,7 @@ export default function Index() {
         rowsDispatch={rowsDispatch}
         row={row}
       />
+      {direction}
       <Divider />
       <BalanceTotal rows={rows} />
       <Divider />
