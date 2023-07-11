@@ -45,6 +45,17 @@ export default function EditForm({ rowDispatch, row, rowsDispatch }) {
             onChange={handleChange}
           />
         </Form.Field>
+
+        <Form.Field>
+          <label>餘額</label>
+          <input
+            type="number"
+            name="balance"
+            value={row.balance}
+            onChange={handleChange}
+          />
+        </Form.Field>
+
       </Form.Group>
       <Button type="submit">Submit</Button>
     </Form>

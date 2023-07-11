@@ -5,10 +5,12 @@ import EditForm from './components/EditForm';
 import { fetchData } from './api';
 import rowsReducer from './reducer/rowsReducer';
 import rowReducer from './reducer/rowReducer';
+import { Divider } from 'semantic-ui-react';
+import { initRow } from './initRow';
 
 export default function Index() {
   const [rows, rowsDispatch] = useReducer(rowsReducer, []);
-  const initRow = { name: '', prior: '' };
+  // const initRow = { name: '', prior: '',balance:'' };
   const [row, rowDispatch] = useReducer(rowReducer, initRow);
   useEffect(() => {
     const fetchAccounts = async () => {
@@ -25,6 +27,7 @@ export default function Index() {
         rowsDispatch={rowsDispatch}
         row={row}
       />
+      <Divider/>
       <DataView rows={rows} rowDispatch={rowDispatch}
       rowsDispatch={rowsDispatch}
       />
