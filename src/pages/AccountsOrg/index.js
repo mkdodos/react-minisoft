@@ -7,6 +7,7 @@ import rowsReducer from './reducer/rowsReducer';
 import rowReducer from './reducer/rowReducer';
 import { Divider } from 'semantic-ui-react';
 import { initRow } from './initRow';
+import BalanceTotal from './components/BalanceTotal';
 
 export default function Index() {
   const [rows, rowsDispatch] = useReducer(rowsReducer, []);
@@ -27,6 +28,8 @@ export default function Index() {
         rowsDispatch={rowsDispatch}
         row={row}
       />
+       <Divider/>
+      <BalanceTotal rows={rows}/>
       <Divider/>
       <DataView rows={rows} rowDispatch={rowDispatch}
       rowsDispatch={rowsDispatch}
