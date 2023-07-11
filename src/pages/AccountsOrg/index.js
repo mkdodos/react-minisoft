@@ -17,7 +17,9 @@ export default function Index() {
     const fetchAccounts = async () => {
       const [data] = await Promise.all([fetchData()]);
       rowsDispatch({ type: 'INIT_ROWS', payload: data });
+      
     };
+
     fetchAccounts();
   }, []);
 
@@ -28,11 +30,13 @@ export default function Index() {
         rowsDispatch={rowsDispatch}
         row={row}
       />
-       <Divider/>
-      <BalanceTotal rows={rows}/>
-      <Divider/>
-      <DataView rows={rows} rowDispatch={rowDispatch}
-      rowsDispatch={rowsDispatch}
+      <Divider />
+      <BalanceTotal rows={rows} />
+      <Divider />
+      <DataView
+        rows={rows}
+        rowDispatch={rowDispatch}
+        rowsDispatch={rowsDispatch}
       />
     </div>
   );

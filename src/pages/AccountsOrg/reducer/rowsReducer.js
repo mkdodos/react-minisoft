@@ -16,6 +16,12 @@ export default function rowsReducer(rows, action) {
       Object.assign(newRows[action.payload.index], action.payload.row);
       return newRows;
 
+    case 'SORT_ROW':
+      let sortRows = rows.slice().sort((a, b) => {
+        return Number(a.balance) > Number(b.balance) ? 1 : -1;
+      });
+      return sortRows;
+
     default:
       return rows;
   }
