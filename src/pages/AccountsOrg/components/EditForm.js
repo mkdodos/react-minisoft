@@ -2,7 +2,7 @@ import React from 'react';
 import { addRow } from '../api';
 import { Form, Button } from 'semantic-ui-react';
 
-export default function EditForm({modalOpen,setModalOpen, rowDispatch, row, rowsDispatch }) {
+export default function EditForm({ rowDispatch, row, rowsDispatch }) {
   function handleChange(e) {
     rowDispatch({
       type: 'INPUT_CHANGE',
@@ -23,7 +23,7 @@ export default function EditForm({modalOpen,setModalOpen, rowDispatch, row, rows
     }
 
     rowDispatch({ type: 'INIT_ROW' });
-    setModalOpen(false)
+    
   }
   return (
    

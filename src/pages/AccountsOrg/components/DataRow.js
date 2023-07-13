@@ -9,16 +9,14 @@ import {
   TableCell,
 } from 'semantic-ui-react';
 
-export default function DataRow({setModalOpen, row, index, rowDispatch, rowsDispatch }) {
+export default function DataRow({ row, index, rowDispatch, rowsDispatch }) {
+  
   function handleEdit() {
-    setModalOpen(true)
+    
     rowDispatch({ type: 'EDIT_ROW', payload: { row, index } });
   }
 
-  function handleDelete() {
-    rowsDispatch({ type: 'DELETE_ROW', payload: row.id });
-    rowDispatch({ type: 'INIT_ROW'});
-  }
+  
 
   return (
     <TableRow onClick={handleEdit}>
@@ -30,9 +28,7 @@ export default function DataRow({setModalOpen, row, index, rowDispatch, rowsDisp
         <Button primary onClick={handleEdit}>
           Edit
         </Button>
-        <Button color="red" basic onClick={handleDelete}>
-          Del
-        </Button>
+       
       </TableCell> */}
     </TableRow>
   );

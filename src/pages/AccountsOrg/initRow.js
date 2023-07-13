@@ -1,1 +1,7 @@
-export const initRow = { name: '', prior: '', balance: '' };
+export const initRow = {
+  name: '',
+  prior: '',
+  balance: '',
+  index: -1,
+  modalOpen: false,
+};

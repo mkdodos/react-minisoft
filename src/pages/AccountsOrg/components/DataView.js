@@ -2,7 +2,8 @@ import React from 'react';
 import DataRow from './DataRow';
 import { List, Table } from 'semantic-ui-react';
 
-export default function DataView({modalOpen,setModalOpen, rows, rowDispatch, rowsDispatch }) {
+export default function DataView({row, rows, rowDispatch, rowsDispatch }) {
+  
   function handleSort() {
     rowsDispatch({ type: 'SORT_ROW', payload: 'asc' });
     console.log('abc');
@@ -28,8 +29,8 @@ export default function DataView({modalOpen,setModalOpen, rows, rowDispatch, row
               key={row.id}
               row={row}
               index={index}
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
+              
+              
             />
           );
         })}

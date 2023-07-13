@@ -43,7 +43,7 @@ export default function Index() {
       <ModalView
         row={row}
         rowDispatch={rowDispatch}
-        // rowsDispatch={rowsDispatch}
+        rowsDispatch={rowsDispatch}
         // modalOpen={modalOpen}
         // setModalOpen={setModalOpen}
       />
@@ -57,13 +57,12 @@ export default function Index() {
 
       <AddButton rowDispatch={rowDispatch} row={row} />
 
-      {/* <DataView
-        modalOpen={modalOpen}
-        setModalOpen={setModalOpen}
+      <DataView     
+      row={row}  
         rows={rows}
         rowDispatch={rowDispatch}
         rowsDispatch={rowsDispatch}
-      /> */}
+      />
     </div>
   );
 }
