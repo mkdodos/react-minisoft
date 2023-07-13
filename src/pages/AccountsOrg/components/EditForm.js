@@ -28,7 +28,7 @@ export default function EditForm({ rowDispatch, row, rowsDispatch }) {
   return (
    
         <Form onSubmit={handleSubmit}>
-          <Form.Group>
+          {/* <Form.Group> */}
             <Form.Field>
               <label>名稱</label>
               <input
@@ -57,7 +57,7 @@ export default function EditForm({ rowDispatch, row, rowsDispatch }) {
                 onChange={handleChange}
               />
             </Form.Field>
-          </Form.Group>
+          {/* </Form.Group> */}
           <Button type="submit">Submit</Button>
         </Form>
      
