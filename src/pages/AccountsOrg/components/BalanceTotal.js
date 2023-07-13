@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Statistic } from 'semantic-ui-react';
+import { Statistic,Segment } from 'semantic-ui-react';
 export default function BalanceTotal({ rows }) {
   const [total, setTotal] = useState(0);
   useEffect(() => {
@@ -10,8 +10,10 @@ export default function BalanceTotal({ rows }) {
     setTotal(total);
   }, [rows]);
   return (
-    <Statistic>
-      <Statistic.Value>{total}</Statistic.Value>
-    </Statistic>
+    <Segment textAlign="center">
+      <Statistic>
+        <Statistic.Value>{total}</Statistic.Value>
+      </Statistic>
+    </Segment>
   );
 }
