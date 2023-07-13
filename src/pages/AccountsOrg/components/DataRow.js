@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import {
   Label,
   Button,
@@ -9,27 +9,20 @@ import {
   TableCell,
 } from 'semantic-ui-react';
 
-export default function DataRow({ row, index, rowDispatch, rowsDispatch }) {
-  
+import { RowContext } from '..';
+
+export default function DataRow({ row, index }) {
+  const rowContext = useContext(RowContext);
+  const { rowDispatch } = rowContext;
   function handleEdit() {
-    
     rowDispatch({ type: 'EDIT_ROW', payload: { row, index } });
   }
-
-  
 
   return (
     <TableRow onClick={handleEdit}>
       <TableCell>{row.name}</TableCell>
       <TableCell>{row.prior}</TableCell>
-      <TableCell>{row.balance}</TableCell>
-      
-      {/* <TableCell>
-        <Button primary onClick={handleEdit}>
-          Edit
-        </Button>
-       
-      </TableCell> */}
+      <TableCell>{row.balance}</TableCell>     
     </TableRow>
   );
 }

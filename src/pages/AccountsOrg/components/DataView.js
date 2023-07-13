@@ -2,11 +2,9 @@ import React from 'react';
 import DataRow from './DataRow';
 import { List, Table } from 'semantic-ui-react';
 
-export default function DataView({row, rows, rowDispatch, rowsDispatch }) {
-  
+export default function DataView({  rows,  rowsDispatch }) {
   function handleSort() {
     rowsDispatch({ type: 'SORT_ROW', payload: 'asc' });
-    console.log('abc');
   }
   return (
     <Table unstackable>
@@ -15,22 +13,16 @@ export default function DataView({row, rows, rowDispatch, rowsDispatch }) {
           <Table.HeaderCell>名稱</Table.HeaderCell>
           <Table.HeaderCell>順序</Table.HeaderCell>
           <Table.HeaderCell onClick={handleSort}>餘額</Table.HeaderCell>
-
-          {/* <Table.HeaderCell>#</Table.HeaderCell> */}
         </Table.Row>
       </Table.Header>
 
       <Table.Body>
         {rows.map((row, index) => {
           return (
-            <DataRow
-              rowDispatch={rowDispatch}
-              rowsDispatch={rowsDispatch}
+            <DataRow  
               key={row.id}
               row={row}
               index={index}
-              
-              
             />
           );
         })}

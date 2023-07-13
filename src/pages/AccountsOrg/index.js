@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState, createContext } from 'react';
 import DataView from './components/DataView';
 import EditForm from './components/EditForm';
 
@@ -11,6 +11,8 @@ import BalanceTotal from './components/BalanceTotal';
 import AddButton from './components/AddButton';
 import ModalView from './components/ModalView';
 
+export const RowContext = createContext();
+
 export default function Index() {
   // const [rows, rowsDispatch] = useReducer(rowsReducer, []);
   const [state, rowsDispatch] = useReducer(rowsReducer, {
@@ -20,7 +22,7 @@ export default function Index() {
 
   const [row, rowDispatch] = useReducer(rowReducer, initRow);
 
-  // const [modalOpen, setModalOpen] = useState(false);
+  // const RowContext = createContext();
 
   useEffect(() => {
     const fetchAccounts = async () => {
@@ -34,35 +36,25 @@ export default function Index() {
   const { rows, direction } = state;
 
   return (
-    <div>
-      {/* <EditForm
-        rowDispatch={rowDispatch}
-        rowsDispatch={rowsDispatch}
-        row={row}
-      /> */}
+    <RowContext.Provider value={{ row, rowDispatch }}>
       <ModalView
         row={row}
         rowDispatch={rowDispatch}
         rowsDispatch={rowsDispatch}
-        // modalOpen={modalOpen}
-        // setModalOpen={setModalOpen}
       />
 
-      {row.modalOpen}
       <Divider />
       <BalanceTotal rows={rows} />
       <Divider />
 
-      {/* <AddButton setModalOpen={setModalOpen} /> */}
-
       <AddButton rowDispatch={rowDispatch} row={row} />
 
-      <DataView     
-      row={row}  
+      <DataView
+        // row={row}
         rows={rows}
-        rowDispatch={rowDispatch}
+        // rowDispatch={rowDispatch}
         rowsDispatch={rowsDispatch}
       />
-    </div>
+    </RowContext.Provider>
   );
 }
