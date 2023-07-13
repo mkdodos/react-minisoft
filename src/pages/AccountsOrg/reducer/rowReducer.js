@@ -9,6 +9,13 @@ export default function rowReducer(row, action) {
     case 'EDIT_ROW':
       const index = action.payload.index;
       return { ...action.payload.row, index };
+
+    case 'OPEN_MODAL':
+      // console.log('open')
+      return { modalOpen: true };
+      case 'CLOSE_MODAL':
+        // console.log('open')
+        return { modalOpen: false };  
     default:
       return row;
   }

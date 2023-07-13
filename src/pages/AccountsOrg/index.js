@@ -20,7 +20,7 @@ export default function Index() {
 
   const [row, rowDispatch] = useReducer(rowReducer, initRow);
 
-  const [modalOpen, setModalOpen] = useState(false);
+  // const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchAccounts = async () => {
@@ -32,6 +32,7 @@ export default function Index() {
   }, []);
 
   const { rows, direction } = state;
+
   return (
     <div>
       {/* <EditForm
@@ -42,24 +43,27 @@ export default function Index() {
       <ModalView
         row={row}
         rowDispatch={rowDispatch}
-        rowsDispatch={rowsDispatch}
-        modalOpen={modalOpen}
-        setModalOpen={setModalOpen}
+        // rowsDispatch={rowsDispatch}
+        // modalOpen={modalOpen}
+        // setModalOpen={setModalOpen}
       />
 
+      {row.modalOpen}
       <Divider />
       <BalanceTotal rows={rows} />
       <Divider />
 
-      <AddButton setModalOpen={setModalOpen} />
+      {/* <AddButton setModalOpen={setModalOpen} /> */}
 
-      <DataView
+      <AddButton rowDispatch={rowDispatch} row={row} />
+
+      {/* <DataView
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
         rows={rows}
         rowDispatch={rowDispatch}
         rowsDispatch={rowsDispatch}
-      />
+      /> */}
     </div>
   );
 }
