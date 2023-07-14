@@ -38,7 +38,7 @@ export default function Index() {
   useEffect(() => {
     dbCol
       .orderBy('date', 'desc')
-      .limit(2)
+      .limit(20)
       .get()
       .then((snapshot) => {
         const data = snapshot.docs.map((doc) => {

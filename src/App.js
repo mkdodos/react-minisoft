@@ -13,6 +13,7 @@ import Login from './pages/Login';
 import Accounts from './pages/Accounts';
 
 import AccountsOrg from './pages/AccountsOrg';
+import Babys from './pages/Babys'
 
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -33,6 +34,10 @@ export default function App() {
           <Header />
           <Container>
             <Routes>
+            <Route
+                element={<Babys/>}
+                path="/babys"
+              />
             <Route
                 element={<AccountsOrg/>}
                 path="/accounts-org"

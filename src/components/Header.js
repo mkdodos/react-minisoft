@@ -52,6 +52,9 @@ export default function Header() {
           <Dropdown.Item as={Link} to="/cates">
             類別
           </Dropdown.Item>
+          <Dropdown.Item as={Link} to="/notes">
+            記事
+          </Dropdown.Item>
           <Dropdown.Item as={Link} to="/cates-note">
             記事類別
           </Dropdown.Item>
