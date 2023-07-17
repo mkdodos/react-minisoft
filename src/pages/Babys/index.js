@@ -2,6 +2,8 @@ import data from './data.json';
 import { Table, Input, Button, Icon } from 'semantic-ui-react';
 import React, { useEffect, useState } from 'react';
 import 'datejs';
+import Salary from './components/Salary';
+
 export default function Index() {
   // const { babys } = data;
 
@@ -11,11 +13,16 @@ export default function Index() {
   const [ym, setYm] = useState({ y: 2026, m: 12 });
   // 員工資料
   const [babys, setBabys] = useState(data.babys);
+  // 薪資
+  const [salary, setSalary] = useState(data.salary);
 
   // 符合資格
   const [eligibleBabys, setEligibleBabys] = useState([]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+
+    console.log(salary)
+  }, []);
 
   // 是否到期
   function calIsExpire(date) {
@@ -56,6 +63,7 @@ export default function Index() {
   }
   return (
     <>
+    <Salary rows={salary} setRows={setSalary} babys={eligibleBabys}/>
       發薪年月
       <Input value={ym.y} name="y" onChange={handleInputChange} />
       <Input value={ym.m} name="m" onChange={handleInputChange} />
