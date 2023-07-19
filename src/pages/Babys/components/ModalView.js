@@ -20,7 +20,9 @@ export default function ModalView({ dispatch,state }) {
       }}
     >
       <Modal.Header>編輯帳戶</Modal.Header>
-      <Modal.Content></Modal.Content>
+      <Modal.Content>
+        <EditForm dispatch={dispatch} state={state}/>
+      </Modal.Content>
       <Modal.Actions>
         {/* <Button color="red" basic onClick={handleDelete}>
           Del

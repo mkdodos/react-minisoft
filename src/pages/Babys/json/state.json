@@ -1,7 +1,7 @@
 {
   "babies":[],
   "salalies":[],
-  "babyRow":{},
+  "baby":{"name":"","birth":""},
   "salaryRow":{},
   "isLoading":false,
   "editedIndex":-1,  

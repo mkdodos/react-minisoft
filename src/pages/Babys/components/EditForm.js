@@ -1,29 +1,29 @@
 import React from 'react';
 // import { addRow } from '../api';
 import { Form, Button } from 'semantic-ui-react';
-
-export default function EditForm({ dispatch, row }) {
+import { actions } from '../constants/actions';
+export default function EditForm({ dispatch, state }) {
+  const { baby, editedIndex } = state;
   function handleChange(e) {
     dispatch({
-      type: 'INPUT_CHANGE',
-      payload: { name: e.target.name, value: e.target.value },
+      type: actions.INPUT_CHANGE,
+      payload: { baby: { name: e.target.name, value: e.target.value } },
     });
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    dispatch({ type: 'INIT_ROW', payload: { row, editIndex: 0 } });
+    console.log(baby);
+    dispatch({ type: actions.ADD_BABY, payload: { baby, editedIndex: -1 } });
   }
   return (
     <Form onSubmit={handleSubmit}>
-      {/* <Form.Group> */}
       <Form.Field>
-        <label>名稱</label>
+        <label>姓名</label>
         <input
           type="text"
           name="name"
-          value={row.name}
+          value={baby.name}
           onChange={handleChange}
         />
       </Form.Field>
@@ -32,21 +32,11 @@ export default function EditForm({ dispatch, row }) {
         <input
           type="text"
           name="birth"
-          value={row.birth}
+          value={baby.birth}
           onChange={handleChange}
         />
       </Form.Field>
 
-      <Form.Field>
-        <label>餘額</label>
-        <input
-          type="number"
-          name="balance"
-          value={row.balance}
-          onChange={handleChange}
-        />
-      </Form.Field>
-      {/* </Form.Group> */}
       <Button type="submit">Submit</Button>
     </Form>
   );
