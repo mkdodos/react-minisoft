@@ -1,0 +1,9 @@
+{
+  "babies":[],
+  "salalies":[],
+  "babyRow":{},
+  "salaryRow":{},
+  "isLoading":false,
+  "editedIndex":-1,  
+  "isModalOpen":false
+}
