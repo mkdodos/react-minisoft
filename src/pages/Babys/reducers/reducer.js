@@ -1,4 +1,6 @@
 import { actions } from '../constants/actions';
+import baby from '../json/baby.json';
+
 export default function (state, action) {
   switch (action.type) {
     case actions.OPEN_MODAL:
@@ -20,7 +22,7 @@ export default function (state, action) {
         ...state,
         babies: [...state.babies, { ...action.payload.baby, id: Date.now() }],
         isModalOpen: false,
-        baby:{"name":"","birth":""}
+        baby: baby,
       };
 
     case actions.INPUT_CHANGE:
@@ -30,6 +32,13 @@ export default function (state, action) {
           ...state.baby,
           [action.payload.baby.name]: action.payload.baby.value,
         },
+      };
+
+    case actions.EDIT_ROW:
+      return {
+        ...state,
+        baby: action.row,
+        isModalOpen:true
       };
 
     default:

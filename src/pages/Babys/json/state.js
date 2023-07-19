@@ -1,7 +1,14 @@
-{
+const baby = {
+  "id":"",
+  "name":"",
+  "birth":"",
+  "expireDate":""
+}
+
+export const state = {
   "babies":[],
   "salalies":[],
-  "baby":{"name":"","birth":""},
+  "baby":baby,
   "salaryRow":{},
   "isLoading":false,
   "editedIndex":-1,  

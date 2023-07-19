@@ -3,7 +3,8 @@ const actions = {
   CLOSE_MODAL : 'close-modal',
   INIT_DATA : 'init-data',
   INPUT_CHANGE:'input-change',
-  ADD_BABY:'add-baby'
+  ADD_BABY:'add-baby',
+  EDIT_ROW:'edit-row'
 }
 
 export {actions}

@@ -37,6 +37,16 @@ export default function EditForm({ dispatch, state }) {
         />
       </Form.Field>
 
+      <Form.Field>
+        <label>到期日</label>
+        <input
+          type="date"
+          name="expireDate"
+          value={baby.expireDate}
+          onChange={handleChange}
+        />
+      </Form.Field>
+
       <Button type="submit">Submit</Button>
     </Form>
   );
