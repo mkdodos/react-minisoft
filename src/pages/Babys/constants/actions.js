@@ -4,7 +4,8 @@ const actions = {
   INIT_DATA : 'init-data',
   INPUT_CHANGE:'input-change',
   ADD_BABY:'add-baby',
-  EDIT_ROW:'edit-row'
+  EDIT_ROW:'edit-row',
+  UPDATE_ROW:'update-row'
 }
 
 export {actions}

@@ -1,10 +1,10 @@
 import { actions } from '../constants/actions';
-import baby from '../json/baby.json';
+import { baby } from '../json/state';
 
 export default function (state, action) {
   switch (action.type) {
     case actions.OPEN_MODAL:
-      return { ...state, isModalOpen: true };
+      return { ...state, isModalOpen: true, baby: baby };
 
     case actions.CLOSE_MODAL:
       return { ...state, isModalOpen: false };
@@ -17,12 +17,24 @@ export default function (state, action) {
       };
 
     case actions.ADD_BABY:
-      console.log(action.payload.baby);
       return {
         ...state,
         babies: [...state.babies, { ...action.payload.baby, id: Date.now() }],
         isModalOpen: false,
         baby: baby,
+        editedIndex:-1
+      };
+
+    case actions.UPDATE_ROW:
+      const newRows = state.babies.slice();
+      Object.assign(newRows[action.payload.editedIndex], action.payload.baby);
+
+      return {
+        ...state,
+        babies: newRows,
+        isModalOpen: false,
+        baby: baby,
+        editedIndex:-1
       };
 
     case actions.INPUT_CHANGE:
@@ -34,11 +46,13 @@ export default function (state, action) {
         },
       };
 
+    // 編輯
     case actions.EDIT_ROW:
       return {
         ...state,
         baby: action.row,
-        isModalOpen:true
+        isModalOpen: true,
+        editedIndex: action.index,
       };
 
     default:

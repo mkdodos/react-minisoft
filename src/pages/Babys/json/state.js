@@ -1,4 +1,5 @@
-const baby = {
+// 資料欄位預設值
+export const baby = {
   "id":"",
   "name":"",
   "birth":"",

@@ -16,8 +16,8 @@ export default function Babys({ rows,dispatch }) {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {rows.map((baby) => {
-            return <Baby dispatch={dispatch} row={baby} key={baby.id} />;
+          {rows.map((baby,index) => {
+            return <Baby dispatch={dispatch} index={index} row={baby} key={baby.id} />;
           })}
         </Table.Body>
       </Table>

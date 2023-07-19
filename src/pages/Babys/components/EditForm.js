@@ -13,8 +13,15 @@ export default function EditForm({ dispatch, state }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(baby);
-    dispatch({ type: actions.ADD_BABY, payload: { baby, editedIndex: -1 } });
+    console.log(editedIndex);
+    // 用 editedIndex 判斷新增或編輯
+    if(editedIndex==-1){
+      dispatch({ type: actions.ADD_BABY, payload: { baby } });
+    }else{
+      dispatch({ type: actions.UPDATE_ROW, payload: { baby,editedIndex } });
+    }
+    
+    
   }
   return (
     <Form onSubmit={handleSubmit}>
@@ -30,7 +37,7 @@ export default function EditForm({ dispatch, state }) {
       <Form.Field>
         <label>生日</label>
         <input
-          type="text"
+          type="date"
           name="birth"
           value={baby.birth}
           onChange={handleChange}
