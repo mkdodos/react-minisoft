@@ -6,10 +6,10 @@ import { actions } from '../constants/actions';
 export default function ModalView({ dispatch,state }) {
   
 
-  // function handleDelete() {
-  //   rowsDispatch({ type: 'DELETE_ROW', payload: row.id });
-  //   rowDispatch({ type: 'INIT_ROW' });
-  // }
+  function handleDelete() {
+    dispatch({ type: actions.DELETE_ROW, id: state.baby.id });
+    
+  }
 
   return (
     <Modal
@@ -24,9 +24,9 @@ export default function ModalView({ dispatch,state }) {
         <EditForm dispatch={dispatch} state={state}/>
       </Modal.Content>
       <Modal.Actions>
-        {/* <Button color="red" basic onClick={handleDelete}>
+        <Button color="red" basic onClick={handleDelete}>
           Del
-        </Button> */}
+        </Button>
       </Modal.Actions>
     </Modal>
   );

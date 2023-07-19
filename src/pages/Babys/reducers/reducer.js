@@ -22,7 +22,7 @@ export default function (state, action) {
         babies: [...state.babies, { ...action.payload.baby, id: Date.now() }],
         isModalOpen: false,
         baby: baby,
-        editedIndex:-1
+        editedIndex: -1,
       };
 
     case actions.UPDATE_ROW:
@@ -34,7 +34,7 @@ export default function (state, action) {
         babies: newRows,
         isModalOpen: false,
         baby: baby,
-        editedIndex:-1
+        editedIndex: -1,
       };
 
     case actions.INPUT_CHANGE:
@@ -53,6 +53,16 @@ export default function (state, action) {
         baby: action.row,
         isModalOpen: true,
         editedIndex: action.index,
+      };
+
+    // 刪除
+    case actions.DELETE_ROW:
+      return {
+        ...state,
+        babies: state.babies.filter((row) => row.id !== action.id),
+        baby: baby,
+        isModalOpen: false,
+        editedIndex: -1,
       };
 
     default:

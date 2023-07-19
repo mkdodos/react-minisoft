@@ -5,7 +5,8 @@ const actions = {
   INPUT_CHANGE:'input-change',
   ADD_BABY:'add-baby',
   EDIT_ROW:'edit-row',
-  UPDATE_ROW:'update-row'
+  UPDATE_ROW:'update-row',
+  DELETE_ROW:'delete-row'
 }
 
 export {actions}
