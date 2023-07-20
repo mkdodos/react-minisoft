@@ -12,29 +12,31 @@ export default function (state, action) {
     // 比對符合條件
     case actions.COMPARE:
       const newRowsForCompare = state.babies.slice();
-
-      // babies.map((baby) => {
-      //   const date = new Date(baby.expireDate);
-      //   const expireNum = date.getFullYear() * 12 + (date.getMonth() + 1);
-      //   const baseNum = baseYM.y * 12 + baseYM.m * 1;
-      //   console.log(expireNum - baseNum);
-      // });
-
       const baseYM = action.payload.baseYM;
       const data = newRowsForCompare.map((row) => {
         const date = new Date(row.expireDate);
-
         const expireNum = date.getFullYear() * 12 + (date.getMonth() + 1);
         const baseNum = baseYM.y * 12 + baseYM.m * 1;
-
-        console.log(expireNum, baseNum);
-        console.log(expireNum >= baseNum);
-
-        // 到期日大於發薪日代表可領
+        // 到期日大於等於發薪日代表可領
         // 到期日小於發薪日代表過期
         return { ...row, isExpire: expireNum < baseNum };
       });
-      return { ...state, babies: data };
+      // 可領
+      const eligible = data.filter((row) => !row.isExpire);
+      // console.log(eligible);
+      // return;
+      const salaData = state.salaries.slice();
+      const newSala = salaData.map((sala) => {
+        // console.log(sala.name);
+        console.log(eligible);
+        if (eligible.filter((b) => b.name == sala.name).length > 0)
+          return { ...sala, bonus: 5000 };
+        return { ...sala, bonus: 0 };
+      });
+
+      console.log(newSala);
+
+      return { ...state, babies: data, salaries: newSala };
 
     // 初始資料
     case actions.INIT_DATA:

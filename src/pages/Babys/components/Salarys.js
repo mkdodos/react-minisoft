@@ -9,9 +9,10 @@ export default function Salarys({ rows }) {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>name</Table.HeaderCell>
-            <Table.HeaderCell>birth</Table.HeaderCell>
-            <Table.HeaderCell>最後發放月</Table.HeaderCell>
-            <Table.HeaderCell>可領</Table.HeaderCell>
+            <Table.HeaderCell>年</Table.HeaderCell>
+            <Table.HeaderCell>月</Table.HeaderCell>
+            <Table.HeaderCell>本薪</Table.HeaderCell>
+            <Table.HeaderCell>津貼</Table.HeaderCell>
             
           </Table.Row>
         </Table.Header>
