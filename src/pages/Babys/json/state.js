@@ -3,12 +3,13 @@ export const baby = {
   "id":"",
   "name":"",
   "birth":"",
-  "expireDate":""
+  "expireDate":"",
+  "isExpire":true
 }
 
 export const state = {
   "babies":[],
-  "salalies":[],
+  "salaries":[],
   "baby":baby,
   "salaryRow":{},
   "isLoading":false,

@@ -9,6 +9,34 @@ export default function (state, action) {
     case actions.CLOSE_MODAL:
       return { ...state, isModalOpen: false };
 
+    // 比對符合條件
+    case actions.COMPARE:
+      const newRowsForCompare = state.babies.slice();
+
+      // babies.map((baby) => {
+      //   const date = new Date(baby.expireDate);
+      //   const expireNum = date.getFullYear() * 12 + (date.getMonth() + 1);
+      //   const baseNum = baseYM.y * 12 + baseYM.m * 1;
+      //   console.log(expireNum - baseNum);
+      // });
+
+      const baseYM = action.payload.baseYM;
+      const data = newRowsForCompare.map((row) => {
+        const date = new Date(row.expireDate);
+
+        const expireNum = date.getFullYear() * 12 + (date.getMonth() + 1);
+        const baseNum = baseYM.y * 12 + baseYM.m * 1;
+
+        console.log(expireNum, baseNum);
+        console.log(expireNum >= baseNum);
+
+        // 到期日大於發薪日代表可領
+        // 到期日小於發薪日代表過期
+        return { ...row, isExpire: expireNum < baseNum };
+      });
+      return { ...state, babies: data };
+
+    // 初始資料
     case actions.INIT_DATA:
       return {
         ...state,
@@ -16,6 +44,7 @@ export default function (state, action) {
         salaries: action.payload.salaries,
       };
 
+    // 新增列
     case actions.ADD_BABY:
       return {
         ...state,
@@ -25,6 +54,7 @@ export default function (state, action) {
         editedIndex: -1,
       };
 
+    // 更新列
     case actions.UPDATE_ROW:
       const newRows = state.babies.slice();
       Object.assign(newRows[action.payload.editedIndex], action.payload.baby);
@@ -37,6 +67,7 @@ export default function (state, action) {
         editedIndex: -1,
       };
 
+    // 資料輸入
     case actions.INPUT_CHANGE:
       return {
         ...state,

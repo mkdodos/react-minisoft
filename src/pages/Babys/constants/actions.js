@@ -6,7 +6,8 @@ const actions = {
   ADD_BABY:'add-baby',
   EDIT_ROW:'edit-row',
   UPDATE_ROW:'update-row',
-  DELETE_ROW:'delete-row'
+  DELETE_ROW:'delete-row',
+  COMPARE:'compare'
 }
 
 export {actions}

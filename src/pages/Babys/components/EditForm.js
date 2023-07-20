@@ -54,7 +54,7 @@ export default function EditForm({ dispatch, state }) {
         />
       </Form.Field>
 
-      <Button type="submit">Submit</Button>
+      <Button type="submit">儲存</Button>
     </Form>
   );
 }
