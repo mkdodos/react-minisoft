@@ -23,18 +23,16 @@ export default function (state, action) {
       });
       // 可領
       const eligible = data.filter((row) => !row.isExpire);
-      // console.log(eligible);
-      // return;
+     
       const salaData = state.salaries.slice();
       const newSala = salaData.map((sala) => {
-        // console.log(sala.name);
-        console.log(eligible);
+       
         if (eligible.filter((b) => b.name == sala.name).length > 0)
           return { ...sala, bonus: 5000 };
         return { ...sala, bonus: 0 };
       });
 
-      console.log(newSala);
+      
 
       return { ...state, babies: data, salaries: newSala };
 

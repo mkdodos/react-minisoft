@@ -5,12 +5,7 @@ export default function SearchBar({ baseYM, setBaseYM, state, dispatch }) {
   const { babies } = state;
   function handleQuery() {
     dispatch({ type: actions.COMPARE, payload: { baseYM } });
-    // babies.map((baby) => {
-    //   const date = new Date(baby.expireDate);
-    //   const expireNum = date.getFullYear() * 12 + (date.getMonth() + 1);
-    //   const baseNum = baseYM.y * 12 + baseYM.m * 1;
-    //   console.log(expireNum - baseNum);
-    // });
+    
   }
 
   function handleChange(e) {

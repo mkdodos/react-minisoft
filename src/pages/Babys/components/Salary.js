@@ -3,7 +3,7 @@ import { Table, Icon,Button } from 'semantic-ui-react';
 import { actions } from '../constants/actions';
 
 export default function Salary({row}) {
-  console.log(row)
+  
 
   return (
     <Table.Row>
