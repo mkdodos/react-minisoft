@@ -7,7 +7,7 @@ $obj = json_decode(file_get_contents('php://input'));
 
 $sql =  "insert into Babys
           (name,birth,expireDate) values
-          ('$obj->empName','$obj->birth','$obj->expireDate') ";
+          ('$obj->name','$obj->birth','$obj->expireDate') ";
 
 // return $sql;
           

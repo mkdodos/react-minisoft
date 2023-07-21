@@ -16,40 +16,23 @@ export default function Index() {
 
   const [baseYM, setBaseYM] = useState({ y: 2026, m: 11 });
 
-  // 新增 baby
-  const handleSave = () => {
-    const headers = {
-      'Content-Type': 'text/plain',
-    };
-
-    const API_PATH = 'http://server2000:8888/react-minisoft/src/pages/Babys/api';
-    const url = `${API_PATH}/create.php`;
-    const objRow = {
-      empName:'馬克',
-      birth: '2023-07-21',
-      expireDate: '2027-01-05',
-    };
-    axios.post(url, objRow, { headers }).then((res) => {
-      console.log(res.data);
-    });
-  };
-
   useEffect(() => {
-    handleSave();
-    const url = `${API_HOST}/salary/read.php`;
-    axios.get(url, { params: { y: 2023, m: 6 } }).then((res) => {
-      console.log(res.data);
+    let url = `${API_HOST}/salary/read.php`;
+    // 載入  babies 和 salaries
+    axios.get(url, { params: { y: 2023, m: 6 } }).then((sala) => {
+      const API_PATH = 'http://server2000:8888/react-minisoft/api/babys';
+      url = `${API_PATH}/read.php`;
 
-      // 載入  babies 和 salaries
-      dispatch({
-        type: actions.INIT_DATA,
-        // payload: { babies: data.babies, salaries: data.salaries },
-        payload: { babies: data.babies, salaries: res.data },
+      axios.get(url).then((ba) => {
+        dispatch({
+          type: actions.INIT_DATA,
+          // payload: { babies: data.babies, salaries: data.salaries },
+          payload: { babies: ba.data, salaries: sala.data },
+        });
+        // 顯示可領並更新薪資
+        dispatch({ type: actions.COMPARE, payload: { baseYM } });
       });
     });
-
-    // 顯示可領並更新薪資
-    dispatch({ type: actions.COMPARE, payload: { baseYM } });
   }, []);
   return (
     <div>

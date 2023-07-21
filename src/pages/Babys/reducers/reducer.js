@@ -1,5 +1,20 @@
 import { actions } from '../constants/actions';
 import { baby } from '../json/state';
+import axios from 'axios';
+
+// 新增 baby
+const addBaby = (row) => {
+  const headers = {
+    'Content-Type': 'text/plain',
+  };
+
+  const API_PATH = 'http://server2000:8888/react-minisoft/api/babys';
+  const url = `${API_PATH}/create.php`;
+
+  axios.post(url, row, { headers }).then((res) => {
+    console.log(res.data);
+  });
+};
 
 export default function (state, action) {
   switch (action.type) {
@@ -23,29 +38,30 @@ export default function (state, action) {
       });
       // 可領
       const eligible = data.filter((row) => !row.isExpire);
-     
+
       const salaData = state.salaries.slice();
       const newSala = salaData.map((sala) => {
-       
         if (eligible.filter((b) => b.name == sala.name).length > 0)
           return { ...sala, bonus: 5000 };
         return { ...sala, bonus: 0 };
       });
 
-      
-
       return { ...state, babies: data, salaries: newSala };
 
     // 初始資料
     case actions.INIT_DATA:
+     
+
       return {
         ...state,
         babies: action.payload.babies,
+        // babies: printData(),
         salaries: action.payload.salaries,
       };
 
     // 新增列
     case actions.ADD_BABY:
+      addBaby(action.payload.baby);
       return {
         ...state,
         babies: [...state.babies, { ...action.payload.baby, id: Date.now() }],
