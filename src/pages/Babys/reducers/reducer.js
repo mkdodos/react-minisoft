@@ -17,6 +17,23 @@ const addBaby = (row) => {
 };
 
 
+
+// 更新 baby
+const updateBaby = (row) => {
+  const headers = {
+    'Content-Type': 'text/plain',
+  };
+
+  const API_PATH = 'http://server2000:8888/react-minisoft/api/babys';
+  const url = `${API_PATH}/update.php`;
+
+  axios.post(url, row, { headers }).then((res) => {
+    console.log(res.data)
+  });
+};
+
+
+
 // 刪除 baby
 const deleteBaby = (id) => {
   const headers = {
@@ -87,6 +104,8 @@ export default function (state, action) {
 
     // 更新列
     case actions.UPDATE_ROW:
+      // console.log(action.payload.baby)
+      updateBaby(action.payload.baby);
       const newRows = state.babies.slice();
       Object.assign(newRows[action.payload.editedIndex], action.payload.baby);
 
