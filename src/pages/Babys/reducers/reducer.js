@@ -16,6 +16,21 @@ const addBaby = (row) => {
   });
 };
 
+
+// 刪除 baby
+const deleteBaby = (id) => {
+  const headers = {
+    'Content-Type': 'text/plain',
+  };
+
+  const API_PATH = 'http://server2000:8888/react-minisoft/api/babys';
+  const url = `${API_PATH}/delete.php`;
+
+  axios.post(url, {id:id}, { headers }).then((res) => {
+    console.log(res.data);
+  });
+};
+
 export default function (state, action) {
   switch (action.type) {
     case actions.OPEN_MODAL:
@@ -104,6 +119,7 @@ export default function (state, action) {
 
     // 刪除
     case actions.DELETE_ROW:
+      deleteBaby(action.id)
       return {
         ...state,
         babies: state.babies.filter((row) => row.id !== action.id),

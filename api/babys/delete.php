@@ -12,13 +12,14 @@ $db = new PDO("odbc:salary");
 
 $id = $_POST['id'];
 
-$sql = "delete from 薪資紀錄表 where id=".$id;
+$sql = "delete from Babys where id=".$id;
 $sql = mb_convert_encoding($sql, "BIG5", "UTF-8");
-// return $sql;
+// echo $sql;
+
 try {
     $rs = $db->query($sql);
     // Returns the number of rows affected by the last SQL statement
-    // echo $rs->rowCount();
+    echo $rs->rowCount();
 } catch (PDOException $err) {
     print_r($err->getMessage());
 }
