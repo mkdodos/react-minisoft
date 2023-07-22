@@ -2,6 +2,8 @@ import React from 'react';
 // import { addRow } from '../api';
 import { Form, Button } from 'semantic-ui-react';
 import { actions } from '../constants/actions';
+import { addBaby } from '../dataFunctions/crud';
+
 export default function EditForm({ dispatch, state }) {
   const { baby, editedIndex } = state;
   function handleChange(e) {
@@ -16,7 +18,8 @@ export default function EditForm({ dispatch, state }) {
     console.log(editedIndex);
     // 用 editedIndex 判斷新增或編輯
     if(editedIndex==-1){
-      dispatch({ type: actions.ADD_BABY, payload: { baby } });
+      addBaby(baby,dispatch)
+      // dispatch({ type: actions.ADD_BABY, payload: { baby } });
     }else{
       dispatch({ type: actions.UPDATE_ROW, payload: { baby,editedIndex } });
     }

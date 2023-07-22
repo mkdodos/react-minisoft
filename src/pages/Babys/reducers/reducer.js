@@ -2,19 +2,8 @@ import { actions } from '../constants/actions';
 import { baby } from '../json/state';
 import axios from 'axios';
 
-// 新增 baby
-const addBaby = (row) => {
-  const headers = {
-    'Content-Type': 'text/plain',
-  };
 
-  const API_PATH = 'http://server2000:8888/react-minisoft/api/babys';
-  const url = `${API_PATH}/create.php`;
 
-  axios.post(url, row, { headers }).then((res) => {
-    console.log(res.data);
-  });
-};
 
 
 
@@ -93,10 +82,10 @@ export default function (state, action) {
 
     // 新增列
     case actions.ADD_BABY:
-      addBaby(action.payload.baby);
+      // addBaby(action.payload.baby);
       return {
         ...state,
-        babies: [...state.babies, { ...action.payload.baby, id: Date.now() }],
+        babies: [...state.babies, { ...action.payload.baby, id: action.payload.id }],
         isModalOpen: false,
         baby: baby,
         editedIndex: -1,
