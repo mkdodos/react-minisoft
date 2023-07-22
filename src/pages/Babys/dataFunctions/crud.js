@@ -42,7 +42,7 @@ const updateBaby = (row, editedIndex, dispatch) => {
     'Content-Type': 'text/plain',
   };
 
-  const API_PATH = 'http://server2000:8888/react-minisoft/api/babys';
+ 
   const url = `${API_PATH}/update.php`;
 
   axios.post(url, row, { headers }).then((res) => {
@@ -51,4 +51,20 @@ const updateBaby = (row, editedIndex, dispatch) => {
   });
 };
 
-export { fetchData, addBaby, updateBaby };
+
+// 刪除 baby
+const deleteBaby = (id,dispatch) => {
+  const headers = {
+    'Content-Type': 'text/plain',
+  };
+
+  
+  const url = `${API_PATH}/delete.php`;
+
+  axios.post(url, {id:id}, { headers }).then((res) => {
+    dispatch({ type: actions.DELETE_ROW, id });
+    console.log(res.data);
+  });
+};
+
+export { fetchData, addBaby, updateBaby,deleteBaby };

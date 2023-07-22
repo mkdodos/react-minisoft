@@ -2,12 +2,14 @@ import React from 'react';
 import { Modal, Button } from 'semantic-ui-react';
 import EditForm from './EditForm';
 import { actions } from '../constants/actions';
+import { deleteBaby } from '../dataFunctions/crud';
 
 export default function ModalView({ dispatch,state }) {
   
 
   function handleDelete() {
-    dispatch({ type: actions.DELETE_ROW, id: state.baby.id });
+    deleteBaby(state.baby.id,dispatch)
+    // dispatch({ type: actions.DELETE_ROW, id: state.baby.id });
     
   }
 
