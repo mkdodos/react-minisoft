@@ -2,7 +2,7 @@ import React from 'react';
 // import { addRow } from '../api';
 import { Form, Button } from 'semantic-ui-react';
 import { actions } from '../constants/actions';
-import { addBaby } from '../dataFunctions/crud';
+import { addBaby,updateBaby } from '../dataFunctions/crud';
 
 export default function EditForm({ dispatch, state }) {
   const { baby, editedIndex } = state;
@@ -21,7 +21,9 @@ export default function EditForm({ dispatch, state }) {
       addBaby(baby,dispatch)
       // dispatch({ type: actions.ADD_BABY, payload: { baby } });
     }else{
-      dispatch({ type: actions.UPDATE_ROW, payload: { baby,editedIndex } });
+      updateBaby(baby,editedIndex,dispatch)
+
+      // dispatch({ type: actions.UPDATE_ROW, payload: { baby,editedIndex } });
     }
     
     

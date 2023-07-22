@@ -36,4 +36,19 @@ const addBaby = (row, dispatch) => {
   });
 };
 
-export { fetchData, addBaby };
+// 更新 baby
+const updateBaby = (row, editedIndex, dispatch) => {
+  const headers = {
+    'Content-Type': 'text/plain',
+  };
+
+  const API_PATH = 'http://server2000:8888/react-minisoft/api/babys';
+  const url = `${API_PATH}/update.php`;
+
+  axios.post(url, row, { headers }).then((res) => {
+    dispatch({ type: actions.UPDATE_ROW, payload: { baby: row, editedIndex } });
+    // console.log(res.data)
+  });
+};
+
+export { fetchData, addBaby, updateBaby };
