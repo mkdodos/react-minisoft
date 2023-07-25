@@ -16,5 +16,5 @@ export default function EmpSelect({ onChange }) {
       setOptions(data);
     });
   }, []);
-  return <Form.Select options={options} onChange={onChange} />;
+  return <Form.Select  clearable options={options} onChange={onChange} />;
 }

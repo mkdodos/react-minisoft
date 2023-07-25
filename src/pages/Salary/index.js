@@ -19,13 +19,22 @@ export default function Index() {
   });
 
 
+  // 
   useEffect(() => {handleQuery()}, []);
 
 
   // 查詢薪資
   const handleQuery = () => {
     axios.get(url, { params: { y: search.y, m: search.m } }).then((res) => {
-      setRows(res.data);
+      // 有選員工,做進一步篩選
+      if(search.emp!==''){
+        const data  = res.data.filter(row=>row.name==search.emp);
+        setRows(data);
+      }else{
+        setRows(res.data);
+      }
+      
+     
     });
   };
 
