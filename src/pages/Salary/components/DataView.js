@@ -3,22 +3,18 @@ import { API_HOST } from '../../../global/constants';
 import axios from 'axios';
 import { Tab, Table, TableHeader, TableHeaderCell } from 'semantic-ui-react';
 
-export default function DataView({ search }) {
-  const url = `${API_HOST}/salary/read.php`;
+export default function DataView({ rows }) {
+  // const url = `${API_HOST}/salary/read.php`;
 
-  const [rows, setRows] = useState([]);
+  // const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    axios.get(url, { params: { y: search.y, m: search.m } }).then((res) => {
-      console.log(res.data);
+    // axios.get(url, { params: { y: search.y, m: search.m } }).then((res) => {
+    //   console.log(res.data);
 
-      setRows(res.data);
-      // const data = res.data.map((emp) => {
-      //   return { key: emp.name, text: emp.name, value: emp.name };
-      // });
-
-      // setOptions(data);
-    });
+    //   setRows(res.data);
+    
+    // });
   }, []);
 
   return (

@@ -4,8 +4,11 @@ import { API_HOST } from '../../../global/constants';
 import axios from 'axios';
 import EmpSelect from '../../../components/EmpSelect';
 
-export default function SearchBar({ search, setSearch }) {
+export default function SearchBar({ search, setSearch,handleQuery }) {
   const [options, setOptions] = useState([]);
+  
+ 
+  
   useEffect(() => {}, []);
 
   const loading = false;
@@ -22,9 +25,7 @@ export default function SearchBar({ search, setSearch }) {
     optionsM.push({ key: i, text: i, value: i });
   }
 
-  const handleQuery = () => {
-    console.log(search);
-  };
+ 
 
   const handleEmpChange = (e, obj) => {
     setSearch({ ...search, emp: obj.value });
@@ -55,7 +56,7 @@ export default function SearchBar({ search, setSearch }) {
           }}
         />
 
-        <EmpSelect onChange={handleEmpChange} />
+        <EmpSelect onChange={handleEmpChange}  />
 
         <Form.Button loading={loading} color="teal" onClick={handleQuery}>
           查詢
