@@ -31,7 +31,7 @@ export default function Index() {
       <ModalView dispatch={dispatch} state={state} />
       <AddButton dispatch={dispatch} />
       <Babys rows={state.babies} dispatch={dispatch} />
-      <Salarys rows={state.salaries} />
+      {/* <Salarys rows={state.salaries} /> */}
     </div>
   );
 }
