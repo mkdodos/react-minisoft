@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import SearchBar from './components/SearchBar';
+import DataView from './components/DataView';
 
 export default function Index() {
   let m = new Date().getMonth();
@@ -16,6 +17,7 @@ export default function Index() {
   return (
     <div>
       <SearchBar search={search} setSearch={setSearch} />
+      <DataView search={search}/>
     </div>
   );
 }

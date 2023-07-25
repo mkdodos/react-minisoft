@@ -6,20 +6,7 @@ import EmpSelect from '../../../components/EmpSelect';
 
 export default function SearchBar({ search, setSearch }) {
   const [options, setOptions] = useState([]);
-  // const [emp, setEmp] = useState('');
-
-  useEffect(() => {
-    // const url = `${API_HOST}/employee/read.php`;
-    // axios.get(url).then((res) => {
-    //   console.log(res.data);
-    //   const data = res.data.map((obj) => {
-    //     return { text: obj.name, key: obj.name, value: obj.name };
-    //   });
-    //   setOptions(data);
-    // });
-  }, []);
-
-  
+  useEffect(() => {}, []);
 
   const loading = false;
 
@@ -31,17 +18,14 @@ export default function SearchBar({ search, setSearch }) {
   }
 
   const optionsM = [];
-
   for (let i = 1; i <= 12; i++) {
     optionsM.push({ key: i, text: i, value: i });
   }
 
-  
   const handleQuery = () => {
-    console.log(search)
+    console.log(search);
   };
-  
-  
+
   const handleEmpChange = (e, obj) => {
     setSearch({ ...search, emp: obj.value });
   };
@@ -52,7 +36,6 @@ export default function SearchBar({ search, setSearch }) {
           clearable
           width={3}
           fluid
-          // label='Gender'
           value={search.y}
           options={optionsY}
           placeholder="年"
@@ -64,7 +47,6 @@ export default function SearchBar({ search, setSearch }) {
           clearable
           width={3}
           fluid
-          // label='Gender'
           value={search.m}
           options={optionsM}
           placeholder="月"
@@ -74,7 +56,6 @@ export default function SearchBar({ search, setSearch }) {
         />
 
         <EmpSelect onChange={handleEmpChange} />
-        {/* <Form.Select options={options}/> */}
 
         <Form.Button loading={loading} color="teal" onClick={handleQuery}>
           查詢
