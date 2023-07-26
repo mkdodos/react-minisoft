@@ -5,7 +5,7 @@ import TableHeader from './components/TableHeader';
 import TableHeaderSum from './components/TableHeaderSum';
 import { actions } from '../../actions';
 
-export default function DataView({state,dispatch,search}) {
+export default function DataView({state,dispatch,search,form,setForm}) {
   const {rows,isModalOpen,row}=state;
   // 此值傳給子元件做為是否顯示大小月欄位依據
   const [isShowBigM, setIsShowBigM] = useState(false);
@@ -21,10 +21,10 @@ export default function DataView({state,dispatch,search}) {
   
 
   const handleEdit = (row) => {
-    dispatch({type:actions.EDIT_ROW,payload:{row}})
-    // setOpen(true);
-    // setEditedIndex(rows.indexOf(row));
-    // setRow(row);
+    // 索引做為儲存後將資料寫回陣列之用
+    const index = rows.indexOf(row);
+    
+    setForm({...form,row:row,isOpen:true,index})    
   };
 
   return (

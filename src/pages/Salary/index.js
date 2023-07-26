@@ -11,7 +11,7 @@ export default function Index() {
   // 初始值
   const initState = {
     rows: [],
-    row: {name:''},
+    row: { name: '' },
     isLoading: false,
     editedIndex: -1,
     isModalOpen: false,
@@ -23,6 +23,13 @@ export default function Index() {
 
   // 查詢參數
   const [search, setSearch] = useState({ y: 2022, m: 7, emp: '' });
+
+  // 編輯表單
+  const [form, setForm] = useState({
+    row: {name:''},
+    isOpen: false,
+    isLoading: false,
+  });
 
   // 載入資料
   useEffect(() => {
@@ -38,8 +45,8 @@ export default function Index() {
         loading={state.isLoading}
         dispatch={dispatch}
       />
-      <DataView state={state} dispatch={dispatch} search={search} />
-      <EditForm state={state} dispatch={dispatch} />
+      <DataView  form={form} setForm={setForm} state={state} dispatch={dispatch} search={search} />
+      <EditForm form={form} setForm={setForm} dispatch={dispatch} />
     </div>
   );
 }

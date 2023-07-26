@@ -10,7 +10,6 @@ export default function reducer(state, action) {
       return { ...state, rows: action.payload.rows, isLoading: false };
 
     case actions.EDIT_ROW:
-     
       return {
         ...state,
         isModalOpen: true,
@@ -23,6 +22,18 @@ export default function reducer(state, action) {
         ...state,
         row: { ...state.row, [action.payload.name]: action.payload.value },
       };
+
+    case actions.UPDATE_ROW:
+      const index = action.payload.index;
+      const newRows = state.rows.slice();
+      Object.assign(newRows[index], action.payload.row);
+      console.log(newRows);
+
+      return {
+        ...state,
+        rows:newRows
+      };
+
     // setOpen(true);
     // setEditedIndex(rows.indexOf(row));
     // setRow(row);

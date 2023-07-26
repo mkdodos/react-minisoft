@@ -2,7 +2,8 @@ import React from 'react';
 import { Modal, Form, Button } from 'semantic-ui-react';
 import { actions } from '../actions';
 
-export default function EditForm({ state, dispatch }) {
+export default function EditForm({ form, setForm,dispatch }) {
+  const { row, isOpen,isLoading } = form;
   // 修改本薪同時更新大小月金額
   const handleChangeBasic = (e) => {
     // setRow({
@@ -25,22 +26,28 @@ export default function EditForm({ state, dispatch }) {
   };
 
   const handleInputChange = (e) => {
-    dispatch({
-      type: actions.INPUT_CHANGE,
-      payload: { name: e.target.name, value: e.target.value },
-    });
+    setForm({ ...form, row: { ...row, [e.target.name]: e.target.value } });
+    // dispatch({
+    //   type: actions.INPUT_CHANGE,
+    //   payload: { name: e.target.name, value: e.target.value },
+    // });
   };
-  const { row, isModalOpen,isLoading } = state;
+  // const { isModalOpen, isLoading } = state;
+
+  const handleModalClose = () => {
+    setForm({ ...form, isOpen: false });
+  };
+
+  // 儲存
+  const handleSave = ()=>{
+    
+    dispatch({type:actions.UPDATE_ROW,payload:{index:form.index,row}})
+    setForm({ ...form, isOpen: false });
+  }
 
   return (
     <div>
-      <Modal
-        open={isModalOpen}
-        closeIcon
-        onClose={() => {
-          setOpen(false);
-        }}
-      >
+      <Modal open={isOpen} closeIcon onClose={handleModalClose}>
         <Modal.Header>{row.name}</Modal.Header>
         <Modal.Content>
           <Form>
@@ -49,6 +56,7 @@ export default function EditForm({ state, dispatch }) {
                 <label>本薪</label>
                 <input
                   type="number"
+                  name="basic"
                   value={row.basic}
                   onChange={handleInputChange}
                 ></input>
@@ -158,7 +166,6 @@ export default function EditForm({ state, dispatch }) {
                   name="others"
                   value={row.others}
                   onChange={handleInputChange}
-                  
                 ></input>
               </Form.Field>
             </Form.Group>
@@ -185,9 +192,9 @@ export default function EditForm({ state, dispatch }) {
           >
             刪除
           </Button>
-          {/* <Button primary onClick={handleSave} loading={loading}>
+          <Button primary onClick={handleSave} loading={isLoading}>
             儲存
-          </Button> */}
+          </Button>
         </Modal.Actions>
       </Modal>
     </div>
