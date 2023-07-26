@@ -43,17 +43,20 @@ const addBaby = (row, dispatch) => {
   });
 };
 
-// 更新 baby
-const updateBaby = (row, editedIndex, dispatch) => {
+// 更新 
+const updateRow = (row, editedIndex, dispatch) => {
   const headers = {
     'Content-Type': 'text/plain',
   };
 
   const url = `${API_PATH}/update.php`;
 
+  // 配合後端將 others 改成 other_bonus
+  row={...row,other_bonus:row.others}
+
   axios.post(url, row, { headers }).then((res) => {
-    dispatch({ type: actions.UPDATE_ROW, payload: { baby: row, editedIndex } });
-    // console.log(res.data)
+    // dispatch({ type: actions.UPDATE_ROW, payload: { baby: row, editedIndex } });
+    console.log(res.data)
   });
 };
 
@@ -71,4 +74,4 @@ const deleteBaby = (id, dispatch) => {
   });
 };
 
-export { fetchData, addBaby, updateBaby, deleteBaby };
+export { fetchData, addBaby, updateRow, deleteBaby };

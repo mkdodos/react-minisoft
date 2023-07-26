@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Form, Button } from 'semantic-ui-react';
 import { actions } from '../actions';
+import { updateRow } from '../crud';
 
 export default function EditForm({ form, setForm,dispatch }) {
   const { row, isOpen,isLoading } = form;
@@ -43,6 +44,7 @@ export default function EditForm({ form, setForm,dispatch }) {
     
     dispatch({type:actions.UPDATE_ROW,payload:{index:form.index,row}})
     setForm({ ...form, isOpen: false });
+    updateRow(row)
   }
 
   return (
@@ -192,7 +194,7 @@ export default function EditForm({ form, setForm,dispatch }) {
           >
             刪除
           </Button>
-          <Button primary onClick={handleSave} loading={isLoading}>
+          <Button floated="left" primary onClick={handleSave} loading={isLoading}>
             儲存
           </Button>
         </Modal.Actions>
