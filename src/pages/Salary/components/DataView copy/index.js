@@ -3,10 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'semantic-ui-react';
 import TableHeader from './components/TableHeader';
 import TableHeaderSum from './components/TableHeaderSum';
-import { actions } from '../../actions';
 
-export default function DataView({state,dispatch}) {
-  const {rows,search,isModalOpen,row}=state;
+export default function DataView({ rows,row,setRow, search,setOpen }) {
   // 此值傳給子元件做為是否顯示大小月欄位依據
   const [isShowBigM, setIsShowBigM] = useState(false);
   useEffect(() => {
@@ -18,10 +16,9 @@ export default function DataView({state,dispatch}) {
 
 
   const handleEdit = (row) => {
-    dispatch({type:actions.EDIT_ROW,payload:{row}})
-    // setOpen(true);
+    setOpen(true);
     // setEditedIndex(rows.indexOf(row));
-    // setRow(row);
+    setRow(row);
   };
 
   return (

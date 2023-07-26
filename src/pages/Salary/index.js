@@ -1,69 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import SearchBar from './components/SearchBar';
 import DataView from './components/DataView';
 import { API_HOST } from '../../global/constants';
 import axios from 'axios';
 import EditForm from './components/EditForm';
+import reducer from './reducer';
+import crud, { fetchData } from './crud';
 
 export default function Index() {
-  const url = `${API_HOST}/salary/read.php`;
-  let m = new Date().getMonth();
-
-  // 薪資
-  const [rows, setRows] = useState([]);
-
-
-  const defaultItem = {
-    basic: '',
-    job: '',
-    tech: '',
-    food: '',
-    bigM: '',
+  // 初始值
+  const initState = {
+    rows: [],
+    row: null,
+    isLoading: false,
+    editedIndex: -1,
+    isModalOpen: false,
+    search:{y:2023,m:6,emp:''}
   };
 
-  const [row, setRow] = useState(defaultItem);
+  const [state, dispatch] = useReducer(reducer, initState);
 
-  // 載入中
-  const [loading,setLoading]=useState(false)
 
-  // 開啟編輯視窗
-  const [open,setOpen]=useState(false)
 
-  // getMonth(),1月時會取得0
-  const [search, setSearch] = useState({
-    y: new Date().getFullYear(),
-    m: m == 0 ? 1 : m,
-    emp: '',
-  });
+  const {rows,search}=state;
 
-  //
+
   useEffect(() => {
-    handleQuery();
+    
+    fetchData(search, dispatch);
   }, []);
 
-  // 查詢薪資
-  const handleQuery = () => {
-    axios.get(url, { params: { y: search.y, m: search.m } }).then((res) => {
-      // 有選員工,做進一步篩選
-      if (search.emp !== '') {
-        const data = res.data.filter((row) => row.name == search.emp);
-        setRows(data);
-      } else {
-        setRows(res.data);
-      }
-    });
-  };
-
-  return (
-    <div>
-      <SearchBar
-        search={search}
-        setSearch={setSearch}
-        handleQuery={handleQuery}
-      />
-      <DataView search={search} rows={rows} row={row} setRow={setRow} setOpen={setOpen} />
-
-      <EditForm row={row} open={open} setOpen={setOpen} setRow={setRow} loading={loading} />
-    </div>
-  );
+  
+  return <div>
+    {/* {JSON.stringify(rows)} */}
+    <DataView state={state} dispatch={dispatch} />
+    </div>;
 }
