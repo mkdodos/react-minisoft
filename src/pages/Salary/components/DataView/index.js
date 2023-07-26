@@ -5,8 +5,8 @@ import TableHeader from './components/TableHeader';
 import TableHeaderSum from './components/TableHeaderSum';
 import { actions } from '../../actions';
 
-export default function DataView({state,dispatch}) {
-  const {rows,search,isModalOpen,row}=state;
+export default function DataView({state,dispatch,search}) {
+  const {rows,isModalOpen,row}=state;
   // 此值傳給子元件做為是否顯示大小月欄位依據
   const [isShowBigM, setIsShowBigM] = useState(false);
   useEffect(() => {
@@ -14,8 +14,11 @@ export default function DataView({state,dispatch}) {
     const bigM = [1, 3, 5, 7, 8, 10, 12];
     if (bigM.indexOf(search.m) > -1) setIsShowBigM(true);
     else setIsShowBigM(false);
+    console.log(search)
   }, [search]);
 
+
+  console.log(state)
 
   const handleEdit = (row) => {
     dispatch({type:actions.EDIT_ROW,payload:{row}})
@@ -32,13 +35,13 @@ export default function DataView({state,dispatch}) {
         {rows.map((item) => {
           return (
             <Table.Row key={item.id}>
-               <Table.Cell
+               {/* <Table.Cell
                   onClick={() => {
                     handleEdit(item);
                   }}
                 >
                   <a href="#">編輯</a>
-                </Table.Cell>
+                </Table.Cell> */}
               <Table.Cell>{item.name}</Table.Cell>
               <Table.Cell>{item.y}</Table.Cell>
               <Table.Cell>{item.m}</Table.Cell>

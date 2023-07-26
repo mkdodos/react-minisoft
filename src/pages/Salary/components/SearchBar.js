@@ -3,20 +3,25 @@ import { Form, Dropdown } from 'semantic-ui-react';
 import { API_HOST } from '../../../global/constants';
 import axios from 'axios';
 import EmpSelect from '../../../components/EmpSelect';
+import { actions } from '../actions';
+import  { fetchData } from '../crud';
 
-export default function SearchBar({ search, setSearch,handleQuery }) {
+
+export default function SearchBar({ search, setSearch,dispatch  }) {
   const [options, setOptions] = useState([]);
-  
- 
-  // 大小月顯示控制
-  const [isBigM,setIsBigM]=useState([])
 
-  
+  // const {search}=state;
+
+  // 大小月顯示控制
+  const [isBigM, setIsBigM] = useState([]);
+
   useEffect(() => {}, []);
 
   const loading = false;
 
   const optionsY = [];
+
+  const { m } = search;
 
   // 年份由新到舊,2004為資料庫中最舊年份
   for (let i = new Date().getFullYear(); i >= 2004; i--) {
@@ -28,17 +33,20 @@ export default function SearchBar({ search, setSearch,handleQuery }) {
     optionsM.push({ key: i, text: i, value: i });
   }
 
- 
-
   const handleMonthChange = (e, obj) => {
     setSearch({ ...search, m: obj.value });
-    console.log(obj.value)
+   
   };
-
 
   const handleEmpChange = (e, obj) => {
     setSearch({ ...search, emp: obj.value });
   };
+
+  // 傳年月取得資料
+  const handleQuery = () => {
+    fetchData(search,dispatch)
+  };
+
   return (
     <Form>
       <Form.Group>
@@ -63,7 +71,7 @@ export default function SearchBar({ search, setSearch,handleQuery }) {
           onChange={handleMonthChange}
         />
 
-        <EmpSelect onChange={handleEmpChange}  />
+        <EmpSelect onChange={handleEmpChange} />
 
         <Form.Button loading={loading} color="teal" onClick={handleQuery}>
           查詢
