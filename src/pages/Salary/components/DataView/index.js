@@ -4,7 +4,7 @@ import { Table } from 'semantic-ui-react';
 import TableHeader from './components/TableHeader';
 import TableHeaderSum from './components/TableHeaderSum';
 
-export default function DataView({ rows, search }) {
+export default function DataView({ rows,row,setRow, search,setOpen }) {
   // 此值傳給子元件做為是否顯示大小月欄位依據
   const [isShowBigM, setIsShowBigM] = useState(false);
   useEffect(() => {
@@ -14,6 +14,13 @@ export default function DataView({ rows, search }) {
     else setIsShowBigM(false);
   }, [search]);
 
+
+  const handleEdit = (row) => {
+    setOpen(true);
+    // setEditedIndex(rows.indexOf(row));
+    setRow(row);
+  };
+
   return (
     <Table unstackable>
       <TableHeader isShowBigM={isShowBigM} />
@@ -22,6 +29,13 @@ export default function DataView({ rows, search }) {
         {rows.map((item) => {
           return (
             <Table.Row key={item.id}>
+               <Table.Cell
+                  onClick={() => {
+                    handleEdit(item);
+                  }}
+                >
+                  <a href="#">編輯</a>
+                </Table.Cell>
               <Table.Cell>{item.name}</Table.Cell>
               <Table.Cell>{item.y}</Table.Cell>
               <Table.Cell>{item.m}</Table.Cell>
@@ -41,6 +55,7 @@ export default function DataView({ rows, search }) {
               <Table.Cell>{item.minus}</Table.Cell>
               <Table.Cell>{item.others}</Table.Cell>
               <Table.Cell>{item.total}</Table.Cell>
+             
             </Table.Row>
           );
         })}
