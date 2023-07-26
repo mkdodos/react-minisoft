@@ -6,6 +6,7 @@ export default function TableHeader({isShowBigM}) {
    
       <Table.Header>
         <Table.Row>
+        <Table.HeaderCell width={1}>#</Table.HeaderCell>
           <Table.HeaderCell width={1}>姓名</Table.HeaderCell>
           <Table.HeaderCell width={1}>年</Table.HeaderCell>
           <Table.HeaderCell>月</Table.HeaderCell>

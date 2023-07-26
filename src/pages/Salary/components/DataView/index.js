@@ -14,11 +14,11 @@ export default function DataView({state,dispatch,search}) {
     const bigM = [1, 3, 5, 7, 8, 10, 12];
     if (bigM.indexOf(search.m) > -1) setIsShowBigM(true);
     else setIsShowBigM(false);
-    console.log(search)
+    
   }, [search]);
 
 
-  console.log(state)
+  
 
   const handleEdit = (row) => {
     dispatch({type:actions.EDIT_ROW,payload:{row}})
@@ -35,13 +35,13 @@ export default function DataView({state,dispatch,search}) {
         {rows.map((item) => {
           return (
             <Table.Row key={item.id}>
-               {/* <Table.Cell
+               <Table.Cell
                   onClick={() => {
                     handleEdit(item);
                   }}
                 >
                   <a href="#">編輯</a>
-                </Table.Cell> */}
+                </Table.Cell>
               <Table.Cell>{item.name}</Table.Cell>
               <Table.Cell>{item.y}</Table.Cell>
               <Table.Cell>{item.m}</Table.Cell>

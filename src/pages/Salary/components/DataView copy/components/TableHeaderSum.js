@@ -27,6 +27,7 @@ export default function TableHeaderSum({ rows, isShowBigM }) {
   return (
     <Table.Header>
       <Table.Row>
+      <Table.HeaderCell width={1}></Table.HeaderCell>
         <Table.HeaderCell width={1}></Table.HeaderCell>
         <Table.HeaderCell width={1}></Table.HeaderCell>
         <Table.HeaderCell></Table.HeaderCell>

@@ -1,7 +1,8 @@
 const actions = {
   OPEN_MODAL : 'open-modal',
   CLOSE_MODAL : 'close-modal',
-  FETCH_DATA : 'fetch-data',
+  FETCH_DATA_BEGIN : 'fetch-data-begin',
+  FETCH_DATA_SUCCESS : 'fetch-data-success',
   INPUT_CHANGE:'input-change',
   ADD_ROW:'add-row',
   EDIT_ROW:'edit-row',

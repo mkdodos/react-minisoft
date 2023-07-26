@@ -10,6 +10,9 @@ const API_PATH = `${API_HOST}/salary`;
 // 載入資料
 function fetchData(search, dispatch) {
   let url = `${API_HOST}/salary/read.php`;
+  dispatch({
+    type: actions.FETCH_DATA_BEGIN,    
+  });
   axios.get(url, { params: { y: search.y, m: search.m } }).then((res) => {
     let data = [];
     // 有選員工,做進一步篩選
@@ -19,7 +22,7 @@ function fetchData(search, dispatch) {
       data = res.data;
     }
     dispatch({
-      type: actions.FETCH_DATA,
+      type: actions.FETCH_DATA_SUCCESS,
       payload: { rows: data },
     });
   });

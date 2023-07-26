@@ -7,12 +7,11 @@ import EditForm from './components/EditForm';
 import reducer from './reducer';
 import crud, { fetchData } from './crud';
 
-
 export default function Index() {
   // 初始值
   const initState = {
     rows: [],
-    row: null,
+    row: {name:''},
     isLoading: false,
     editedIndex: -1,
     isModalOpen: false,
@@ -23,17 +22,24 @@ export default function Index() {
   const [state, dispatch] = useReducer(reducer, initState);
 
   // 查詢參數
-  const [search,setSearch]=useState({y:2022,m:7,emp:''})
+  const [search, setSearch] = useState({ y: 2022, m: 7, emp: '' });
 
   // 載入資料
-  useEffect(() => {    
+  useEffect(() => {
     fetchData(search, dispatch);
   }, []);
 
-  
-  return <div>
-    {/* {JSON.stringify(rows)} */}
-    <SearchBar search={search} setSearch={setSearch} dispatch={dispatch}/>
-    <DataView state={state} dispatch={dispatch} search={search}/>
-    </div>;
+  return (
+    <div>
+      {/* {JSON.stringify(rows)} */}
+      <SearchBar
+        search={search}
+        setSearch={setSearch}
+        loading={state.isLoading}
+        dispatch={dispatch}
+      />
+      <DataView state={state} dispatch={dispatch} search={search} />
+      <EditForm state={state} dispatch={dispatch} />
+    </div>
+  );
 }

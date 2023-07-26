@@ -7,15 +7,15 @@ import { actions } from '../actions';
 import  { fetchData } from '../crud';
 
 
-export default function SearchBar({ search, setSearch,dispatch  }) {
-  const [options, setOptions] = useState([]);
+export default function SearchBar({ search, setSearch,dispatch,loading  }) {
+  // const [options, setOptions] = useState([]);
  
   // 大小月顯示控制
   const [isBigM, setIsBigM] = useState([]);
 
   useEffect(() => {}, []);
 
-  const loading = false;
+  
 
   // 年月下拉選項
   const optionsY = [];
