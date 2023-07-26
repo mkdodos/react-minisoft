@@ -10,6 +10,8 @@ export default function Index() {
 
   // 薪資
   const [rows, setRows] = useState([]);
+
+  
   
   // getMonth(),1月時會取得0  
   const [search, setSearch] = useState({

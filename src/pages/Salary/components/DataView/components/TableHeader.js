@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table } from 'semantic-ui-react'
 
-export default function TableHeader() {
+export default function TableHeader({isShowBigM}) {
   return (
    
       <Table.Header>
@@ -20,6 +20,7 @@ export default function TableHeader() {
           <Table.HeaderCell>加班金額</Table.HeaderCell>
           <Table.HeaderCell>請假</Table.HeaderCell>
           <Table.HeaderCell>請假扣</Table.HeaderCell>
+          {isShowBigM && <Table.HeaderCell>大小月</Table.HeaderCell>}
           <Table.HeaderCell>其他扣</Table.HeaderCell>
           <Table.HeaderCell width={1}>育嬰津貼</Table.HeaderCell>
           <Table.HeaderCell width={1}>合計</Table.HeaderCell>

@@ -8,6 +8,9 @@ export default function SearchBar({ search, setSearch,handleQuery }) {
   const [options, setOptions] = useState([]);
   
  
+  // 大小月顯示控制
+  const [isBigM,setIsBigM]=useState([])
+
   
   useEffect(() => {}, []);
 
@@ -26,6 +29,12 @@ export default function SearchBar({ search, setSearch,handleQuery }) {
   }
 
  
+
+  const handleMonthChange = (e, obj) => {
+    setSearch({ ...search, m: obj.value });
+    console.log(obj.value)
+  };
+
 
   const handleEmpChange = (e, obj) => {
     setSearch({ ...search, emp: obj.value });
@@ -51,9 +60,7 @@ export default function SearchBar({ search, setSearch,handleQuery }) {
           value={search.m}
           options={optionsM}
           placeholder="月"
-          onChange={(e, obj) => {
-            setSearch({ ...search, m: obj.value });
-          }}
+          onChange={handleMonthChange}
         />
 
         <EmpSelect onChange={handleEmpChange}  />
