@@ -22,6 +22,7 @@ export default function TableHeader() {
           <Table.HeaderCell>請假扣</Table.HeaderCell>
           <Table.HeaderCell>其他扣</Table.HeaderCell>
           <Table.HeaderCell width={1}>育嬰津貼</Table.HeaderCell>
+          <Table.HeaderCell width={1}>合計</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
    

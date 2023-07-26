@@ -33,6 +33,7 @@ export default function DataView({ rows }) {
               <Table.Cell>{item.offHoursAmt}</Table.Cell>
               <Table.Cell>{item.minus}</Table.Cell>
               <Table.Cell>{item.others}</Table.Cell>
+              <Table.Cell>{item.total}</Table.Cell>
             </Table.Row>
           );
         })}
