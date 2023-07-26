@@ -9,9 +9,7 @@ import  { fetchData } from '../crud';
 
 export default function SearchBar({ search, setSearch,dispatch  }) {
   const [options, setOptions] = useState([]);
-
-  // const {search}=state;
-
+ 
   // 大小月顯示控制
   const [isBigM, setIsBigM] = useState([]);
 
@@ -19,30 +17,36 @@ export default function SearchBar({ search, setSearch,dispatch  }) {
 
   const loading = false;
 
+  // 年月下拉選項
   const optionsY = [];
-
-  const { m } = search;
-
+  const optionsM = [];
   // 年份由新到舊,2004為資料庫中最舊年份
   for (let i = new Date().getFullYear(); i >= 2004; i--) {
     optionsY.push({ key: i, text: i, value: i });
   }
-
-  const optionsM = [];
+ 
   for (let i = 1; i <= 12; i++) {
     optionsM.push({ key: i, text: i, value: i });
-  }
+  }  
+  
+  // const { m } = search;
+
+  
+
+  // 參數改變
+  const handleYearChange = (e, obj) => {
+    setSearch({ ...search, y: obj.value });   
+  };
 
   const handleMonthChange = (e, obj) => {
-    setSearch({ ...search, m: obj.value });
-   
+    setSearch({ ...search, m: obj.value });   
   };
 
   const handleEmpChange = (e, obj) => {
     setSearch({ ...search, emp: obj.value });
   };
 
-  // 傳年月取得資料
+  // 傳參數取得資料
   const handleQuery = () => {
     fetchData(search,dispatch)
   };
@@ -57,9 +61,7 @@ export default function SearchBar({ search, setSearch,dispatch  }) {
           value={search.y}
           options={optionsY}
           placeholder="年"
-          onChange={(e, obj) => {
-            setSearch({ ...search, y: obj.value });
-          }}
+          onChange={handleYearChange}
         />
         <Form.Select
           clearable

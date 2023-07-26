@@ -22,16 +22,11 @@ export default function Index() {
   // 薪資資料
   const [state, dispatch] = useReducer(reducer, initState);
 
-
-  // 參數
+  // 查詢參數
   const [search,setSearch]=useState({y:2022,m:7,emp:''})
-  
 
-  const {rows}=state;
-
-
-  useEffect(() => {
-    
+  // 載入資料
+  useEffect(() => {    
     fetchData(search, dispatch);
   }, []);
 

@@ -8,15 +8,23 @@ import { actions } from './actions';
 const API_PATH = `${API_HOST}/salary`;
 
 // 載入資料
-function fetchData(baseYM, dispatch) {
-  let url = `${API_HOST}/salary/read.php`;  
-  axios.get(url, { params: { y: baseYM.y, m: baseYM.m } }).then((res) => {
+function fetchData(search, dispatch) {
+  let url = `${API_HOST}/salary/read.php`;
+  axios.get(url, { params: { y: search.y, m: search.m } }).then((res) => {
+    let data = [];
+    // 有選員工,做進一步篩選
+    if (search.emp !== '') {
+      data = res.data.filter((row) => row.name == search.emp);
+    } else {
+      data = res.data;
+    }
     dispatch({
       type: actions.FETCH_DATA,
-      payload: { rows: res.data },
+      payload: { rows: data },
     });
   });
 }
+
 
 // 新增 baby
 const addBaby = (row, dispatch) => {
