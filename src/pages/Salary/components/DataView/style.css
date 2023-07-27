@@ -1,0 +1,10 @@
+.ui.table tr:hover {
+  background-color: #75dddd!important;
+  color: #000!important;
+}
+
+
+/* .ui.table td {
+  background-color: black!important;
+  color: #fff!important;
+} */

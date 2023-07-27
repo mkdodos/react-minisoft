@@ -4,8 +4,14 @@ import { Table } from 'semantic-ui-react';
 import TableHeader from './components/TableHeader';
 import TableHeaderSum from './components/TableHeaderSum';
 import { actions } from '../../actions';
+ // 樣式
+ import './style.css';
 
 export default function DataView({state,dispatch,search,form,setForm}) {
+  
+  
+ 
+  
   const {rows,isModalOpen,row}=state;
   // 此值傳給子元件做為是否顯示大小月欄位依據
   const [isShowBigM, setIsShowBigM] = useState(false);

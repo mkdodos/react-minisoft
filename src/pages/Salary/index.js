@@ -6,6 +6,7 @@ import axios from 'axios';
 import EditForm from './components/EditForm';
 import reducer from './reducer';
 import crud, { fetchData } from './crud';
+import ActionBar from './components/ActionBar';
 
 export default function Index() {
   // 初始值
@@ -45,6 +46,7 @@ export default function Index() {
         loading={state.isLoading}
         dispatch={dispatch}
       />
+      <ActionBar search={search}/>
       <DataView  form={form} setForm={setForm} state={state} dispatch={dispatch} search={search} />
       <EditForm form={form} setForm={setForm} dispatch={dispatch} />
     </div>

@@ -11,7 +11,7 @@ const API_PATH = `${API_HOST}/salary`;
 function fetchData(search, dispatch) {
   let url = `${API_HOST}/salary/read.php`;
   dispatch({
-    type: actions.FETCH_DATA_BEGIN,    
+    type: actions.FETCH_DATA_BEGIN,
   });
   axios.get(url, { params: { y: search.y, m: search.m } }).then((res) => {
     let data = [];
@@ -28,7 +28,6 @@ function fetchData(search, dispatch) {
   });
 }
 
-
 // 新增 baby
 const addBaby = (row, dispatch) => {
   const headers = {
@@ -43,7 +42,7 @@ const addBaby = (row, dispatch) => {
   });
 };
 
-// 更新 
+// 更新
 const updateRow = (row, editedIndex, dispatch) => {
   const headers = {
     'Content-Type': 'text/plain',
@@ -52,12 +51,40 @@ const updateRow = (row, editedIndex, dispatch) => {
   const url = `${API_PATH}/update.php`;
 
   // 配合後端將 others 改成 other_bonus
-  row={...row,other_bonus:row.others}
+  row = { ...row, other_bonus: row.others };
 
   axios.post(url, row, { headers }).then((res) => {
     // dispatch({ type: actions.UPDATE_ROW, payload: { baby: row, editedIndex } });
-    console.log(res.data)
+    console.log(res.data);
   });
+};
+
+// 轉人員薪資
+const insertEmpSalary = (y, m) => {
+  if (!window.confirm('確定轉薪資嗎?')) return;
+
+  const headers = {
+    'Content-Type': 'text/plain',
+  };
+
+  axios
+    .post(`${API_HOST}/salary/insertEmpSalary.php`, { y, m }, { headers })
+    .then((res) => {
+      // handleQuery();
+    });
+};
+
+// 刪除整月薪資
+const deleteEmpSalary = (y, m) => {
+  if (!window.confirm('確定刪除嗎?')) return;
+  const headers = {
+    'Content-Type': 'text/plain',
+  };
+  axios
+    .post(`${API_HOST}/salary/deleteEmpSalary.php`, { y, m }, { headers })
+    .then((res) => {
+      // handleQuery();
+    });
 };
 
 // 刪除 baby
@@ -74,4 +101,11 @@ const deleteBaby = (id, dispatch) => {
   });
 };
 
-export { fetchData, addBaby, updateRow, deleteBaby };
+export {
+  fetchData,
+  insertEmpSalary,
+  deleteEmpSalary,
+  addBaby,
+  updateRow,
+  deleteBaby,
+};

@@ -48,7 +48,7 @@ export default function EditForm({ form, setForm,dispatch }) {
   }
 
   return (
-    <div>
+   
       <Modal open={isOpen} closeIcon onClose={handleModalClose}>
         <Modal.Header>{row.name}</Modal.Header>
         <Modal.Content>
@@ -194,11 +194,11 @@ export default function EditForm({ form, setForm,dispatch }) {
           >
             刪除
           </Button>
-          <Button floated="left" primary onClick={handleSave} loading={isLoading}>
+          <Button  primary onClick={handleSave} loading={isLoading}>
             儲存
           </Button>
         </Modal.Actions>
       </Modal>
-    </div>
+    
   );
 }
