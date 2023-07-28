@@ -22,12 +22,18 @@ export default function Index() {
   // 薪資資料
   const [state, dispatch] = useReducer(reducer, initState);
 
-  // 查詢參數
-  const [search, setSearch] = useState({ y: 2022, m: 7, emp: '' });
+  // 查詢參數(預設為當月)
+  let m = new Date().getMonth();
+  m = m == 0 ? m : m + 1;
+  const [search, setSearch] = useState({
+    y: new Date().getFullYear(),
+    m: m,
+    emp: '',
+  });
 
   // 編輯表單
   const [form, setForm] = useState({
-    row: {name:''},
+    row: { name: '' },
     isOpen: false,
     isLoading: false,
   });
@@ -46,8 +52,14 @@ export default function Index() {
         loading={state.isLoading}
         dispatch={dispatch}
       />
-      <ActionBar search={search}/>
-      <DataView  form={form} setForm={setForm} state={state} dispatch={dispatch} search={search} />
+      <ActionBar search={search} dispatch={dispatch} />
+      <DataView
+        form={form}
+        setForm={setForm}
+        state={state}
+        dispatch={dispatch}
+        search={search}
+      />
       <EditForm form={form} setForm={setForm} dispatch={dispatch} />
     </div>
   );

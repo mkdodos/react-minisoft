@@ -3,16 +3,16 @@ import { Button, Icon } from 'semantic-ui-react';
 import axios from 'axios';
 import { API_HOST } from '../../../global/constants';
 import { insertEmpSalary, deleteEmpSalary } from '../crud';
-export default function ActionBar({ search }) {
-  const { y, m } = search;
+export default function ActionBar({ search,dispatch }) {
+  // const { y, m } = search;
   // 轉人員薪資
   const handleInsertEmpSalary = () => {
-    insertEmpSalary(y, m);
+    insertEmpSalary(search,dispatch);
   };
 
   // 刪除整月
   const handleDeleteEmpSalary = () => {
-    deleteEmpSalary(y, m);
+    deleteEmpSalary(search,dispatch);
   };
 
   return (
