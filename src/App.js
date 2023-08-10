@@ -27,6 +27,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import { Container } from 'semantic-ui-react';
 
+import Explore from './app/features/witcher/Explore';
+
 export default function App() {
   return (
     <div>
@@ -35,6 +37,19 @@ export default function App() {
           <Header />
           <Container>
             <Routes>
+            
+           
+            <Route
+                element={<Explore/>}
+                path="/explore"
+              />
+
+            <Route
+                element={<Salary/>}
+                path="/salary"
+              />
+            
+            
             <Route
                 element={<Salary/>}
                 path="/salary"
