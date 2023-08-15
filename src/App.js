@@ -28,6 +28,8 @@ import Header from './components/Header';
 import { Container } from 'semantic-ui-react';
 
 import Explore from './app/features/witcher/Explore';
+import PostList from './app/features/posts/PostList';
+import SectionsList from './app/features/sections/SectionsList';
 
 export default function App() {
   return (
@@ -39,6 +41,17 @@ export default function App() {
             <Routes>
             
            
+            <Route
+                element={<SectionsList/>}
+                path="/sections"
+              />
+            
+            
+            <Route
+                element={<PostList/>}
+                path="/posts"
+              />
+            
             <Route
                 element={<Explore/>}
                 path="/explore"
