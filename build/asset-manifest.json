@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/react-minisoft/build/static/css/main.85cad6f1.css",
-    "main.js": "/react-minisoft/build/static/js/main.59a07024.js",
+    "main.css": "/react-minisoft/build/static/css/main.edf0a2cf.css",
+    "main.js": "/react-minisoft/build/static/js/main.c3fd69b3.js",
     "static/media/brand-icons.svg": "/react-minisoft/build/static/media/brand-icons.6729d29753e000c17489.svg",
     "static/media/icons.svg": "/react-minisoft/build/static/media/icons.62d9dae4e0040e81c980.svg",
     "static/media/outline-icons.svg": "/react-minisoft/build/static/media/outline-icons.9c4845b4b41ef40a22fa.svg",
@@ -19,11 +19,11 @@
     "static/media/outline-icons.woff": "/react-minisoft/build/static/media/outline-icons.ddae9b1ba9b0b42f5880.woff",
     "static/media/outline-icons.woff2": "/react-minisoft/build/static/media/outline-icons.687a4990ea22bb1a49d4.woff2",
     "index.html": "/react-minisoft/build/index.html",
-    "main.85cad6f1.css.map": "/react-minisoft/build/static/css/main.85cad6f1.css.map",
-    "main.59a07024.js.map": "/react-minisoft/build/static/js/main.59a07024.js.map"
+    "main.edf0a2cf.css.map": "/react-minisoft/build/static/css/main.edf0a2cf.css.map",
+    "main.c3fd69b3.js.map": "/react-minisoft/build/static/js/main.c3fd69b3.js.map"
   },
   "entrypoints": [
-    "static/css/main.85cad6f1.css",
-    "static/js/main.59a07024.js"
+    "static/css/main.edf0a2cf.css",
+    "static/js/main.c3fd69b3.js"
   ]
 }

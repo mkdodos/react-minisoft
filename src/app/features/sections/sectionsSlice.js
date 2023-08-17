@@ -33,8 +33,14 @@ const sectionsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
+    builder.addCase(fetchSections.pending, (state, action) => {
+      state.status = 'loading';
+      //  state.status='succeeded'
+    });
     builder.addCase(fetchSections.fulfilled, (state, action) => {
+      state.status='succeeded'
       state.sections = action.payload;
+      // return action.payload;
     });
   },
 });
@@ -42,4 +48,4 @@ const sectionsSlice = createSlice({
 //
 export default sectionsSlice.reducer;
 export const getSectionsStatus = (state) => state.sections.status;
-export const getAllSections = (state)=>state.sections.sections;
+export const getAllSections = (state) => state.sections.sections;

@@ -3,6 +3,9 @@ import { Form, Button, Modal, Menu } from 'semantic-ui-react';
 import AccSelect from './AccSelect';
 // import CateSelect from './CateSelect';
 import CateSelect from '../../../components/CateSelect';
+
+import TilesChoose from '../../../components/TilesChoose';
+
 export default function EditForm({
   open,
   setOpen,
@@ -63,7 +66,7 @@ export default function EditForm({
       {/* 編輯時不修改帳戶和金額,若有記錯,使用沖回方式,例支出多記100,就新增一筆收入100沖銷,再新增一筆正確的資料
       這樣才能完整呈現整個記帳過程餘額的變化     
       */}
-      <Modal.Header>編輯表單</Modal.Header>
+      <Modal.Header>編輯表單{item.cate}</Modal.Header>
       <Modal.Content>
         {editedIndex == -1 && (
           <Menu fluid widths={2} pointing secondary>
@@ -109,6 +112,11 @@ export default function EditForm({
 
           <Form.Field>
             <CateSelect cate={item.cate} onChange={handleCateChange} />
+        
+        
+            <TilesChoose setItem={setItem} item={item}/>
+        
+        
           </Form.Field>
 
           

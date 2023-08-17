@@ -14,19 +14,26 @@ export default function SectionsList() {
 
   const dispatch = useDispatch();
 
+  let content = '';
+
   useEffect(() => {
     if (status == 'idle') {
       dispatch(fetchSections());
     }
-  }, []);
+  }, [status, dispatch]);
 
-  return (
-    <div>
+  if (status === 'loading') {
+    content = 'loading';
+    // console.log('loading')
+  } else if (status === 'succeeded') {
+    content = (
       <ul>
         {sections.map((row) => {
           return <li key={row.id}>{row.section}</li>;
         })}
       </ul>
-    </div>
-  );
+    );
+  }
+
+  return <div>{content}</div>;
 }

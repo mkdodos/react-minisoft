@@ -55,6 +55,7 @@ export default function PostList() {
                 <List.Header as="a">{post.title}</List.Header>
                 <List.Description as="a">
                   {post.body} {post.id}
+                  <PostAuthor userId={post.userId}/>
                 </List.Description>
               </List.Content>
             </List.Item>
