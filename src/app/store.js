@@ -7,13 +7,17 @@ import usersReducer from './features/users/usersSlice'
 import sectionsReducer from './features/sections/sectionsSlice'
 import catesReducer from './features/cates/catesSlice'
 
+import balancesReducer from './features/balances/balancesSlice'
+
+
 const store = configureStore({
   reducer: {  
     posts:postsReducer,
     witcher:witcherReducer,
     users:usersReducer,
     sections:sectionsReducer,
-    cates:catesReducer
+    cates:catesReducer,
+    balances:balancesReducer
     
   },
   
