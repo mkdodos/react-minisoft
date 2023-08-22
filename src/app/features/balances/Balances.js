@@ -7,8 +7,10 @@ import {
 } from './balancesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import TableListSmall from './TableListSmall';
-import { Table, Button, Input } from 'semantic-ui-react';
+import { Table, Button, Input, Grid, Divider } from 'semantic-ui-react';
 import TilesChoose from '../../../components/TilesChoose';
+import RowsCountBanner from './RowsCountBanner';
+import SearchForm from './SearchForm';
 
 export default function Balances() {
   const dispatch = useDispatch();
@@ -22,12 +24,10 @@ export default function Balances() {
   // 搜尋包含類別的資料
   const [cateSearch, setCateSearch] = useState('');
 
-
   // 每次載入筆數
-  const limit = 20
+  const limit = 20;
 
   let rowsCopy = rows.slice();
-
 
   // 處理二個欄位同時搜尋
   // 判斷輸入了那個欄位
@@ -48,24 +48,17 @@ export default function Balances() {
 
   return (
     <>
-      原始{rows.length}
-      篩選結果{rowsCopy.length}
-      {/* <TilesChoose item={cateSearch} setItem={setCateSearch} /> */}
-      <Input
-        value={cateSearch}
-        placeholder="類別"
-        onChange={(e) => setCateSearch(e.target.value)}
+      <RowsCountBanner
+        rows={rows}
+        rowsCopy={rowsCopy}
+        limit={limit}
+        lastDoc={lastDoc}
       />
-      <Input value={search} onChange={(e) => setSearch(e.target.value)} />
-      <Button
-        onClick={() => dispatch(fetchMoreData({ limit, lastDoc: lastDoc }))}
-      >
-        More
-      </Button>
+
+      <Divider />
+      <SearchForm cateSearch={cateSearch} setCateSearch={setCateSearch} search={search} setSearch={setSearch} />
+      <Divider />
       <TableListSmall rows={rowsCopy} />
     </>
   );
-
-  // return <div>{rows.map((row) => <TableListSmall row={row}/>)}</div>;
-  // return <div></div>;
 }

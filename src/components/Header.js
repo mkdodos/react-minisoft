@@ -29,6 +29,10 @@ export default function Header() {
         收支
       </Menu.Item>
 
+      <Menu.Item as={Link} to="/balances">       
+        收支查詢
+      </Menu.Item>
+
       {/* <Menu.Item as={Link} to="/notes">
         <Icon name="book" />
         記事本
@@ -39,10 +43,10 @@ export default function Header() {
       </Menu.Item>
 
 
-      <Menu.Item as={Link} to="/dashboard">
+      {/* <Menu.Item as={Link} to="/dashboard">
         <Icon name="chart bar" />
         統計
-      </Menu.Item>
+      </Menu.Item> */}
 
       <Dropdown text="設定" item>
         <Dropdown.Menu>

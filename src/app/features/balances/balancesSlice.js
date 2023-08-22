@@ -33,7 +33,7 @@ export const fetchMoreData = createAsyncThunk(
   async ({ limit, lastDoc }) => {
     const user = localStorage.getItem('user');
 
-    console.log(lastDoc);
+   
 
     // startAfter 要在 orderBy 後面
     const snapshot = await db
@@ -71,9 +71,10 @@ const slice = createSlice({
   extraReducers(builder) {
     builder.addCase(fetchData.fulfilled, (state, action) => {
       // state.rows.concat(action.payload)
-      state.rows = state.rows.concat(action.payload.data);
+      // state.rows = state.rows.concat(action.payload.data);
+      state.rows = action.payload.data;
       state.lastDoc = action.payload.lastDoc;
-      console.log(action.payload.lastDoc);
+      // console.log(action.payload.lastDoc);
       // state.rows.push(action.payload)
       // return action.payload;
     });
