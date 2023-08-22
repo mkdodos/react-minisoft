@@ -4,6 +4,7 @@ import {
   fetchMoreData,
   getLastDoc,
   selectAllBalances,
+  getStatus
 } from './balancesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import TableListSmall from './TableListSmall';
@@ -20,6 +21,9 @@ export default function Balances() {
   const [search, setSearch] = useState('');
   // includes 的功能為只要字串有包含(不用整個字串符合)就傳回 true
   // rows = rows.filter(row=>row.title.includes(search))
+
+
+  const status = useSelector(getStatus);
 
   // 搜尋包含類別的資料
   const [cateSearch, setCateSearch] = useState('');
@@ -48,11 +52,13 @@ export default function Balances() {
 
   return (
     <>
+    {/* {status} */}
       <RowsCountBanner
         rows={rows}
         rowsCopy={rowsCopy}
         limit={limit}
         lastDoc={lastDoc}
+        status={status}
       />
 
       <Divider />

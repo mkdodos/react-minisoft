@@ -3,7 +3,13 @@ import { Label, Button } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { fetchMoreData } from './balancesSlice';
 
-export default function RowsCountBanner({ rows, rowsCopy, limit, lastDoc }) {
+export default function RowsCountBanner({
+  rows,
+  rowsCopy,
+  limit,
+  lastDoc,
+  status,
+}) {
   const dispatch = useDispatch();
   return (
     <div>
@@ -20,6 +26,8 @@ export default function RowsCountBanner({ rows, rowsCopy, limit, lastDoc }) {
         筆
       </span>
       <Button
+        loading={status == 'loading'}
+        disabled={status == 'loading'}
         color="pink"
         floated="right"
         onClick={() => dispatch(fetchMoreData({ limit, lastDoc }))}
