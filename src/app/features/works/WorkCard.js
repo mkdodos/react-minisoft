@@ -3,7 +3,7 @@ import { Card, Icon, Label } from 'semantic-ui-react';
 
 export default function WorkCard({ row }) {
   return (
-    <Card>
+    <Card centered>
       <Card.Content>
         <Card.Header>
           {' '}

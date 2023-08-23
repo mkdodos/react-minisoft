@@ -25,11 +25,11 @@ export default function WorksList() {
   // fetchData()
 
   return (
-    <ul>
+    <>
       {rows.map((row) => {
-        return <WorkCard row={row} key={row.workID}/>
+        return <WorkCard row={row} key={row.workID} />;
         // return <li key={row.workID}>{row.workID}-{row.custName}-{row.workNote}</li>;
       })}
-    </ul>
+    </>
   );
 }
