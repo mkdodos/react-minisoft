@@ -8,7 +8,7 @@ import sectionsReducer from './features/sections/sectionsSlice'
 import catesReducer from './features/cates/catesSlice'
 
 import balancesReducer from './features/balances/balancesSlice'
-
+import worksReducer from './features/works/worksSlice'
 
 const store = configureStore({
   reducer: {  
@@ -17,7 +17,8 @@ const store = configureStore({
     users:usersReducer,
     sections:sectionsReducer,
     cates:catesReducer,
-    balances:balancesReducer
+    balances:balancesReducer,
+    works:worksReducer
     
   },
   

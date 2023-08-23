@@ -13,7 +13,7 @@ import Login from './pages/Login';
 import Accounts from './pages/Accounts';
 
 import AccountsOrg from './pages/AccountsOrg';
-import Babys from './pages/Babys'
+import Babys from './pages/Babys';
 import Salary from './pages/Salary';
 
 import { AuthProvider } from './contexts/AuthContext';
@@ -31,7 +31,7 @@ import Explore from './app/features/witcher/Explore';
 import PostList from './app/features/posts/PostList';
 import SectionsList from './app/features/sections/SectionsList';
 import Balances from './app/features/balances/Balances';
-
+import WorksList from './app/features/works/WorksList';
 
 export default function App() {
   return (
@@ -41,47 +41,20 @@ export default function App() {
           <Header />
           <Container>
             <Routes>
-            <Route
-                element={<Balances/>}
-                path="/balances"
-              /> 
-           
+              <Route element={<WorksList />} path="/works" />
+              <Route element={<Balances />} path="/balances" />
 
+              <Route element={<SectionsList />} path="/sections" />
 
-            <Route
-                element={<SectionsList/>}
-                path="/sections"
-              />
-            
-            
-            <Route
-                element={<PostList/>}
-                path="/posts"
-              />
-            
-            <Route
-                element={<Explore/>}
-                path="/explore"
-              />
+              <Route element={<PostList />} path="/posts" />
 
-            <Route
-                element={<Salary/>}
-                path="/salary"
-              />
-            
-            
-            <Route
-                element={<Salary/>}
-                path="/salary"
-              />
-            <Route
-                element={<Babys/>}
-                path="/babys"
-              />
-            <Route
-                element={<AccountsOrg/>}
-                path="/accounts-org"
-              />
+              <Route element={<Explore />} path="/explore" />
+
+              <Route element={<Salary />} path="/salary" />
+
+              <Route element={<Salary />} path="/salary" />
+              <Route element={<Babys />} path="/babys" />
+              <Route element={<AccountsOrg />} path="/accounts-org" />
               <Route
                 element={<Protected Component={Accounts} />}
                 path="/accounts"
@@ -105,10 +78,7 @@ export default function App() {
                 path="/credits-section"
               />
 
-<Route
-                element={<Protected Component={Cates} />}
-                path="/cates"
-              />
+              <Route element={<Protected Component={Cates} />} path="/cates" />
 
               <Route
                 element={<Protected Component={CatesNote} />}
