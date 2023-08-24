@@ -32,6 +32,7 @@ import PostList from './app/features/posts/PostList';
 import SectionsList from './app/features/sections/SectionsList';
 import Balances from './app/features/balances/Balances';
 import WorksList from './app/features/works/WorksList';
+import Mortgages from './app/features/mortgages/Mortgages';
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
           <Header />
           <Container>
             <Routes>
+            <Route element={<Mortgages />} path="/mortgages" />
               <Route element={<WorksList />} path="/works" />
               <Route element={<Balances />} path="/balances" />
 

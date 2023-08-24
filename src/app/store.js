@@ -9,6 +9,7 @@ import catesReducer from './features/cates/catesSlice'
 
 import balancesReducer from './features/balances/balancesSlice'
 import worksReducer from './features/works/worksSlice'
+import mortgagesReducer from './features/mortgages/mortgagesSlice'
 
 const store = configureStore({
   reducer: {  
@@ -18,8 +19,8 @@ const store = configureStore({
     sections:sectionsReducer,
     cates:catesReducer,
     balances:balancesReducer,
-    works:worksReducer
-    
+    works:worksReducer,
+    mortgages:mortgagesReducer
   },
   
   // 在 取得 cates 資料時,出現錯誤

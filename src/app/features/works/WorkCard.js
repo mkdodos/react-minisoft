@@ -15,7 +15,7 @@ export default function WorkCard({ row }) {
       </Card.Content>
       <Card.Content extra>
         <a>
-          <Label basic circular>{row.size1}</Label>X
+          <Label circular>{row.size1}</Label>X
           <Label circular>{row.size2}</Label>
           {row.size3 != '' && 'X'}
           {row.size3 != '' && <Label circular>{row.size3}</Label>}
