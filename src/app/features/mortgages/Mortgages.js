@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchData, selectData, addNewRow, rowAdded } from './mortgagesSlice';
+import TableListSmall from './TableListSmall';
 
 export default function Mortgages() {
   const dispatch = useDispatch();
@@ -23,9 +24,10 @@ export default function Mortgages() {
     <div>
       <input onChange={(e) => setBasic(e.target.value)} />
       <button onClick={() => dispatch(addNewRow(row))}>ADd</button>
-      {rows.map((row) => {
+      <TableListSmall rows={rows} />
+      {/* {rows.map((row) => {
         return <span key={row.id}>{row.basic}-</span>;
-      })}
+      })} */}
     </div>
   );
 }
