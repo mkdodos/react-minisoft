@@ -4,7 +4,8 @@ import {
   fetchMoreData,
   getLastDoc,
   selectAllBalances,
-  getStatus
+  getStatus,
+  fetchDataByCate
 } from './balancesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import TableListSmall from './TableListSmall';
@@ -37,18 +38,27 @@ export default function Balances() {
   // 判斷輸入了那個欄位
   if (search !== '') {
     rowsCopy = rowsCopy.filter((row) => row.title.includes(search));
-    console.log('search');
+    
   }
 
   if (cateSearch !== '') {
+    // console.log(cateSearch)
+    // dispatch(fetchData(cateSearch))
     // 有的資料沒有類別,加上 cate? 可過濾掉
-    rowsCopy = rowsCopy.filter((row) => row.cate?.includes(cateSearch));
+    // rowsCopy = rowsCopy.filter((row) => row.cate?.includes(cateSearch));
   }
 
   const lastDoc = useSelector(getLastDoc);
   useEffect(() => {
     dispatch(fetchData({ limit }));
   }, []);
+
+
+  const handleCateChange = (e,{value})=>{
+    dispatch(fetchDataByCate(value))
+    // console.log(value)
+  }
+
 
   return (
     <>
@@ -62,7 +72,7 @@ export default function Balances() {
       />
 
       <Divider />
-      <SearchForm cateSearch={cateSearch} setCateSearch={setCateSearch} search={search} setSearch={setSearch} />
+      <SearchForm cateChange={handleCateChange} cateSearch={cateSearch} setCateSearch={setCateSearch} search={search} setSearch={setSearch} />
       <Divider />
       <TableListSmall rows={rowsCopy} />
     </>

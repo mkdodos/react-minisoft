@@ -68,7 +68,7 @@ const slice = createSlice({
         //   basic: 0, //本金
         //   interest: 0, //利息
         // });
-        // console.log(action.payload)
+        console.log(state)
       });
   },
 });
