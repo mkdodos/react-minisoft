@@ -34,26 +34,24 @@ import Balances from './app/features/balances/Balances';
 import WorksList from './app/features/works/WorksList';
 import Mortgages from './app/features/mortgages/Mortgages';
 
+import Layout from './components/Layout';
+
 export default function App() {
   return (
     <div>
       <AuthProvider>
         <Router>
-          <Header />
-          <Container>
-            <Routes>
-            <Route element={<Mortgages />} path="/mortgages" />
+          {/* <Header /> */}
+          {/* <Container> */}
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route element={<Mortgages />} path="/mortgages" />
               <Route element={<WorksList />} path="/works" />
               <Route element={<Balances />} path="/balances" />
-
               <Route element={<SectionsList />} path="/sections" />
-
               <Route element={<PostList />} path="/posts" />
-
               <Route element={<Explore />} path="/explore" />
-
               <Route element={<Salary />} path="/salary" />
-
               <Route element={<Salary />} path="/salary" />
               <Route element={<Babys />} path="/babys" />
               <Route element={<AccountsOrg />} path="/accounts-org" />
@@ -69,38 +67,33 @@ export default function App() {
                 element={<Protected Component={Balance} />}
                 path="/balance"
               />
-
               <Route
                 element={<Protected Component={Credits} />}
                 path="/credits"
               />
-
               <Route
                 element={<Protected Component={Section} />}
                 path="/credits-section"
               />
-
               <Route element={<Protected Component={Cates} />} path="/cates" />
-
               <Route
                 element={<Protected Component={CatesNote} />}
                 path="/cates-note"
               />
               <Route element={<Protected Component={Notes} />} path="/notes" />
-
               <Route
                 element={<Protected Component={Spending} />}
                 path="/spending"
               />
-
               <Route
                 element={<Protected Component={Notebook} />}
                 path="/notebook"
               />
               <Route element={<Login />} path="/login" />
               <Route element={<Balance />} path="/balance" />
-            </Routes>
-          </Container>
+            </Route>
+          </Routes>
+          {/* </Container> */}
         </Router>
       </AuthProvider>
     </div>
