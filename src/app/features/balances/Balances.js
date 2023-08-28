@@ -57,12 +57,14 @@ export default function Balances() {
 
     if (value == '') {
       dispatch(fetchData({ limit }));
+     
     } else {
       dispatch(fetchDataByCate({ cate: value, limit }));
     }
 
+    setSearch('');
     setCateSearch(value);
-    dispatch(setIsEnd());
+    dispatch(setIsEnd(false));
 
     // console.log(value)
   };

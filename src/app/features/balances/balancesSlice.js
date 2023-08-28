@@ -110,7 +110,7 @@ const slice = createSlice({
   initialState,
   reducers: {
     setIsEnd(state, action) {
-      state.isEnd = false;
+      state.isEnd = action.payload;
     },
   },
   extraReducers(builder) {
