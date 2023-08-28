@@ -5,7 +5,8 @@ import {
   getLastDoc,
   selectAllBalances,
   getStatus,
-  fetchDataByCate
+  fetchDataByCate,
+  setIsEnd,
 } from './balancesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import TableListSmall from './TableListSmall';
@@ -23,7 +24,6 @@ export default function Balances() {
   // includes 的功能為只要字串有包含(不用整個字串符合)就傳回 true
   // rows = rows.filter(row=>row.title.includes(search))
 
-
   const status = useSelector(getStatus);
 
   // 搜尋包含類別的資料
@@ -38,7 +38,6 @@ export default function Balances() {
   // 判斷輸入了那個欄位
   if (search !== '') {
     rowsCopy = rowsCopy.filter((row) => row.title.includes(search));
-    
   }
 
   if (cateSearch !== '') {
@@ -53,26 +52,41 @@ export default function Balances() {
     dispatch(fetchData({ limit }));
   }, []);
 
+  const handleCateChange = (e, { value }) => {
+    // 使用者按X清除類別時
 
-  const handleCateChange = (e,{value})=>{
-    dispatch(fetchDataByCate(value))
+    if (value == '') {
+      dispatch(fetchData({ limit }));
+    } else {
+      dispatch(fetchDataByCate({ cate: value, limit }));
+    }
+
+    setCateSearch(value);
+    dispatch(setIsEnd());
+
     // console.log(value)
-  }
-
+  };
 
   return (
     <>
-    {/* {status} */}
+      {/* {status} */}
       <RowsCountBanner
         rows={rows}
         rowsCopy={rowsCopy}
         limit={limit}
         lastDoc={lastDoc}
         status={status}
+        cate={cateSearch}
       />
 
       <Divider />
-      <SearchForm cateChange={handleCateChange} cateSearch={cateSearch} setCateSearch={setCateSearch} search={search} setSearch={setSearch} />
+      <SearchForm
+        cateChange={handleCateChange}
+        cateSearch={cateSearch}
+        setCateSearch={setCateSearch}
+        search={search}
+        setSearch={setSearch}
+      />
       <Divider />
       <TableListSmall rows={rowsCopy} />
     </>

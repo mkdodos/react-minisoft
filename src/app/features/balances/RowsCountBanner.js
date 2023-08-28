@@ -1,7 +1,7 @@
 import React from 'react';
 import { Label, Button } from 'semantic-ui-react';
-import { useDispatch } from 'react-redux';
-import { fetchMoreData } from './balancesSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMoreData, getIsEnd } from './balancesSlice';
 
 export default function RowsCountBanner({
   rows,
@@ -9,8 +9,10 @@ export default function RowsCountBanner({
   limit,
   lastDoc,
   status,
+  cate,
 }) {
   const dispatch = useDispatch();
+  const isEnd = useSelector(getIsEnd);
   return (
     <div>
       <Label circular color="pink" basic>
@@ -27,10 +29,10 @@ export default function RowsCountBanner({
       </span>
       <Button
         loading={status == 'loading'}
-        disabled={status == 'loading'}
+        disabled={status == 'loading' || isEnd == true}
         color="pink"
         floated="right"
-        onClick={() => dispatch(fetchMoreData({ limit, lastDoc }))}
+        onClick={() => dispatch(fetchMoreData({ limit, lastDoc, cate }))}
       >
         More
       </Button>

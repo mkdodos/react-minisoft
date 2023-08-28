@@ -28,6 +28,7 @@ export default function CateSelect({ width, cate, onChange }) {
       options={options}
       value={cate}     
       search
+      clearable
     ></Form.Select>
   );
 }
