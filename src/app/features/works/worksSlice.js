@@ -1,6 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-const initialState = [];
+
+
+// const initialState = [];
+
+const initialState = {
+  data:[],
+  status:'idle' // idle | succeeded
+};
 
 export const fetchData = createAsyncThunk('works/fetchData', async () => {
   // const url = 'http://server2000:8888/pdo-salary/works/read.php';
@@ -16,11 +23,15 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
+    // 載入完成
     builder.addCase(fetchData.fulfilled, (state, action) => {
-      return action.payload;
+      state.data = action.payload;
+      state.status = 'succeeded'
+      // return action.payload;
     });
   },
 });
 
 export default slice.reducer;
-export const selectData = (state) => state.works;
+export const selectData = (state) => state.works.data;
+export const getStatus = (state) => state.works.status;

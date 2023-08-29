@@ -36,6 +36,11 @@ import Mortgages from './app/features/mortgages/Mortgages';
 
 import Layout from './components/Layout';
 
+import AddPostForm from './app/features/posts/AddPostForm';
+import SinglePostPage from './app/features/posts/SinglePostPage';
+
+import SingleWorkPage from './app/features/works/SingleWorkPage';
+
 export default function App() {
   return (
     <div>
@@ -45,8 +50,18 @@ export default function App() {
           {/* <Container> */}
           <Routes>
             <Route path="/" element={<Layout />}>
+              {/* post */}
+              <Route index element={<PostList />} />
+              <Route path="post">
+                <Route index element={<AddPostForm />} />
+                <Route path=":postId" element={<SinglePostPage />} />
+              </Route>
               <Route element={<Mortgages />} path="/mortgages" />
+
+              {/* works */}
               <Route element={<WorksList />} path="/works" />
+              <Route path="/work/:workId" element={<SingleWorkPage />} />
+
               <Route element={<Balances />} path="/balances" />
               <Route element={<SectionsList />} path="/sections" />
               <Route element={<PostList />} path="/posts" />

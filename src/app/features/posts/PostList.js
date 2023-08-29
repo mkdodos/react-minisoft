@@ -12,6 +12,8 @@ import { nanoid } from '@reduxjs/toolkit';
 import PostAuthor from './PostAuthor';
 import AddPostForm from './AddPostForm';
 
+import PostsExcerpt from './PostsExcerpt';
+
 export default function PostList() {
   // const posts = useSelector(selectAllPosts);
   // const posts = useSelector(selectAllUsers);
@@ -50,15 +52,16 @@ export default function PostList() {
       <List divided>
         {posts.map((post) => {
           return (
-            <List.Item key={post.id}>
-              <List.Content>
-                <List.Header as="a">{post.title}</List.Header>
-                <List.Description as="a">
-                  {post.body} {post.id}
-                  <PostAuthor userId={post.userId}/>
-                </List.Description>
-              </List.Content>
-            </List.Item>
+            <PostsExcerpt post={post} key={post.id}/>
+            // <List.Item key={post.id}>
+            //   <List.Content>
+            //     <List.Header as="a">{post.title}</List.Header>
+            //     <List.Description as="a">
+            //       {post.body} {post.id}
+            //       <PostAuthor userId={post.userId}/>
+            //     </List.Description>
+            //   </List.Content>
+            // </List.Item>
           );
         })}
       </List>
