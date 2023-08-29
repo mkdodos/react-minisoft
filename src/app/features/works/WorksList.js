@@ -3,15 +3,30 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchData, selectData, getStatus } from './worksSlice';
 import WorkCard from './WorkCard';
-import { Loader,Dimmer } from 'semantic-ui-react';
+import { Loader, Dimmer } from 'semantic-ui-react';
 
 export default function WorksList() {
   const dispatch = useDispatch();
   const rows = useSelector(selectData);
   const status = useSelector(getStatus);
 
+  Date.prototype.addDays = function (days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+  };
+
+  var date = new Date();
+
+  // console.log(date.addDays(-30).toISOString().substring(0, 10));
+
   useEffect(() => {
-    dispatch(fetchData());
+    const from = date.addDays(-600).toISOString().substring(0, 10);
+    const to = date.addDays(0).toISOString().substring(0, 10);
+    
+    // console.log(new Date().toISOString().substring(0, 10));
+    const dateRange = { from, to };
+    dispatch(fetchData(dateRange));
   }, []);
 
   // console.log(status);
@@ -20,7 +35,7 @@ export default function WorksList() {
   return (
     <>
       {status !== 'succeeded' && (
-        <Loader active inline='centered' />
+        <Loader active inline="centered" />
         // <Dimmer active>
         //   <Loader content="Loading" />
         // </Dimmer>
