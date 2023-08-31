@@ -11,14 +11,17 @@ const initialState = {
 
 const host = 'http://192.168.0.12:8888/pdo-salary';
 
-export const fetchData = createAsyncThunk('works/fetchData', async (dateRange) => {
-  // const url = 'http://server2000:8888/pdo-salary/works/read.php';
-  const url = `${host}/works/read.php`;
-  const response = await axios.get(url, {
-    params: { from: dateRange.from, to: dateRange.to },
-  });
-  return response.data;
-});
+export const fetchData = createAsyncThunk(
+  'works/fetchData',
+  async ({ dateFrom, dateTo }) => {
+    // const url = 'http://server2000:8888/pdo-salary/works/read.php';
+    const url = `${host}/works/read.php`;
+    const response = await axios.get(url, {
+      params: { dateFrom, dateTo },
+    });
+    return response.data;
+  }
+);
 
 export const fetchArrDone = createAsyncThunk(
   'works/fetchArrDone',
@@ -36,17 +39,22 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
+    // 載入中
+    builder.addCase(fetchData.pending, (state, action) => {
+      state.status = 'idle';
+    });
+
     // 載入完成
     builder.addCase(fetchData.fulfilled, (state, action) => {
       state.data = action.payload;
       state.status = 'succeeded';
+      console.log('work loaded');
       // return action.payload;
     });
     // 載入失敗
     builder.addCase(fetchData.rejected, (state, action) => {
       state.data = [];
       state.status = 'fail';
-      
     });
     // 排程完工載入完成
     builder.addCase(fetchArrDone.fulfilled, (state, action) => {
@@ -64,7 +72,7 @@ export const getStatus = (state) => state.works.status;
 // 用工作單號取得單筆工件
 // export const selectWorkById = (state, workId) =>
 //    state.works.data;
-  export const selectWorkById = (state, workId) =>
+export const selectWorkById = (state, workId) =>
   state.works.data.find((work) => work.workID == workId);
-  // export const selectPostById = (state, postId) =>
-  //   state.posts.posts.find(post => post.id === postId);
+// export const selectPostById = (state, postId) =>
+//   state.posts.posts.find(post => post.id === postId);

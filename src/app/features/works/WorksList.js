@@ -6,29 +6,19 @@ import WorkCard from './WorkCard';
 import { Loader, Dimmer } from 'semantic-ui-react';
 
 import DateSwitch from './DateSwitch';
-import { test } from './functions';
+import '../../functions/date';
 
 export default function WorksList() {
   const dispatch = useDispatch();
   const rows = useSelector(selectData);
   const status = useSelector(getStatus);
 
-
-  test();
-
-  Date.prototype.addDays = function (days) {
-    var date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-  };
-
   var date = new Date();
 
   useEffect(() => {
-    const from = date.addDays(-600).toISOString().substring(0, 10);
-    const to = date.addDays(0).toISOString().substring(0, 10);
-    const dateRange = { from, to };
-    dispatch(fetchData(dateRange));
+    const dateFrom = date.addDays(-7).toISOString().substring(0, 10);
+    const dateTo = date.addDays(0).toISOString().substring(0, 10);
+    dispatch(fetchData({ dateFrom, dateTo }));
   }, []);
 
   return (
