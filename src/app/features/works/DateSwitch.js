@@ -4,13 +4,13 @@ import { Menu, Icon, Input, Form } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchData, selectData, getStatus } from './worksSlice';
 
-export default function DateSwitch() {
+export default function DateSwitch({dateFrom,dateTo,setDateFrom,setDateTo}) {
   const dispatch = useDispatch();
 
   const [activeItem, setActiveItem] = useState('');
   const today = new Date().toISOString().substring(0, 10);
-  const [dateFrom, setDateFrom] = useState(today);
-  const [dateTo, setDateTo] = useState(today);
+  // const [dateFrom, setDateFrom] = useState(today);
+  // const [dateTo, setDateTo] = useState(today);
 
   let date = new Date();
 
@@ -46,7 +46,7 @@ export default function DateSwitch() {
     setDateTo(date2);
     dispatch(fetchData({ dateFrom: date1, dateTo: date2 }));
     setActiveItem(name);
-    // dispatch(fetchData({ dateFrom, dateTo }));
+    
   };
   return (
     <div>

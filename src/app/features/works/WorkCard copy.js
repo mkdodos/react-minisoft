@@ -1,17 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, Icon, Label } from 'semantic-ui-react';
 import { Link, useNavigate } from 'react-router-dom';
-import WorkModal from './WorkModal';
 
 export default function WorkCard({ row, dateFrom, dateTo }) {
   const navigate = useNavigate();
   // console.log(dateFrom)
-  const handleWorkIdClick = () => {
-   
-    setOpen(true)
-  };
-
-  const [open,setOpen]=useState(false)
   return (
     <Card centered>
       <Card.Content>
@@ -19,10 +12,13 @@ export default function WorkCard({ row, dateFrom, dateTo }) {
           {' '}
           {/* <Link to="/works" state={{ dateFrom, dateTo }}>Works</Link> */}
           {/* <button onClick={() => navigate(-1)}>Back</button> */}
-          {row.custName} <WorkModal row={row} open={open} setOpen={setOpen} />
-          <Label onClick={handleWorkIdClick} color="blue" attached="top right">
-            {row.workId}
-          </Label>
+          {row.custName}{' '}
+          <Link to={`/work/${row.workID}`}>
+            {' '}
+            <Label color="blue" attached="top right">
+              {row.workID}
+            </Label>
+          </Link>{' '}
         </Card.Header>
         <Card.Meta></Card.Meta>
         <Card.Description></Card.Description>
