@@ -32,6 +32,7 @@ import PostList from './app/features/posts/PostList';
 import SectionsList from './app/features/sections/SectionsList';
 import Balances from './app/features/balances/Balances';
 import WorksList from './app/features/works/WorksList';
+// 房貸
 import Mortgages from './app/features/mortgages/Mortgages';
 
 import Layout from './components/Layout';
@@ -51,7 +52,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               {/* post */}
-              <Route index element={<PostList />} />
+              {/* <Route index element={<PostList />} /> */}
               <Route path="post">
                 <Route index element={<AddPostForm />} />
                 <Route path=":postId" element={<SinglePostPage />} />

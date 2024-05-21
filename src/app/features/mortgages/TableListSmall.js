@@ -3,17 +3,30 @@ import { Table, Icon, Header } from 'semantic-ui-react';
 import { deleteRow } from './mortgagesSlice';
 import { useDispatch } from 'react-redux';
 
-export default function TableListSmall({ rows }) {
-  const dispatch = useDispatch()
+export default function TableListSmall({ rows,setOpen,setEditedRow }) {
+  const dispatch = useDispatch();
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure?')) dispatch(deleteRow(id));
+  };
+
+  const handleEdit = (row,index) => {
+    setOpen(true)
+    setEditedRow(row)
+    // console.log(row,index)
+  };
+
   return (
-    <div>
+    <>
       <Table unstackable>
         <Table.Header>
           <Table.Row>
-          {/* <Table.HeaderCell>id</Table.HeaderCell> */}
-            <Table.HeaderCell>date</Table.HeaderCell>
-            <Table.HeaderCell>basic</Table.HeaderCell>
-            <Table.HeaderCell>interest</Table.HeaderCell>
+            {/* <Table.HeaderCell>id</Table.HeaderCell> */}
+            <Table.HeaderCell>日期</Table.HeaderCell>
+            <Table.HeaderCell>本金</Table.HeaderCell>
+            <Table.HeaderCell>利息</Table.HeaderCell>
+            <Table.HeaderCell>小計</Table.HeaderCell>
+            <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -25,13 +38,29 @@ export default function TableListSmall({ rows }) {
                 <Table.Cell>{row.date}</Table.Cell>
                 <Table.Cell>{row.basic}</Table.Cell>
                 <Table.Cell>{row.interest}</Table.Cell>
-                <Table.Cell><Icon onClick={()=>dispatch(deleteRow(row.id))} color='red' name="close"/>
+                <Table.Cell>{Number(row.basic) + Number(row.interest)}</Table.Cell>
+
+                <Table.Cell>
+                  <Icon
+                    onClick={() => handleEdit(row,index)}
+                    color="green"
+                    name="pencil"
+                  />
+                 
+                </Table.Cell>
+                <Table.Cell>
+                
+                  <Icon
+                    onClick={() => handleDelete(row.id)}
+                    color="red"
+                    name="close"
+                  />
                 </Table.Cell>
               </Table.Row>
             );
           })}
         </Table.Body>
       </Table>
-    </div>
+    </>
   );
 }
