@@ -3,16 +3,18 @@ import { Table, Icon, Header } from 'semantic-ui-react';
 import { deleteRow } from './mortgagesSlice';
 import { useDispatch } from 'react-redux';
 
-export default function TableListSmall({ rows,setOpen,setEditedRow }) {
+export default function TableListSmall({ rows,setOpen,setEditedRow,setEditedRowIndex }) {
   const dispatch = useDispatch();
 
   const handleDelete = (id) => {
-    if (window.confirm('Are you sure?')) dispatch(deleteRow(id));
+    // if (window.confirm('Are you sure?'))
+     dispatch(deleteRow(id));
   };
 
   const handleEdit = (row,index) => {
     setOpen(true)
     setEditedRow(row)
+    setEditedRowIndex(index)
     // console.log(row,index)
   };
 
@@ -21,7 +23,7 @@ export default function TableListSmall({ rows,setOpen,setEditedRow }) {
       <Table unstackable>
         <Table.Header>
           <Table.Row>
-            {/* <Table.HeaderCell>id</Table.HeaderCell> */}
+            <Table.HeaderCell>id</Table.HeaderCell>
             <Table.HeaderCell>日期</Table.HeaderCell>
             <Table.HeaderCell>本金</Table.HeaderCell>
             <Table.HeaderCell>利息</Table.HeaderCell>
@@ -34,7 +36,7 @@ export default function TableListSmall({ rows,setOpen,setEditedRow }) {
           {rows.map((row, index) => {
             return (
               <Table.Row key={row.id}>
-                {/* <Table.Cell>{row.id}</Table.Cell> */}
+                <Table.Cell>{row.id}</Table.Cell>
                 <Table.Cell>{row.date}</Table.Cell>
                 <Table.Cell>{row.basic}</Table.Cell>
                 <Table.Cell>{row.interest}</Table.Cell>

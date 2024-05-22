@@ -19,6 +19,18 @@ export const addNewRow = createAsyncThunk(
   }
 );
 
+// 更新 row: 更新的資料, index:資料列所在的索引
+export const updateRow = createAsyncThunk(
+  'mortgages/updateRow',
+  async ({ row, index }) => {
+    await db
+      .collection('mortgages')
+      .doc(row.id)
+      .update({ date: row.date, basic: row.basic, interest: row.interest });
+    return { row, index };
+  }
+);
+
 export const deleteRow = createAsyncThunk('mortgages/deleteRow', async (id) => {
   const doc = await db.collection('mortgages').doc(id).delete();
   return id;
@@ -48,13 +60,22 @@ const slice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchData.fulfilled, (state, action) => {
-        state.data = state.data.concat(action.payload)
+        state.data = action.payload;
+        // state.data = state.data.concat(action.payload)
         // return action.payload;
       })
+      // 新增
       .addCase(addNewRow.fulfilled, (state, action) => {
         // console.log(state);
         // state = state.concat(action.payload);
         state.data.push(action.payload);
+      })
+      // 更新
+      .addCase(updateRow.fulfilled, (state, action) => {
+        // 表格資料列更新 
+        let newItemList = state.data.slice();
+        Object.assign(newItemList[action.payload.index], action.payload.row);
+        state.data = newItemList;
       })
       .addCase(deleteRow.fulfilled, (state, action) => {
         // const { id } = action.payload;
@@ -68,7 +89,7 @@ const slice = createSlice({
         //   basic: 0, //本金
         //   interest: 0, //利息
         // });
-        console.log(state)
+        console.log(state);
       });
   },
 });

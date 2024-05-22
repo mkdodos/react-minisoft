@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchData, selectData, addNewRow, rowAdded } from './mortgagesSlice';
+import { fetchData, selectData, addNewRow, updateRow } from './mortgagesSlice';
 import TableListSmall from './TableListSmall';
 import { Button, Input, Grid } from 'semantic-ui-react';
 import EditForm from './components/EditForm';
@@ -14,12 +14,13 @@ export default function Mortgages() {
   const [open, setOpen] = useState(false);
 
   const defaultRow = {
-    date: '',
-    basic:'', //本金
-    interest:'', //利息
-
+    date: new Date().toISOString().substring(0, 10),
+    basic: '', //本金
+    interest: '', //利息
   };
   const [editedRow, setEditedRow] = useState(defaultRow);
+
+  const [editedRowIndex, setEditedRowIndex] = useState(-1);
 
   useEffect(() => {
     dispatch(fetchData());
@@ -33,6 +34,7 @@ export default function Mortgages() {
   };
 
   const handleAdd = () => {
+    setEditedRow(defaultRow);
     setOpen(true);
   };
 
@@ -43,11 +45,15 @@ export default function Mortgages() {
     // console.log('close')
   };
 
+  // 儲存
   const handleSave = () => {
-  //  console.log(row)
-    dispatch(addNewRow(editedRow))
-    setOpen(false)
-
+    if (!editedRow.id) {
+      dispatch(addNewRow(editedRow));
+    } else {
+      const data = { row: editedRow, index: editedRowIndex };
+      dispatch(updateRow(data));
+    }
+    setOpen(false);
   };
 
   return (
@@ -60,6 +66,7 @@ export default function Mortgages() {
         rows={rows}
         setOpen={setOpen}
         setEditedRow={setEditedRow}
+        setEditedRowIndex={setEditedRowIndex}
       />
 
       <EditForm

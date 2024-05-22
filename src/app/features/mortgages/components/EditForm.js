@@ -20,6 +20,7 @@ export default function EditForm({
               <Form.Input
                 label="日期"
                 width={8}
+                type="date"
                 value={editedRow.date}
                 onChange={(e) =>
                   setEditedRow({ ...editedRow, date: e.target.value })
