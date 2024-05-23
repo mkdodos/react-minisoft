@@ -11,6 +11,18 @@ export const fetchData = createAsyncThunk('mortgages/fetchData', async () => {
   return data;
 });
 
+export const searchData = createAsyncThunk('mortgages/searchData', async (search) => {
+    
+  const snapshot = await db
+    .collection('mortgages')
+    .where('date', '==', search.date)
+    .get();
+  const data = snapshot.docs.map((doc) => {
+    return { ...doc.data(), id: doc.id };
+  });
+  return data;
+});
+
 export const addNewRow = createAsyncThunk(
   'mortgages/addNewRow',
   async (row) => {
@@ -64,6 +76,10 @@ const slice = createSlice({
         // state.data = state.data.concat(action.payload)
         // return action.payload;
       })
+      // 搜尋
+      .addCase(searchData.fulfilled, (state, action) => {
+        state.data = action.payload;
+      })
       // 新增
       .addCase(addNewRow.fulfilled, (state, action) => {
         // console.log(state);
@@ -72,7 +88,7 @@ const slice = createSlice({
       })
       // 更新
       .addCase(updateRow.fulfilled, (state, action) => {
-        // 表格資料列更新 
+        // 表格資料列更新
         let newItemList = state.data.slice();
         Object.assign(newItemList[action.payload.index], action.payload.row);
         state.data = newItemList;

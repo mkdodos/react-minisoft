@@ -1,37 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchData, selectData, addNewRow, updateRow } from './mortgagesSlice';
-import TableListSmall from './TableListSmall';
+import {
+  searchData,
+  fetchData,
+  selectData,
+  addNewRow,
+  updateRow,
+} from './mortgagesSlice';
+import TableView from './components/TableView';
 import { Button, Input, Grid } from 'semantic-ui-react';
 import EditForm from './components/EditForm';
+import SearchForm from './components/SearchForm';
 
-export default function Mortgages() {
+export default function Index() {
   const dispatch = useDispatch();
+  // 資料
   const rows = useSelector(selectData);
-
-  const [basic, setBasic] = useState(0);
-
+  // 搜尋參數預設值
+  const defaultSearch = {
+    date: new Date().toISOString().substring(0, 10),
+  };
+  // 搜尋參數
+  const [search, setSearch] = useState(defaultSearch);
+  // 表單開關
   const [open, setOpen] = useState(false);
-
+  // 編輯參數預設值
   const defaultRow = {
     date: new Date().toISOString().substring(0, 10),
     basic: '', //本金
     interest: '', //利息
   };
+  // 編輯列參數
   const [editedRow, setEditedRow] = useState(defaultRow);
-
+  // 編輯列索引
   const [editedRowIndex, setEditedRowIndex] = useState(-1);
 
   useEffect(() => {
     dispatch(fetchData());
   }, []);
 
-  const row = {
-    account: '房貸A',
-    date: '2023-08-24',
-    basic, //本金
-    interest: 5, //利息
-  };
+  // const row = {
+  //   account: '房貸A',
+  //   date: '2023-08-24',
+  //   basic, 100 //本金
+  //   interest: 5, //利息
+  // };
 
   const handleAdd = () => {
     setEditedRow(defaultRow);
@@ -56,17 +69,26 @@ export default function Mortgages() {
     setOpen(false);
   };
 
+  // 搜尋
+  const handleSearch = () => {
+    dispatch(searchData(search));
+    // console.log(search);
+  };
+
   return (
     <>
-      <Button color="pink" onClick={handleAdd}>
-        ADD
-      </Button>
+      <SearchForm
+        handleSearch={handleSearch}
+        search={search}
+        setSearch={setSearch}
+      />
 
-      <TableListSmall
+      <TableView
         rows={rows}
         setOpen={setOpen}
         setEditedRow={setEditedRow}
         setEditedRowIndex={setEditedRowIndex}
+        handleAdd={handleAdd}
       />
 
       <EditForm

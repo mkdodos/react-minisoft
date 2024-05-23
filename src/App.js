@@ -33,7 +33,7 @@ import SectionsList from './app/features/sections/SectionsList';
 import Balances from './app/features/balances/Balances';
 import WorksList from './app/features/works/WorksList';
 // 房貸
-import Mortgages from './app/features/mortgages/Mortgages';
+import Mortgages from './app/features/mortgages';
 
 import Layout from './components/Layout';
 
