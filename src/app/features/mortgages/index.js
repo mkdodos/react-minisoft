@@ -19,6 +19,7 @@ export default function Index() {
   // 搜尋參數預設值
   const defaultSearch = {
     date: new Date().toISOString().substring(0, 10),
+    basic:''
   };
   // 搜尋參數
   const [search, setSearch] = useState(defaultSearch);

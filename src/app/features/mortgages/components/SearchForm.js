@@ -14,6 +14,13 @@ export default function SearchForm({ handleSearch, search,setSearch }) {
             />
           </Grid.Column>
           <Grid.Column width={3}>
+            <Input
+              type="number"
+              value={search.basic}
+              onChange={(e) => setSearch({ ...search, basic: e.target.value })}
+            />
+          </Grid.Column>
+          <Grid.Column width={3}>
             <Button color="olive" onClick={handleSearch}>
               Search
             </Button>

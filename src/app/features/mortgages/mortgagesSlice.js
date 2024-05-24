@@ -11,17 +11,30 @@ export const fetchData = createAsyncThunk('mortgages/fetchData', async () => {
   return data;
 });
 
-export const searchData = createAsyncThunk('mortgages/searchData', async (search) => {
+export const searchData = createAsyncThunk(
+  'mortgages/searchData',
+  async (search) => {
+    let snapshot = db.collection('mortgages');
+
+    // 有參數值才加入條件
+    if (search.date != '') {
+      snapshot = snapshot.where('date', '==', search.date);
+    }
+
     
-  const snapshot = await db
-    .collection('mortgages')
-    .where('date', '==', search.date)
-    .get();
-  const data = snapshot.docs.map((doc) => {
-    return { ...doc.data(), id: doc.id };
-  });
-  return data;
-});
+    if (search.basic != '') {
+      snapshot = snapshot.where('basic', '==', search.basic);
+    }
+
+    snapshot = await snapshot.get();
+
+    const data = snapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+    });
+
+    return data;
+  }
+);
 
 export const addNewRow = createAsyncThunk(
   'mortgages/addNewRow',
