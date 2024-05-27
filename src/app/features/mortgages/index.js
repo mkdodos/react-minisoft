@@ -6,6 +6,7 @@ import {
   selectData,
   addNewRow,
   updateRow,
+  deleteRow
 } from './mortgagesSlice';
 import TableView from './components/TableView';
 import { Button, Input, Grid } from 'semantic-ui-react';
@@ -40,12 +41,14 @@ export default function Index() {
     dispatch(fetchData());
   }, []);
 
-  // const row = {
-  //   account: '房貸A',
-  //   date: '2023-08-24',
-  //   basic, 100 //本金
-  //   interest: 5, //利息
-  // };
+ 
+
+  const handleDelete = (id) => {
+    // if (window.confirm('Are you sure?'))
+    dispatch(deleteRow(id));
+    setOpen(false)
+  };
+
 
   const handleAdd = () => {
     setEditedRow(defaultRow);
@@ -98,7 +101,7 @@ export default function Index() {
         handleSave={handleSave}
         setEditedRow={setEditedRow}
         handleClose={handleClose}
-        // handleDelete={handleDelete}
+        handleDelete={handleDelete}
       />
     </>
   );

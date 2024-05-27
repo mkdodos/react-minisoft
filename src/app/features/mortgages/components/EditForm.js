@@ -17,6 +17,16 @@ export default function EditForm({
         <Modal.Content>
           <Form>
             <Form.Group>
+            <Form.Input
+                label="帳戶"
+                width={8}
+                type="text"
+                value={editedRow.account}
+                onChange={(e) =>
+                  setEditedRow({ ...editedRow, account: e.target.value })
+                }
+              />
+
               <Form.Input
                 label="日期"
                 width={8}
@@ -51,8 +61,8 @@ export default function EditForm({
           <Button onClick={handleSave} primary>
             儲存
           </Button>
-          {editedRow.ID && (
-            <Button floated="left" onClick={handleDelete}>
+          {editedRow.id && (
+            <Button floated="left" onClick={()=>handleDelete(editedRow.id)}>
               刪除
             </Button>
           )}

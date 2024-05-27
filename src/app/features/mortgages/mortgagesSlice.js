@@ -26,6 +26,10 @@ export const searchData = createAsyncThunk(
       snapshot = snapshot.where('basic', '==', search.basic);
     }
 
+    if (search.account != '') {
+      snapshot = snapshot.where('account', '==', search.account);
+    }
+
     snapshot = await snapshot.get();
 
     const data = snapshot.docs.map((doc) => {
@@ -51,7 +55,7 @@ export const updateRow = createAsyncThunk(
     await db
       .collection('mortgages')
       .doc(row.id)
-      .update({ date: row.date, basic: row.basic, interest: row.interest });
+      .update({account:row.account, date: row.date, basic: row.basic, interest: row.interest });
     return { row, index };
   }
 );

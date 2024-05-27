@@ -29,7 +29,8 @@ export default function TableView({
       <Table unstackable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>id</Table.HeaderCell>
+            {/* <Table.HeaderCell>id</Table.HeaderCell> */}
+            <Table.HeaderCell>帳戶</Table.HeaderCell>
             <Table.HeaderCell>日期</Table.HeaderCell>
             <Table.HeaderCell>本金</Table.HeaderCell>
             <Table.HeaderCell>利息</Table.HeaderCell>
@@ -39,37 +40,38 @@ export default function TableView({
                 ADD
               </Button>
             </Table.HeaderCell>
-            <Table.HeaderCell>
+            {/* <Table.HeaderCell>
               
-            </Table.HeaderCell>
+            </Table.HeaderCell> */}
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {rows.map((row, index) => {
             return (
               <Table.Row key={row.id}>
-                <Table.Cell>{row.id}</Table.Cell>
+                {/* <Table.Cell>{row.id}</Table.Cell> */}
+                <Table.Cell>{row.account}</Table.Cell>
                 <Table.Cell>{row.date}</Table.Cell>
                 <Table.Cell>{row.basic}</Table.Cell>
                 <Table.Cell>{row.interest}</Table.Cell>
                 <Table.Cell>
-                  {Number(row.basic) + Number(row.interest)}
+                  ${Number(row.basic) + Number(row.interest)}
                 </Table.Cell>
 
-                <Table.Cell>
+                <Table.Cell style={{cursor:'pointer'}}>
                   <Icon
                     onClick={() => handleEdit(row, index)}
                     color="green"
                     name="pencil"
                   />
                 </Table.Cell>
-                <Table.Cell>
+                {/* <Table.Cell style={{cursor:'pointer'}}>
                   <Icon
                     onClick={() => handleDelete(row.id)}
                     color="red"
                     name="close"
                   />
-                </Table.Cell>
+                </Table.Cell> */}
               </Table.Row>
             );
           })}
