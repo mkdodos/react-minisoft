@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Modal, Form } from 'semantic-ui-react';
+import MortgageAccSelect from '../../../../components/MortgageAccSelect';
 
 export default function EditForm({
   open,
@@ -10,6 +11,12 @@ export default function EditForm({
   handleDelete,
   handleClose,
 }) {
+
+  const handleAccChange = (e, { value }) => {
+    setEditedRow({ ...editedRow, account: value })
+  };
+
+
   return (
     <>
       <Modal open={open} onClose={handleClose} closeIcon>
@@ -18,16 +25,6 @@ export default function EditForm({
           <Form>
             <Form.Group>
             <Form.Input
-                label="帳戶"
-                width={8}
-                type="text"
-                value={editedRow.account}
-                onChange={(e) =>
-                  setEditedRow({ ...editedRow, account: e.target.value })
-                }
-              />
-
-              <Form.Input
                 label="日期"
                 width={8}
                 type="date"
@@ -36,6 +33,18 @@ export default function EditForm({
                   setEditedRow({ ...editedRow, date: e.target.value })
                 }
               />
+              <MortgageAccSelect label="帳戶" onChange={handleAccChange} account={editedRow.account}/>
+            {/* <Form.Input
+                label="帳戶"
+                width={8}
+                type="text"
+                value={editedRow.account}
+                onChange={(e) =>
+                  setEditedRow({ ...editedRow, account: e.target.value })
+                }
+              /> */}
+
+             
 
               <Form.Input
                 label="本金"

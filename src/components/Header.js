@@ -49,6 +49,9 @@ export default function Header() {
           <Menu.Item as={Link} to="/mortgages">
             房貸
           </Menu.Item>
+          <Menu.Item as={Link} to="/mortgage-accounts">
+            房貸帳戶
+          </Menu.Item>
           <Menu.Item as={Link} to="/works">
             工件
           </Menu.Item>

@@ -34,6 +34,8 @@ import Balances from './app/features/balances/Balances';
 import WorksList from './app/features/works/WorksList';
 // 房貸
 import Mortgages from './app/features/mortgages';
+// 房貸帳戶
+import MortgageAccounts from './pages/MortgageAccounts';
 
 import Layout from './components/Layout';
 
@@ -57,7 +59,9 @@ export default function App() {
                 <Route index element={<AddPostForm />} />
                 <Route path=":postId" element={<SinglePostPage />} />
               </Route>
+              {/* 房貸 */}
               <Route element={<Mortgages />} path="/mortgages" />
+              <Route element={<MortgageAccounts />} path="/mortgage-accounts" />
 
               {/* works */}
               <Route element={<WorksList />} path="/works" />
