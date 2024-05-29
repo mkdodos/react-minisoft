@@ -6,12 +6,14 @@ import {
   selectData,
   addNewRow,
   updateRow,
-  deleteRow
+  deleteRow,
 } from './mortgagesSlice';
 import TableView from './components/TableView';
 import { Button, Input, Grid } from 'semantic-ui-react';
 import EditForm from './components/EditForm';
 import SearchForm from './components/SearchForm';
+// 帳戶餘額
+import BalanceView from './components/BalanceView';
 
 export default function Index() {
   const dispatch = useDispatch();
@@ -20,7 +22,7 @@ export default function Index() {
   // 搜尋參數預設值
   const defaultSearch = {
     date: new Date().toISOString().substring(0, 10),
-    basic:''
+    basic: '',
   };
   // 搜尋參數
   const [search, setSearch] = useState(defaultSearch);
@@ -41,14 +43,11 @@ export default function Index() {
     dispatch(fetchData());
   }, []);
 
- 
-
   const handleDelete = (id) => {
     // if (window.confirm('Are you sure?'))
     dispatch(deleteRow(id));
-    setOpen(false)
+    setOpen(false);
   };
-
 
   const handleAdd = () => {
     setEditedRow(defaultRow);
@@ -87,6 +86,7 @@ export default function Index() {
         setSearch={setSearch}
       />
 
+      <BalanceView />
       <TableView
         rows={rows}
         setOpen={setOpen}
