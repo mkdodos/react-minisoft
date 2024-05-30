@@ -3,6 +3,18 @@ import axios from 'axios';
 import { actions } from '../../../pages/Salary/actions';
 import { db_money2022 as db } from '../../../utils/firebase';
 
+// 帳戶資料
+export const fetchAccounts = createAsyncThunk(
+  'mortgages/fetchAccounts',
+  async () => {
+    const snapshot = await db.collection('mortgageAccounts').get();
+    const data = snapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+    });
+    return data;
+  }
+);
+
 export const fetchData = createAsyncThunk('mortgages/fetchData', async () => {
   const snapshot = await db.collection('mortgages').get();
   const data = snapshot.docs.map((doc) => {
@@ -21,7 +33,6 @@ export const searchData = createAsyncThunk(
       snapshot = snapshot.where('date', '==', search.date);
     }
 
-    
     if (search.basic != '') {
       snapshot = snapshot.where('basic', '==', search.basic);
     }
@@ -52,10 +63,12 @@ export const addNewRow = createAsyncThunk(
 export const updateRow = createAsyncThunk(
   'mortgages/updateRow',
   async ({ row, index }) => {
-    await db
-      .collection('mortgages')
-      .doc(row.id)
-      .update({account:row.account, date: row.date, basic: row.basic, interest: row.interest });
+    await db.collection('mortgages').doc(row.id).update({
+      account: row.account,
+      date: row.date,
+      basic: row.basic,
+      interest: row.interest,
+    });
     return { row, index };
   }
 );
@@ -77,6 +90,10 @@ export const deleteRow = createAsyncThunk('mortgages/deleteRow', async (id) => {
 
 const initialState = {
   data: [],
+  accounts: [
+    { name: 'A', amt: 0 },
+    { name: 'B', amt: 0 },
+  ],
 };
 const slice = createSlice({
   name: 'mortgages',
@@ -85,23 +102,30 @@ const slice = createSlice({
     rowAdded(state, action) {
       state.push(action.payload);
     },
+    // updateBalance(state, action) {
+    //   state.accounts[0].amt = 100;
+    // },
   },
   extraReducers(builder) {
     builder
+      .addCase(fetchAccounts.fulfilled, (state, action) => {
+        state.accounts = action.payload;
+      })
       .addCase(fetchData.fulfilled, (state, action) => {
         state.data = action.payload;
         // state.data = state.data.concat(action.payload)
         // return action.payload;
       })
+
       // 搜尋
       .addCase(searchData.fulfilled, (state, action) => {
         state.data = action.payload;
       })
       // 新增
       .addCase(addNewRow.fulfilled, (state, action) => {
-        // console.log(state);
-        // state = state.concat(action.payload);
         state.data.push(action.payload);
+        // 更新帳戶餘額
+        state.accounts[0].amt += action.payload.basic * 1;
       })
       // 更新
       .addCase(updateRow.fulfilled, (state, action) => {
@@ -129,6 +153,8 @@ const slice = createSlice({
 
 export default slice.reducer;
 
+// mortgages 對應 store reducer
 export const selectData = (state) => state.mortgages.data;
+export const selectAccounts = (state) => state.mortgages.accounts;
 
 export const { rowAdded } = slice.actions;
