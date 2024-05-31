@@ -16,7 +16,7 @@ export default function MortgageAccSelect({ account, name, onChange, label }) {
         const data = snapshot.docs.map((doc) => {
           const name = doc.data().name;
           
-          return { text: name, value: name, key: doc.id };
+          return { text: name, value: doc.id, key: doc.id };
         });
         
         setRows(data);

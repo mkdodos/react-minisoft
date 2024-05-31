@@ -11,11 +11,12 @@ export default function EditForm({
   handleDelete,
   handleClose,
 }) {
-
   const handleAccChange = (e, { value }) => {
-    setEditedRow({ ...editedRow, account: value })
+    // console.log(e.target.textContent)
+    // console.log(value)
+    const account = { id: value, name: e.target.textContent };
+    setEditedRow({ ...editedRow, account });
   };
-
 
   return (
     <>
@@ -24,7 +25,7 @@ export default function EditForm({
         <Modal.Content>
           <Form>
             <Form.Group>
-            <Form.Input
+              <Form.Input
                 label="日期"
                 width={8}
                 type="date"
@@ -33,8 +34,12 @@ export default function EditForm({
                   setEditedRow({ ...editedRow, date: e.target.value })
                 }
               />
-              <MortgageAccSelect label="帳戶" onChange={handleAccChange} account={editedRow.account}/>
-            {/* <Form.Input
+              <MortgageAccSelect
+                label="帳戶"
+                onChange={handleAccChange}
+                account={editedRow.account?.id}
+              />
+              {/* <Form.Input
                 label="帳戶"
                 width={8}
                 type="text"
@@ -43,8 +48,6 @@ export default function EditForm({
                   setEditedRow({ ...editedRow, account: e.target.value })
                 }
               /> */}
-
-             
 
               <Form.Input
                 label="本金"
@@ -71,9 +74,12 @@ export default function EditForm({
             儲存
           </Button>
           {editedRow.id && (
-            <Button floated="left" onClick={()=>handleDelete(editedRow.id)}>
+            <Button floated="left" onClick={handleDelete}>
               刪除
             </Button>
+            // <Button floated="left" onClick={()=>handleDelete(editedRow.id)}>
+            //   刪除
+            // </Button>
           )}
         </Modal.Actions>
       </Modal>

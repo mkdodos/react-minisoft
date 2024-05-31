@@ -7,7 +7,10 @@ import { db_money2022 as db } from '../../../utils/firebase';
 export const fetchAccounts = createAsyncThunk(
   'mortgages/fetchAccounts',
   async () => {
-    const snapshot = await db.collection('mortgageAccounts').get();
+    const snapshot = await db
+      .collection('mortgageAccounts')
+      .orderBy('name')
+      .get();
     const data = snapshot.docs.map((doc) => {
       return { ...doc.data(), id: doc.id };
     });
@@ -38,7 +41,8 @@ export const searchData = createAsyncThunk(
     }
 
     if (search.account != '') {
-      snapshot = snapshot.where('account', '==', search.account);
+      // console.log(search.account)
+      snapshot = snapshot.where('account.id', '==', search.account);
     }
 
     snapshot = await snapshot.get();
@@ -51,10 +55,18 @@ export const searchData = createAsyncThunk(
   }
 );
 
+// 新增
 export const addNewRow = createAsyncThunk(
   'mortgages/addNewRow',
   async (row) => {
     const doc = await db.collection('mortgages').add(row);
+    // 更新帳戶餘額
+    const account = await db
+      .collection('mortgageAccounts')
+      .doc(row.account.id)
+      .get();
+    const amt = account.data().amt - row.basic * 1;
+    await db.collection('mortgageAccounts').doc(row.account.id).update({ amt });
     return { ...row, id: doc.id };
   }
 );
@@ -73,10 +85,23 @@ export const updateRow = createAsyncThunk(
   }
 );
 
-export const deleteRow = createAsyncThunk('mortgages/deleteRow', async (id) => {
-  const doc = await db.collection('mortgages').doc(id).delete();
-  return id;
-});
+// 刪除
+export const deleteRow = createAsyncThunk(
+  'mortgages/deleteRow',
+  async (row) => {
+    const doc = await db.collection('mortgages').doc(row.id).delete();
+
+    // 更新帳戶餘額
+    const account = await db
+      .collection('mortgageAccounts')
+      .doc(row.account.id)
+      .get();
+    const amt = account.data().amt + row.basic * 1;
+    await db.collection('mortgageAccounts').doc(row.account.id).update({ amt });
+
+    return row;
+  }
+);
 
 // const initialState = [
 // {
@@ -113,8 +138,7 @@ const slice = createSlice({
       })
       .addCase(fetchData.fulfilled, (state, action) => {
         state.data = action.payload;
-        // state.data = state.data.concat(action.payload)
-        // return action.payload;
+      
       })
 
       // 搜尋
@@ -125,7 +149,9 @@ const slice = createSlice({
       .addCase(addNewRow.fulfilled, (state, action) => {
         state.data.push(action.payload);
         // 更新帳戶餘額
-        state.accounts[0].amt += action.payload.basic * 1;
+        const id = action.payload.account.id;
+        const account = state.accounts.find((row) => row.id == id);
+        account.amt -= action.payload.basic * 1;
       })
       // 更新
       .addCase(updateRow.fulfilled, (state, action) => {
@@ -134,19 +160,13 @@ const slice = createSlice({
         Object.assign(newItemList[action.payload.index], action.payload.row);
         state.data = newItemList;
       })
+      // 刪除
       .addCase(deleteRow.fulfilled, (state, action) => {
-        // const { id } = action.payload;
-        // const posts = state.filter(post => post.id !== id);
-        // state = posts;
-        state.data = state.data.filter((row) => row.id != action.payload);
-        // state.push({
-        //   id: 1,
-        //   account: '房貸A',
-        //   date: '2023-08-24',
-        //   basic: 0, //本金
-        //   interest: 0, //利息
-        // });
-        console.log(state);
+        state.data = state.data.filter((row) => row.id != action.payload.id);
+        // 更新帳戶餘額
+        const id = action.payload.account.id;
+        const account = state.accounts.find((row) => row.id == id);
+        account.amt += action.payload.basic * 1;
       });
   },
 });

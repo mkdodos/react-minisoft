@@ -12,10 +12,7 @@ export default function TableView({
 }) {
   const dispatch = useDispatch();
 
-  const handleDelete = (id) => {
-    // if (window.confirm('Are you sure?'))
-    dispatch(deleteRow(id));
-  };
+
 
   const handleEdit = (row, index) => {
     setOpen(true);
@@ -50,7 +47,7 @@ export default function TableView({
             return (
               <Table.Row key={row.id}>
                 {/* <Table.Cell>{row.id}</Table.Cell> */}
-                <Table.Cell>{row.account}</Table.Cell>
+                <Table.Cell>{row.account.name}</Table.Cell>
                 <Table.Cell>{row.date}</Table.Cell>
                 <Table.Cell>{row.basic}</Table.Cell>
                 <Table.Cell>{row.interest}</Table.Cell>

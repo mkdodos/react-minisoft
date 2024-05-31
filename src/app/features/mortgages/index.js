@@ -43,9 +43,11 @@ export default function Index() {
     dispatch(fetchData());
   }, []);
 
-  const handleDelete = (id) => {
+  // 刪除
+  const handleDelete = () => {
     // if (window.confirm('Are you sure?'))
-    dispatch(deleteRow(id));
+    dispatch(deleteRow(editedRow));
+    // dispatch(deleteRow(id));
     setOpen(false);
   };
 
