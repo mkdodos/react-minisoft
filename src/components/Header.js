@@ -32,10 +32,10 @@ export default function Header() {
         收支查詢
       </Menu.Item>
 
-      {/* <Menu.Item as={Link} to="/notes">
+      <Menu.Item as={Link} to="/stock">
         <Icon name="book" />
-        記事本
-      </Menu.Item> */}
+        存股
+      </Menu.Item>
 
       <Dropdown text="月" item>
         <Dropdown.Menu>
