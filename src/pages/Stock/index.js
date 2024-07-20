@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Form } from 'semantic-ui-react';
 import { nanoid } from '@reduxjs/toolkit';
 import { db_money2022 as db } from '../../utils/firebase';
+import  SearchForm  from './components/SearchForm';
+
 export default function Index() {
   // 預設物件
   const defaultRow = {
     date: '2024-07-15',
+    name: '',
     qty: '',
     price: '',
   };
@@ -17,6 +20,11 @@ export default function Index() {
 
   // 編輯列索引
   const [rowIndex, setRowIndex] = useState(-1);
+
+
+
+  const [total, setTotal] = useState(0);
+  const [search, setSearch] = useState('長榮航');
 
   useEffect(() => {
     readDocs();
@@ -46,18 +54,45 @@ export default function Index() {
     setRow(defaultRow);
   };
 
-   // 刪除
-   const handleDelete = (id) => {
+  // 刪除
+  const handleDelete = (id) => {
     deleteDoc(id);
   };
 
+  // 下拉選項
+  const options = [
+    { text: '長榮航', value: '長榮航', key: '長榮航' },
+    { text: '元大50', value: '元大50', key: '元大50' },
+    { text: '元大高股息', value: '元大高股息', key: '元大高股息' },
+    { text: '鴻海', value: '鴻海', key: '鴻海' },
+  ];
+
+  const handleNameChange = (e, { value }) => {
+    setRow({ ...row, name: value });
+  };
+
+  const handleSearchChange = (e, { value }) => {
+    // readDocs(value);
+    setSearch(value);
+  };
+
+ 
+
   // firebase
   const readDocs = async () => {
-    const snapshot = await db.collection('stocks').orderBy('date','desc').get();
+    const snapshot = await db
+      .collection('stocks')
+      .where('name', '==', search)
+      .orderBy('date', 'desc')
+      .get();
+
+    let sum = 0;
     const data = snapshot.docs.map((doc) => {
+      sum += Number(doc.data().qty * doc.data().price);
       return { ...doc.data(), id: doc.id };
     });
     setRows(data);
+    setTotal(sum);
   };
 
   const addDoc = () => {
@@ -85,6 +120,7 @@ export default function Index() {
   };
 
   const updateDoc = () => {
+    console.log(row);
     db.collection('stocks')
       .doc(row.id)
       .update(row)
@@ -100,17 +136,24 @@ export default function Index() {
       });
   };
 
- 
-
   return (
     <div>
+      {/* 搜尋 */}
+      <SearchForm options={options} handleSearchChange={handleSearchChange} readDocs={readDocs} />
+      
+      {/* 表格 */}
       <Table celled unstackable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell width={2}>id</Table.HeaderCell>
             <Table.HeaderCell width={2}>日期</Table.HeaderCell>
-            <Table.HeaderCell width={2}>數量</Table.HeaderCell>
-            <Table.HeaderCell width={2}>單價</Table.HeaderCell>
+            <Table.HeaderCell width={2}>名稱</Table.HeaderCell>
+            <Table.HeaderCell width={1}>股數</Table.HeaderCell>
+            <Table.HeaderCell width={1}>單價</Table.HeaderCell>
+            <Table.HeaderCell width={2}>
+              小計<br></br>
+              {Math.round(total)}
+            </Table.HeaderCell>
             <Table.HeaderCell width={2}>#</Table.HeaderCell>
             <Table.HeaderCell width={2}>#</Table.HeaderCell>
           </Table.Row>
@@ -122,8 +165,10 @@ export default function Index() {
               <Table.Row key={row.id}>
                 <Table.Cell>{row.id}</Table.Cell>
                 <Table.Cell>{row.date}</Table.Cell>
+                <Table.Cell>{row.name}</Table.Cell>
                 <Table.Cell>{row.qty}</Table.Cell>
                 <Table.Cell>{row.price}</Table.Cell>
+                <Table.Cell>{Math.round(row.qty * row.price)}</Table.Cell>
                 <Table.Cell>
                   <Button onClick={() => handleEdit(row, index)}>編輯</Button>
                 </Table.Cell>
@@ -144,6 +189,15 @@ export default function Index() {
             name="date"
             value={row.date}
             onChange={handleChange}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Form.Select
+            placeholder="名稱"
+            fluid
+            value={row.name}
+            options={options}
+            onChange={handleNameChange}
           />
         </Form.Field>
         <Form.Field>
