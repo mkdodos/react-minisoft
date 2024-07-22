@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Form } from 'semantic-ui-react';
 import { nanoid } from '@reduxjs/toolkit';
 import { db_money2022 as db } from '../../utils/firebase';
-import  SearchForm  from './components/SearchForm';
+import SearchForm from './components/SearchForm';
 
 export default function Index() {
   // 預設物件
@@ -15,16 +15,17 @@ export default function Index() {
   // 物件資料集合
   const [rows, setRows] = useState([]);
 
+  // 物件資料複本(搜尋完回復至原資料用)
+  const [rowsCopy, setRowsCopy] = useState([]);
+
   // 編輯列
   const [row, setRow] = useState(defaultRow);
 
   // 編輯列索引
   const [rowIndex, setRowIndex] = useState(-1);
 
-
-
   const [total, setTotal] = useState(0);
-  const [search, setSearch] = useState('長榮航');
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     readDocs();
@@ -71,18 +72,49 @@ export default function Index() {
     setRow({ ...row, name: value });
   };
 
+  // 搜尋
   const handleSearchChange = (e, { value }) => {
+    // let temp = rows.slice();
+    // temp = temp.filter(row=>row.name==value);
+    // setRowsCopy(temp)
     // readDocs(value);
     setSearch(value);
   };
 
- 
+  const handleSearch = () => {
+    console.log(search);
+    if (search) {
+      let temp = rowsCopy.slice();
+      temp = temp.filter((row) => row.name == search);
+      setRows(temp);
+    } else {
+      setRows(rowsCopy);
+    }
+  };
+
+  const [groupSum, setGroupSum] = useState([]);
+
+  // 計算個股成本
+  const calCostByStock = (stock) => {
+    let temp = rowsCopy.slice();
+    temp = temp.filter((row) => row.name == stock);
+
+    let sum = 0;
+    temp.map((row) => {
+      sum += row.price * row.qty;
+    });
+
+   
+
+    setGroupSum([...groupSum,{ stock, sum }])
+    return sum;
+  };
 
   // firebase
   const readDocs = async () => {
     const snapshot = await db
       .collection('stocks')
-      .where('name', '==', search)
+      // .where('name', '==', search)
       .orderBy('date', 'desc')
       .get();
 
@@ -92,6 +124,7 @@ export default function Index() {
       return { ...doc.data(), id: doc.id };
     });
     setRows(data);
+    setRowsCopy(data);
     setTotal(sum);
   };
 
@@ -138,9 +171,16 @@ export default function Index() {
 
   return (
     <div>
+      <Button onClick={()=>calCostByStock('長榮航')}>ABC</Button>
+      {groupSum[0]?.sum}
       {/* 搜尋 */}
-      <SearchForm options={options} handleSearchChange={handleSearchChange} readDocs={readDocs} />
-      
+      <SearchForm
+        options={options}
+        handleSearch={handleSearch}
+        handleSearchChange={handleSearchChange}
+        readDocs={readDocs}
+      />
+
       {/* 表格 */}
       <Table celled unstackable>
         <Table.Header>
