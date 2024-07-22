@@ -3,6 +3,7 @@ import { Table, Button, Form } from 'semantic-ui-react';
 import { nanoid } from '@reduxjs/toolkit';
 import { db_money2022 as db } from '../../utils/firebase';
 import SearchForm from './components/SearchForm';
+import GroupCostsView from './components/GroupCostsView';
 
 export default function Index() {
   // 預設物件
@@ -171,6 +172,8 @@ export default function Index() {
 
   return (
     <div>
+      <GroupCostsView data={rows}/>
+      
       <Button onClick={()=>calCostByStock('長榮航')}>ABC</Button>
       {groupSum[0]?.sum}
       {/* 搜尋 */}
