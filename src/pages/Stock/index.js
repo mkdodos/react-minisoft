@@ -4,8 +4,15 @@ import { nanoid } from '@reduxjs/toolkit';
 import { db_money2022 as db } from '../../utils/firebase';
 import SearchForm from './components/SearchForm';
 import GroupCostsView from './components/GroupCostsView';
+import TableView from './components/TableView';
+import EditForm from './components/EditForm';
+import Stat from './components/stat';
 
 export default function Index() {
+  // 編輯表單顯示隱藏
+  const [open, setOpen] = useState(false);
+  // 載入中
+  const [loading, setLoading] = useState(false);
   // 預設物件
   const defaultRow = {
     date: '2024-07-15',
@@ -36,6 +43,7 @@ export default function Index() {
   const handleEdit = (editedRow, index) => {
     setRow(editedRow);
     setRowIndex(index);
+    setOpen(true);
   };
 
   // 修改欄位值
@@ -54,11 +62,15 @@ export default function Index() {
 
     // 將編輯列資料設定回預設值
     setRow(defaultRow);
+    // 關閉編輯視窗
+    setOpen(false);
   };
 
   // 刪除
-  const handleDelete = (id) => {
-    deleteDoc(id);
+  const handleDelete = () => {
+    deleteDoc();
+    // 關閉編輯視窗
+    setOpen(false);
   };
 
   // 下拉選項
@@ -105,14 +117,19 @@ export default function Index() {
       sum += row.price * row.qty;
     });
 
-   
-
-    setGroupSum([...groupSum,{ stock, sum }])
+    setGroupSum([...groupSum, { stock, sum }]);
     return sum;
+  };
+
+  //
+  const handleAdd = () => {
+    setOpen(true);
+    setRowIndex(-1);
   };
 
   // firebase
   const readDocs = async () => {
+    setLoading(true);
     const snapshot = await db
       .collection('stocks')
       // .where('name', '==', search)
@@ -124,9 +141,11 @@ export default function Index() {
       sum += Number(doc.data().qty * doc.data().price);
       return { ...doc.data(), id: doc.id };
     });
+
     setRows(data);
     setRowsCopy(data);
     setTotal(sum);
+    setLoading(false);
   };
 
   const addDoc = () => {
@@ -141,12 +160,12 @@ export default function Index() {
       });
   };
 
-  const deleteDoc = (id) => {
+  const deleteDoc = () => {
     db.collection('stocks')
-      .doc(id)
+      .doc(row.id)
       .delete()
       .then(() => {
-        setRows(rows.filter((row) => row.id != id));
+        setRows(rows.filter((obj) => obj.id != row.id));
       })
       .catch((error) => {
         console.error('Error adding document: ', error);
@@ -172,10 +191,20 @@ export default function Index() {
 
   return (
     <div>
-      <GroupCostsView data={rows}/>
-      
-      <Button onClick={()=>calCostByStock('長榮航')}>ABC</Button>
-      {groupSum[0]?.sum}
+      <Stat/>
+      {!loading && <GroupCostsView data={rows} />}
+
+      <EditForm
+        open={open}
+        setOpen={setOpen}
+        handleChange={handleChange}
+        handleNameChange={handleNameChange}
+        row={row}
+        options={options}
+        handleSave={handleSave}
+        handleDelete={handleDelete}
+      />
+
       {/* 搜尋 */}
       <SearchForm
         options={options}
@@ -185,86 +214,7 @@ export default function Index() {
       />
 
       {/* 表格 */}
-      <Table celled unstackable>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell width={2}>id</Table.HeaderCell>
-            <Table.HeaderCell width={2}>日期</Table.HeaderCell>
-            <Table.HeaderCell width={2}>名稱</Table.HeaderCell>
-            <Table.HeaderCell width={1}>股數</Table.HeaderCell>
-            <Table.HeaderCell width={1}>單價</Table.HeaderCell>
-            <Table.HeaderCell width={2}>
-              小計<br></br>
-              {Math.round(total)}
-            </Table.HeaderCell>
-            <Table.HeaderCell width={2}>#</Table.HeaderCell>
-            <Table.HeaderCell width={2}>#</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          {rows.map((row, index) => {
-            return (
-              <Table.Row key={row.id}>
-                <Table.Cell>{row.id}</Table.Cell>
-                <Table.Cell>{row.date}</Table.Cell>
-                <Table.Cell>{row.name}</Table.Cell>
-                <Table.Cell>{row.qty}</Table.Cell>
-                <Table.Cell>{row.price}</Table.Cell>
-                <Table.Cell>{Math.round(row.qty * row.price)}</Table.Cell>
-                <Table.Cell>
-                  <Button onClick={() => handleEdit(row, index)}>編輯</Button>
-                </Table.Cell>
-                <Table.Cell>
-                  <Button onClick={() => handleDelete(row.id)}>刪除</Button>
-                </Table.Cell>
-              </Table.Row>
-            );
-          })}
-        </Table.Body>
-      </Table>
-
-      <Form>
-        <Form.Field>
-          <label>日期</label>
-          <input
-            type="date"
-            name="date"
-            value={row.date}
-            onChange={handleChange}
-          />
-        </Form.Field>
-        <Form.Field>
-          <Form.Select
-            placeholder="名稱"
-            fluid
-            value={row.name}
-            options={options}
-            onChange={handleNameChange}
-          />
-        </Form.Field>
-        <Form.Field>
-          <label>數量</label>
-          <input
-            type="number"
-            name="qty"
-            value={row.qty}
-            onChange={handleChange}
-          />
-        </Form.Field>
-        <Form.Field>
-          <label>單價</label>
-          <input
-            type="number"
-            name="price"
-            value={row.price}
-            onChange={handleChange}
-          />
-        </Form.Field>
-        <Button primary fluid type="submit" onClick={handleSave}>
-          儲存
-        </Button>
-      </Form>
+      <TableView rows={rows} handleEdit={handleEdit} handleAdd={handleAdd} />
     </div>
   );
 }

@@ -9,9 +9,9 @@ export default function SearchForm({
 }) {
   return (
     <div>
-      <Grid>
+      <Grid columns={2}>
         <Grid.Row>
-          <Grid.Column width={2}>
+          <Grid.Column width={4}>
             <Form.Select
               clearable
               placeholder="名稱"
@@ -20,7 +20,7 @@ export default function SearchForm({
               onChange={handleSearchChange}
             />
           </Grid.Column>
-          <Grid.Column width={2}>
+          <Grid.Column width={4}>
             <Button onClick={handleSearch}>查詢</Button>
           </Grid.Column>
         </Grid.Row>
