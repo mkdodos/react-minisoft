@@ -3,7 +3,7 @@ import { Table, Button, Form } from 'semantic-ui-react';
 import { nanoid } from '@reduxjs/toolkit';
 import { db_money2022 as db } from '../../utils/firebase';
 import SearchForm from './components/SearchForm';
-import GroupCostsView from './components/GroupCostsView';
+// import GroupCostsView from './components/stat/components/GroupCostsView';
 import TableView from './components/TableView';
 import EditForm from './components/EditForm';
 import Stat from './components/stat';
@@ -191,8 +191,8 @@ export default function Index() {
 
   return (
     <div>
-      <Stat/>
-      {!loading && <GroupCostsView data={rows} />}
+      {/* <Stat data={rows}/> */}
+      {!loading && <Stat data={rows} />}
 
       <EditForm
         open={open}

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Modal } from 'semantic-ui-react';
+import { Modal,Form,Button} from 'semantic-ui-react';
 
-export default function EditForm({open,setOpen}) {
+export default function EditForm({ open, setOpen,row }) {
   return (
     <div>
       <Modal
@@ -11,7 +11,22 @@ export default function EditForm({open,setOpen}) {
         closeIcon
       >
         <Modal.Header>Select a Photo</Modal.Header>
-        <Modal.Content>表單內容</Modal.Content>
+        <Modal.Content>
+          <Form>
+           
+            <Form.Field>
+              <label>名稱</label>
+              <input type="text" name="name" value={row.name}/>
+            </Form.Field>
+            <Form.Field>
+              <label>現價</label>
+              <input type="number" name="price"  value={row.price}/>
+            </Form.Field>
+            <Button primary fluid type="submit">
+              儲存
+            </Button>
+          </Form>
+        </Modal.Content>
         <Modal.Actions>
           {/* <Button primary onClick={handleSave}>
             儲存

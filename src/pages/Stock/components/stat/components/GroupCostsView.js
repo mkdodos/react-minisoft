@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Table } from 'semantic-ui-react';
+import { Table,Button } from 'semantic-ui-react';
 
-export default function GroupCostsView({ data }) {
+export default function GroupCostsView({ data,handleStockEdit }) {
   const [rows, setRows] = useState([]);
 
   const stocks = [
@@ -11,22 +11,30 @@ export default function GroupCostsView({ data }) {
     { id: 4, name: '鴻海', value: '鴻海', price: 190 },
   ];
 
+ 
+
   useEffect(() => {
     stocks.map((stock, index) => {
       let sum = 0;
-      let sumQty = 0;//股數
+      let sumQty = 0; //股數
       let tempRows = data.filter((obj) => obj.name == stock.name);
       tempRows.map((row) => {
         sum += Number(row.price) * Number(row.qty);
-        sumQty +=  Number(row.qty);
+        sumQty += Number(row.qty);
       });
 
       // 平均成本
-      const avgCost = sum/sumQty;
+      const avgCost = sum / sumQty;
       // 損益
-      const bouns = (stock.price-avgCost)*sumQty;
+      const bouns = (stock.price - avgCost) * sumQty;
 
-      stocks[index] = { ...stock, value: sum,qty:sumQty,avgCost:avgCost,bouns:bouns };
+      stocks[index] = {
+        ...stock,
+        value: sum,
+        qty: sumQty,
+        avgCost: avgCost,
+        bouns: bouns,
+      };
     });
 
     console.log(stocks);
@@ -45,6 +53,7 @@ export default function GroupCostsView({ data }) {
             <Table.HeaderCell width={2}>平均成本</Table.HeaderCell>
             <Table.HeaderCell width={2}>現價</Table.HeaderCell>
             <Table.HeaderCell width={2}>損益</Table.HeaderCell>
+            <Table.HeaderCell width={2}>#</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -56,9 +65,12 @@ export default function GroupCostsView({ data }) {
                 <Table.Cell>{row.name}</Table.Cell>
                 <Table.Cell>{Math.round(row.value)}</Table.Cell>
                 <Table.Cell>{row.qty}</Table.Cell>
-                <Table.Cell>{Math.round(row?.avgCost*100)/100}</Table.Cell>
+                <Table.Cell>{Math.round(row?.avgCost * 100) / 100}</Table.Cell>
                 <Table.Cell>{row.price}</Table.Cell>
                 <Table.Cell>{Math.round(row?.bouns)}</Table.Cell>
+                <Table.Cell>
+                  <Button onClick={() => handleStockEdit(row, index)}>編輯</Button>
+                </Table.Cell>
               </Table.Row>
             );
           })}
