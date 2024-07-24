@@ -37,10 +37,10 @@ export default function Index({ data }) {
       // setRows([...rows, { ...row, id: nanoid() }]);
     } else {
       // 修改表格中編輯列的值
-      const tempRows = rows.slice();
-      Object.assign(tempRows[rowIndex], row);
-      setRows(tempRows);
-      setRowIndex(-1);
+      // const tempRows = rows.slice();
+      // Object.assign(tempRows[rowIndex], row);
+      // setRows(tempRows);
+      // setRowIndex(-1);
     }
 
     // 將編輯列資料設定回預設值
@@ -49,11 +49,11 @@ export default function Index({ data }) {
 
   return (
     <div>
-      <GroupCostsView data={data} handleStockEdit={handleStockEdit} />
+      {/* <GroupCostsView data={data} handleStockEdit={handleStockEdit} />
       <Button primary onClick={handleAdd}>
         新增
       </Button>
-      <EditForm open={open} setOpen={setOpen} row={row} />
+      <EditForm open={open} setOpen={setOpen} row={row} /> */}
     </div>
   );
 }
