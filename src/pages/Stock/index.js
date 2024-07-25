@@ -7,9 +7,11 @@ export default function Index() {
   const [loading, setLoading] = useState(false);
 
 
-  // 資料
+  // 交易資料
   const [rows, setRows] = useState([]);
 
+  // 個股資料
+  const [stockRows,setStockRows]=useState([])
 
   useEffect(()=>{
     
@@ -17,8 +19,8 @@ export default function Index() {
 
   return (
     <div>
-      <Stat transactionRows={rows}/>
-      <Transaction rows={rows} setRows={setRows} loading={loading} setLoading={setLoading}/>
+      <Stat stockRows={stockRows} setStockRows={setStockRows} transactionRows={rows}/>
+      <Transaction  stockRows={stockRows} rows={rows} setRows={setRows} loading={loading} setLoading={setLoading}/>
     </div>
   )
 }

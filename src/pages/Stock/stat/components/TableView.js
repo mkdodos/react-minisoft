@@ -29,7 +29,7 @@ export default function TableView({ rows, handleAdd, handleEdit }) {
                 <Table.Cell>{row.name}</Table.Cell>
                 
                 <Table.Cell>{row.totalCost}</Table.Cell>
-                <Table.Cell>{row.qtys}</Table.Cell>
+                <Table.Cell>{row.qtys}股</Table.Cell>
                 <Table.Cell>{Math.round(row.avgCost*100)/100}</Table.Cell>
                 <Table.Cell>{row.price}</Table.Cell>
                 <Table.Cell>{Math.round(row.bouns)}</Table.Cell>

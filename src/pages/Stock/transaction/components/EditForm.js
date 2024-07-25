@@ -3,12 +3,25 @@ import { Modal, Button, Form } from 'semantic-ui-react';
 
 export default function EditForm({
   open,
-  setOpen,  
+  setOpen,
   handleChange,
-  row, 
+  handleStockNameChange,
+  row,
   handleSave,
   handleDelete,
+  stockRows,
 }) {
+  // console.log(stockRows);
+
+  const stockOptions = stockRows.map((obj) => {
+    return { key: obj.name, text: obj.name, value: obj.name };
+  });
+
+  // console.log(stockOptions);
+
+  // 下拉選項
+  // const options = [{ text: 'A', value: 'A', key: 'A' }];
+
   return (
     <div>
       <Modal
@@ -20,7 +33,7 @@ export default function EditForm({
         <Modal.Header>Select a Photo</Modal.Header>
         <Modal.Content>
           <Form>
-          <Form.Field>
+            <Form.Field>
               <label>日期</label>
               <input
                 type="date"
@@ -30,6 +43,17 @@ export default function EditForm({
               />
             </Form.Field>
             <Form.Field>
+            <label>股票名稱</label>
+              <Form.Select
+                placeholder="名稱"
+                fluid
+                options={stockOptions}
+                value={row.name}
+                onChange={handleStockNameChange}
+              />
+            </Form.Field>
+
+            {/* <Form.Field>
               <label>股票名稱</label>
               <input
                 type="text"
@@ -37,7 +61,7 @@ export default function EditForm({
                 value={row.name}
                 onChange={handleChange}
               />
-            </Form.Field>
+            </Form.Field> */}
             <Form.Field>
               <label>購入單價</label>
               <input

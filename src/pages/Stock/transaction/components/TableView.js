@@ -26,7 +26,7 @@ export default function TableView({ rows, handleAdd, handleEdit }) {
                 <Table.Cell>{row.date}</Table.Cell>
                 <Table.Cell>{row.name}</Table.Cell>
                 <Table.Cell>{row.cost}</Table.Cell>
-                <Table.Cell>{row.qty}</Table.Cell>
+                <Table.Cell>{row.qty}股</Table.Cell>
                 <Table.Cell>
                   <Button onClick={() => handleEdit(row, index)}>編輯</Button>
                 </Table.Cell>

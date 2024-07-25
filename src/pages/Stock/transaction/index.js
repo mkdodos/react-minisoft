@@ -3,18 +3,16 @@ import { nanoid } from '@reduxjs/toolkit';
 import TableView from './components/TableView';
 import EditForm from './components/EditForm';
 
-export default function Index({rows,setRows}) {
-  
-  
+export default function Index({ rows, setRows, stockRows }) {
   /********** 變數 ************/
   // 欄位
   const defaultRow = {
-    date:new Date().toISOString().substring(0,10),//交易日期
+    date: new Date().toISOString().substring(0, 10), //交易日期
     name: '', // 股票名稱
     cost: '', // 購入單價
-    qty:'',//股數
+    qty: '', //股數
   };
-  
+
   // 編輯列
   const [row, setRow] = useState(defaultRow);
   // 編輯列索引
@@ -26,7 +24,7 @@ export default function Index({rows,setRows}) {
   const handleAdd = () => {
     setOpen(true);
     setRowIndex(-1);
-    setRow(defaultRow)
+    setRow(defaultRow);
   };
 
   // 儲存(新增或修改)
@@ -44,41 +42,46 @@ export default function Index({rows,setRows}) {
     }
 
     // 關閉編輯視窗
-    setOpen(false)
+    setOpen(false);
     // 將編輯列資料設定回預設值
     setRow(defaultRow);
   };
 
   // 刪除
-  const handleDelete = () => {   
+  const handleDelete = () => {
     setRows(rows.filter((obj) => obj.id != row.id));
     setOpen(false);
   };
 
-   // 按下編輯鈕
-   const handleEdit = (editedRow, index) => {    
+  // 按下編輯鈕
+  const handleEdit = (editedRow, index) => {
     setRow(editedRow);
     setRowIndex(index);
     setOpen(true);
   };
-
 
   // 修改欄位值
   const handleChange = (e) => {
     setRow({ ...row, [e.target.name]: e.target.value });
   };
 
+  // 修改股票名稱下拉選項值
+  const handleStockNameChange = (e, { value }) => {
+    setRow({ ...row, name: value });
+  };
 
   return (
     <div>
       <TableView rows={rows} handleEdit={handleEdit} handleAdd={handleAdd} />
       <EditForm
+        stockRows={stockRows}
         open={open}
         setOpen={setOpen}
         row={row}
         handleSave={handleSave}
         handleDelete={handleDelete}
         handleChange={handleChange}
+        handleStockNameChange={handleStockNameChange}
       />
     </div>
   );
