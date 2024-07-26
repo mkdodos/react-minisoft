@@ -9,11 +9,11 @@ export default function EditForm({
   row,
   handleSave,
   handleDelete,
-  stockRows,
+  statRows,
 }) {
   // console.log(stockRows);
 
-  const stockOptions = stockRows.map((obj) => {
+  const stockOptions = statRows.map((obj) => {
     return { key: obj.name, text: obj.name, value: obj.name };
   });
 

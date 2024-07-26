@@ -1,21 +1,36 @@
 import React, { useState, useEffect } from 'react';
+import { db_money2022 as db } from '../../../utils/firebase';
 import { nanoid } from '@reduxjs/toolkit';
 import TableView from './components/TableView';
 import EditForm from './components/EditForm';
 
-export default function Index({ stockRows,setStockRows,transactionRows }) {
+export default function Index({ statRows, setStatRows, transactionRows }) {
   useEffect(() => {
-    setStockRows(cals());
+    setStatRows(cals());
   }, [transactionRows]);
+
+  //  firebase 文件集合名稱
+  const colName = 'stockStat';
 
   // 計算各項數值
   const cals = () => {
     // setLoading(false);
-    let temp = stockRows.slice();
-    stockRows.map((stock, index) => {
+    let temp = statRows.slice();
+    statRows.map((stock, index) => {
       let sum = 0;
       let sumQty = 0; //股數
       let tempRows = transactionRows.filter((obj) => obj.name == stock.name);
+      if (tempRows.length == 0) {
+        // 沒有交易記錄時將原本數值清空
+        temp[index] = {
+          ...stock,
+          totalCost: '',
+          bouns: '',
+          avgCost: '',
+          qtys: '',
+        };
+        return;
+      }
       tempRows.map((row) => {
         sum += Number(row.cost) * Number(row.qty);
         sumQty += Number(row.qty);
@@ -26,17 +41,33 @@ export default function Index({ stockRows,setStockRows,transactionRows }) {
       // 損益
       const bouns = (stock.price - avgCost) * sumQty;
 
-      // 有個股交易記錄再更新數值
-      if (tempRows.length > 0)
-        temp[index] = {
-          ...stock,
-          totalCost: sum,
-          qtys: sumQty,
-          avgCost: avgCost,
-          bouns: bouns,
-        };
+      temp[index] = {
+        ...stock,
+        totalCost: sum,
+        qtys: sumQty,
+        avgCost: avgCost,
+        bouns: bouns,
+      };
 
-      // setLoading(true);
+      // // 有個股交易記錄再更新數值
+      // if (tempRows.length > 0) {
+      //   temp[index] = {
+      //     ...stock,
+      //     totalCost: sum,
+      //     qtys: sumQty,
+      //     avgCost: avgCost,
+      //     bouns: bouns,
+      //   };
+      // } else {
+      //   // 沒有交易記錄時將原本數值清空
+      //   temp[index] = {
+      //     ...stock,
+      //     totalCost: '',
+      //     bouns: '',
+      //     avgCost: '',
+      //     qtys: '',
+      //   };
+      // }
     });
     return temp;
   };
@@ -77,19 +108,27 @@ export default function Index({ stockRows,setStockRows,transactionRows }) {
   const handleSave = () => {
     // 依照有編輯列索引值決定做新增或修改
     if (rowIndex == -1) {
-      // 將編輯列加入資料陣列
-      setStockRows([...stockRows, { ...row, id: nanoid() }]);
+      db.collection(colName)
+        .add(row)
+        .then((docRef) => {
+          // 將編輯列加入資料陣列
+          setStatRows([...statRows, { ...row, id: docRef.id }]);
+        });
     } else {
       // 修改表格中編輯列的值
-      const tempRows = stockRows.slice();
-      Object.assign(tempRows[rowIndex], row);
-      setStockRows(tempRows);
-      setRowIndex(-1);
-
-      // 有該股的交易記錄,再做數值計算更新
-      if (stockTransaction(row.name).length > 0) {
-        setStockRows(cals());
-      }
+      db.collection(colName)
+        .doc(row.id)
+        .update(row)
+        .then(() => {
+          const tempRows = statRows.slice();
+          Object.assign(tempRows[rowIndex], row);
+          setStatRows(tempRows);
+          setRowIndex(-1);
+          // 有該股的交易記錄,再做數值計算更新
+          if (stockTransaction(row.name).length > 0) {
+            setStatRows(cals());
+          }
+        });
     }
 
     // 關閉編輯視窗
@@ -100,8 +139,13 @@ export default function Index({ stockRows,setStockRows,transactionRows }) {
 
   // 刪除
   const handleDelete = () => {
-    setStockRows(stockRows.filter((obj) => obj.id != row.id));
-    setOpen(false);
+    db.collection(colName)
+      .doc(row.id)
+      .delete()
+      .then(() => {
+        setStatRows(statRows.filter((obj) => obj.id != row.id));
+        setOpen(false);
+      });
   };
 
   // 按下編輯鈕
@@ -118,7 +162,11 @@ export default function Index({ stockRows,setStockRows,transactionRows }) {
 
   return (
     <div>
-      <TableView rows={stockRows} handleEdit={handleEdit} handleAdd={handleAdd} />
+      <TableView
+        rows={statRows}
+        handleEdit={handleEdit}
+        handleAdd={handleAdd}
+      />
 
       <EditForm
         open={open}
