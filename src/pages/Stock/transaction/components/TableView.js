@@ -9,8 +9,9 @@ export default function TableView({ rows, handleAdd, handleEdit }) {
           <Table.Row>
           <Table.HeaderCell width={2}>日期</Table.HeaderCell>
             <Table.HeaderCell width={2}>股票名稱</Table.HeaderCell>
-            <Table.HeaderCell width={2}>購入單價</Table.HeaderCell>
             <Table.HeaderCell width={2}>股數</Table.HeaderCell>
+            <Table.HeaderCell width={2}>購入單價</Table.HeaderCell>
+            <Table.HeaderCell width={2}>小計</Table.HeaderCell>
             <Table.HeaderCell width={2}>
               <Button primary onClick={handleAdd}>
                 新增
@@ -25,8 +26,9 @@ export default function TableView({ rows, handleAdd, handleEdit }) {
               <Table.Row key={row.id}>
                 <Table.Cell>{row.date}</Table.Cell>
                 <Table.Cell>{row.name}</Table.Cell>
-                <Table.Cell>{row.cost}</Table.Cell>
                 <Table.Cell>{row.qty}股</Table.Cell>
+                <Table.Cell>{row.cost}</Table.Cell>
+                <Table.Cell>{Math.round(row.qty*row.cost)}</Table.Cell>
                 <Table.Cell>
                   <Button onClick={() => handleEdit(row, index)}>編輯</Button>
                 </Table.Cell>

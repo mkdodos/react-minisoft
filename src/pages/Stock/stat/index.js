@@ -16,9 +16,14 @@ export default function Index({ statRows, setStatRows, transactionRows }) {
   const cals = () => {
     // setLoading(false);
     let temp = statRows.slice();
+    // 全部股票成本
+    let allCost = 0;
+    let allBonus = 0;
+    let allPrice = 0; //總市值
     statRows.map((stock, index) => {
       let sum = 0;
       let sumQty = 0; //股數
+      let sumPrice = 0; //現值
       let tempRows = transactionRows.filter((obj) => obj.name == stock.name);
       if (tempRows.length == 0) {
         // 沒有交易記錄時將原本數值清空
@@ -31,43 +36,39 @@ export default function Index({ statRows, setStatRows, transactionRows }) {
         };
         return;
       }
+
+      // 有個股交易記錄計算數值
       tempRows.map((row) => {
         sum += Number(row.cost) * Number(row.qty);
         sumQty += Number(row.qty);
+        sumPrice += Number(row.qty) * Number(stock.price);
       });
 
       // 平均成本
       const avgCost = sum / sumQty;
       // 損益
-      const bouns = (stock.price - avgCost) * sumQty;
+      const bonus = (stock.price - avgCost) * sumQty;
+
+      allCost += sum;
+      allBonus += bonus;
+      allPrice += sumPrice;
 
       temp[index] = {
         ...stock,
         totalCost: sum,
+        totalPrice: sumPrice,
         qtys: sumQty,
         avgCost: avgCost,
-        bouns: bouns,
+        bonus: bonus,
+        bonusPercent: bonus / sum,
       };
+    });
 
-      // // 有個股交易記錄再更新數值
-      // if (tempRows.length > 0) {
-      //   temp[index] = {
-      //     ...stock,
-      //     totalCost: sum,
-      //     qtys: sumQty,
-      //     avgCost: avgCost,
-      //     bouns: bouns,
-      //   };
-      // } else {
-      //   // 沒有交易記錄時將原本數值清空
-      //   temp[index] = {
-      //     ...stock,
-      //     totalCost: '',
-      //     bouns: '',
-      //     avgCost: '',
-      //     qtys: '',
-      //   };
-      // }
+    setAllStockAmt({
+      cost: allCost,
+      bonus: allBonus,
+      price: allPrice,
+      bonusPercent:allBonus/allCost
     });
     return temp;
   };
@@ -96,6 +97,11 @@ export default function Index({ statRows, setStatRows, transactionRows }) {
   const [rowIndex, setRowIndex] = useState(defaultRow);
   // 表單開關
   const [open, setOpen] = useState(false);
+
+  const [allStockAmt, setAllStockAmt] = useState({
+    totalCost: 0,
+    totalBouns: 0,
+  });
 
   /********** 方法 ************/
   const handleAdd = () => {
@@ -166,6 +172,7 @@ export default function Index({ statRows, setStatRows, transactionRows }) {
         rows={statRows}
         handleEdit={handleEdit}
         handleAdd={handleAdd}
+        allStockAmt={allStockAmt}
       />
 
       <EditForm
