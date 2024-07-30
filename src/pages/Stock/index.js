@@ -11,6 +11,8 @@ export default function Index() {
 
   // 交易資料
   const [transactionRows, setTransactionRows] = useState([]);
+  // 交易資料複本(篩選用)
+  const [transactionRowsCopy, setTransactionRowsCopy] = useState([]);
 
   useEffect(() => {
     fetchStatData();
@@ -33,9 +35,18 @@ export default function Index() {
       return { ...doc.data(), id: doc.id };
     });
     setTransactionRows(data);
+    setTransactionRowsCopy(data)
     setLoading(true);
-    console.log(data);
+    // console.log(data);
   };
+
+  // stat 股票列 , 取得該列的股票名稱
+  // 篩選出該股票交易明細 
+  const handleStatRowClick = (row)=>{
+    // console.log(row.name)
+    setTransactionRows(transactionRowsCopy.filter(obj=>obj.name==row.name))
+    // console.log(transactionRowsCopy)
+  }
 
   return (
     <div>
@@ -43,6 +54,7 @@ export default function Index() {
         statRows={statRows}
         setStatRows={setStatRows}
         transactionRows={transactionRows}
+        handleRowClick={handleStatRowClick}
       />
 
       <Transaction

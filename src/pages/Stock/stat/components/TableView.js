@@ -6,6 +6,7 @@ export default function TableView({
   handleAdd,
   handleEdit,
   allStockAmt,
+  handleRowClick,
 }) {
   return (
     <div>
@@ -46,7 +47,9 @@ export default function TableView({
           {rows?.map((row, index) => {
             return (
               <Table.Row key={row.id}>
-                <Table.Cell>{row.name}</Table.Cell>
+                <Table.Cell onClick={() => handleRowClick(row)}>
+                  {row.name}
+                </Table.Cell>
 
                 <Table.Cell>{Math.round(row.totalCost)}</Table.Cell>
                 <Table.Cell>{Math.round(row.totalPrice)}</Table.Cell>

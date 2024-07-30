@@ -4,10 +4,10 @@ import { nanoid } from '@reduxjs/toolkit';
 import TableView from './components/TableView';
 import EditForm from './components/EditForm';
 
-export default function Index({ statRows, setStatRows, transactionRows }) {
+export default function Index({ statRows, setStatRows, handleRowClick,transactionRows }) {
   useEffect(() => {
     setStatRows(cals());
-  }, [transactionRows]);
+  }, []);
 
   //  firebase 文件集合名稱
   const colName = 'stockStat';
@@ -166,6 +166,8 @@ export default function Index({ statRows, setStatRows, transactionRows }) {
     setRow({ ...row, [e.target.name]: e.target.value });
   };
 
+  
+
   return (
     <div>
       <TableView
@@ -173,6 +175,7 @@ export default function Index({ statRows, setStatRows, transactionRows }) {
         handleEdit={handleEdit}
         handleAdd={handleAdd}
         allStockAmt={allStockAmt}
+        handleRowClick={handleRowClick}
       />
 
       <EditForm
