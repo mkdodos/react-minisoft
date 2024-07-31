@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from 'semantic-ui-react';
 import { db_money2022 as db } from '../../utils/firebase';
 import Stat from './stat/index';
 import Transaction from './transaction';
@@ -31,25 +32,40 @@ export default function Index() {
   const fetchTransactionData = async () => {
     setLoading(false);
     const snapshot = await db.collection('stockTransaction').get();
-    const data = snapshot.docs.map((doc) => {
+    let data = snapshot.docs.map((doc) => {
       return { ...doc.data(), id: doc.id };
     });
+
+    // 依日期排序(最新在前)
+    data.sort((a, b) => {
+      return a.date < b.date ? 1 : -1;
+    });
+
+    console.log(data);
     setTransactionRows(data);
-    setTransactionRowsCopy(data)
+    setTransactionRowsCopy(data);
     setLoading(true);
     // console.log(data);
   };
 
   // stat 股票列 , 取得該列的股票名稱
-  // 篩選出該股票交易明細 
-  const handleStatRowClick = (row)=>{
+  // 篩選出該股票交易明細
+  const handleStatRowClick = (row) => {
     // console.log(row.name)
-    setTransactionRows(transactionRowsCopy.filter(obj=>obj.name==row.name))
+    setTransactionRows(
+      transactionRowsCopy.filter((obj) => obj.name == row.name)
+    );
     // console.log(transactionRowsCopy)
-  }
+  };
+
+  // 篩選後,需要顯示全部資料時,可按
+  const handleShowAll = () => {
+    setTransactionRows(transactionRowsCopy);
+  };
 
   return (
     <div>
+      <Button onClick={handleShowAll}>全部</Button>
       <Stat
         statRows={statRows}
         setStatRows={setStatRows}

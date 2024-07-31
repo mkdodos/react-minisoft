@@ -53,24 +53,6 @@ export default function EditForm({
               />
             </Form.Field>
 
-            {/* <Form.Field>
-              <label>股票名稱</label>
-              <input
-                type="text"
-                name="name"
-                value={row.name}
-                onChange={handleChange}
-              />
-            </Form.Field> */}
-            <Form.Field>
-              <label>購入單價</label>
-              <input
-                type="number"
-                name="cost"
-                value={row.cost}
-                onChange={handleChange}
-              />
-            </Form.Field>
             <Form.Field>
               <label>股數</label>
               <input
@@ -80,6 +62,16 @@ export default function EditForm({
                 onChange={handleChange}
               />
             </Form.Field>
+            <Form.Field>
+              <label>購入單價</label>
+              <input
+                type="number"
+                name="cost"
+                value={row.cost}
+                onChange={handleChange}
+              />
+            </Form.Field>
+           
           </Form>
         </Modal.Content>
         <Modal.Actions>

@@ -7,7 +7,7 @@ import EditForm from './components/EditForm';
 export default function Index({ statRows, setStatRows, handleRowClick,transactionRows }) {
   useEffect(() => {
     setStatRows(cals());
-  }, []);
+  }, [transactionRows]);
 
   //  firebase 文件集合名稱
   const colName = 'stockStat';

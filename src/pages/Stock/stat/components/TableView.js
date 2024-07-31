@@ -16,13 +16,14 @@ export default function TableView({
             <Table.HeaderCell width={2}>股票名稱</Table.HeaderCell>
 
             <Table.HeaderCell width={1}>
-              成本<br></br>
-              {Math.round(allStockAmt.cost)}
-            </Table.HeaderCell>
-            <Table.HeaderCell width={1}>
               市值<br></br>
               {Math.round(allStockAmt.price)}
             </Table.HeaderCell>
+            <Table.HeaderCell width={1}>
+              成本<br></br>
+              {Math.round(allStockAmt.cost)}
+            </Table.HeaderCell>
+           
             <Table.HeaderCell width={1}>
               損益
               <br></br>
@@ -50,9 +51,9 @@ export default function TableView({
                 <Table.Cell onClick={() => handleRowClick(row)}>
                   {row.name}
                 </Table.Cell>
-
-                <Table.Cell>{Math.round(row.totalCost)}</Table.Cell>
                 <Table.Cell>{Math.round(row.totalPrice)}</Table.Cell>
+                <Table.Cell>{Math.round(row.totalCost)}</Table.Cell>
+               
                 <Table.Cell>{Math.round(row.bonus)}</Table.Cell>
                 <Table.Cell>
                   {Math.round(row.bonusPercent * 10000) / 100} %
