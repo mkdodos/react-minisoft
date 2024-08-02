@@ -37,6 +37,10 @@ export default function Header() {
         存股
       </Menu.Item>
 
+      <Menu.Item as={Link} to="/maya">
+        卓爾金暦
+      </Menu.Item>
+
       <Dropdown text="月" item>
         <Dropdown.Menu>
           <Menu.Item as={Link} to="/credits">

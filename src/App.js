@@ -49,6 +49,9 @@ import SingleWorkPage from './app/features/works/SingleWorkPage';
 // 存股
 import Stock from './pages/Stock'
 
+// 卓爾金暦
+import Maya from './pages/Maya'
+
 export default function App() {
   return (
     <div>
@@ -66,6 +69,8 @@ export default function App() {
               </Route>
               {/* 存股 */}
               <Route element={<Stock />} path="/stock" />
+               {/* 桌遊 */}
+               <Route element={<Maya />} path="/maya" />
               {/* 房貸 */}
               <Route element={<Mortgages />} path="/mortgages" />
               <Route element={<MortgageAccounts />} path="/mortgage-accounts" />
