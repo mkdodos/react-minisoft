@@ -60,7 +60,7 @@ export default function App() {
           {/* <Header /> */}
           {/* <Container> */}
           <Routes>
-            <Route path="/" element={<Layout />}>
+            <Route path="/" exact element={<Layout />}>
               {/* post */}
               {/* <Route index element={<PostList />} /> */}
               <Route path="post">
