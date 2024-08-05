@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, TabPane, Tab } from 'semantic-ui-react';
 import { db_money2022 as db } from '../../utils/firebase';
 import Stat from './stat/index';
 import Transaction from './transaction';
+
 
 export default function Index() {
   const [loading, setLoading] = useState(false);
@@ -63,23 +64,42 @@ export default function Index() {
     setTransactionRows(transactionRowsCopy);
   };
 
-  return (
-    <div>
-      <Button onClick={handleShowAll}>全部</Button>
-      <Stat
-        statRows={statRows}
-        setStatRows={setStatRows}
-        transactionRows={transactionRows}
-        handleRowClick={handleStatRowClick}
-      />
+  const panes = [
+    {
+      menuItem: '統計',
+      render: () => (
+        <TabPane>
+          <Stat
+            statRows={statRows}
+            setStatRows={setStatRows}
+            transactionRows={transactionRows}
+            handleRowClick={handleStatRowClick}
+          />
+        </TabPane>
+      ),
+    },
+    {
+      menuItem: '明細',
+      render: () => (
+        <>
+          <TabPane>
+            <Transaction
+              handleShowAll={handleShowAll}
+              statRows={statRows}
+              transactionRows={transactionRows}
+              setTransactionRows={setTransactionRows}
+              loading={loading}
+              setLoading={setLoading}
+            />
+          </TabPane>
+        </>
+      ),
+    },
+  ];
 
-      <Transaction
-        statRows={statRows}
-        transactionRows={transactionRows}
-        setTransactionRows={setTransactionRows}
-        loading={loading}
-        setLoading={setLoading}
-      />
-    </div>
+  return (
+    <>
+      <Tab panes={panes} />
+    </>
   );
 }

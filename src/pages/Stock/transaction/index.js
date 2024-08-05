@@ -8,6 +8,7 @@ export default function Index({
   transactionRows,
   setTransactionRows,
   statRows,
+  handleShowAll
 }) {
   /********** 變數 ************/
   // 欄位
@@ -67,20 +68,13 @@ export default function Index({
 
   // 刪除
   const handleDelete = () => {
-
-
-
-
     db.collection(colName)
-    .doc(row.id)
-    .delete()
-    .then(() => {
-      setTransactionRows(transactionRows.filter((obj) => obj.id != row.id));
-      setOpen(false);
-    });
-
-
-  
+      .doc(row.id)
+      .delete()
+      .then(() => {
+        setTransactionRows(transactionRows.filter((obj) => obj.id != row.id));
+        setOpen(false);
+      });
   };
 
   // 按下編輯鈕
@@ -103,6 +97,7 @@ export default function Index({
   return (
     <div>
       <TableView
+        handleShowAll={handleShowAll}
         rows={transactionRows}
         handleEdit={handleEdit}
         handleAdd={handleAdd}

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Table,Button } from 'semantic-ui-react';
 
-export default function TableView({ rows, handleAdd, handleEdit }) {
+export default function TableView({ rows, handleAdd, handleEdit,handleShowAll }) {
   return (
-    <div>
+    <>
+    <Button onClick={handleShowAll}>全部</Button>
       <Table celled unstackable>
         <Table.Header>
           <Table.Row>
@@ -37,6 +38,6 @@ export default function TableView({ rows, handleAdd, handleEdit }) {
           })}
         </Table.Body>
       </Table>
-    </div>
+    </>
   );
 }

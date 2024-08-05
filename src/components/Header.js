@@ -32,15 +32,6 @@ export default function Header() {
         收支查詢
       </Menu.Item>
 
-      <Menu.Item as={Link} to="/stock">
-        <Icon name="book" />
-        存股
-      </Menu.Item>
-
-      <Menu.Item as={Link} to="/maya">
-        卓爾金暦
-      </Menu.Item>
-
       <Dropdown text="月" item>
         <Dropdown.Menu>
           <Menu.Item as={Link} to="/credits">
@@ -94,6 +85,19 @@ export default function Header() {
         </Dropdown.Menu>
       </Dropdown>
 
+      {user == 'mkdodos@gmail.com' && (
+        <Dropdown text="其他" item>
+          <Dropdown.Menu>
+            <Menu.Item as={Link} to="/stock">
+              <Icon name="book" />
+              存股
+            </Menu.Item>
+            <Menu.Item as={Link} to="/maya">
+              卓爾金暦
+            </Menu.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      )}
       {/* <Dropdown text="舊資料" item>
         <Dropdown.Menu>
           <Dropdown.Item as={Link} to="/spending">
@@ -110,7 +114,7 @@ export default function Header() {
       </Menu.Item> */}
 
       {user && (
-        <Menu.Item onClick={handleLogout}>
+        <Menu.Item onClick={handleLogout}>          
           <Icon name="sign-out" />
         </Menu.Item>
       )}
